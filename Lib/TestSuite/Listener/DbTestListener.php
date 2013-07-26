@@ -1,6 +1,7 @@
 <?php
 require_once 'PHPUnit/Framework/TestListener.php';
 
+App::uses('Folder', 'Utility');
 class DbTestListener implements PHPUnit_Framework_TestListener {
 
 	private $databaseLoaded = false;
@@ -213,7 +214,9 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 			$skeletonUser = $skeletonDatabase['login'];
 			$skeletonPassword = $skeletonDatabase['password'];
 
-			$tmpFile = ROOT . DS . APP_DIR . DS . 'tmp' . DS . 'cache' . DS . 'fixtures' . DS . 'db_dump_backup.custom';
+			$cacheFolder = ROOT . DS . APP_DIR . DS . 'tmp' . DS . 'cache' . DS . 'fixtures';
+			$this->_ensureFolder($cacheFolder);
+			$tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
 
 			if (!file_exists($tmpFile)) {
 				print "Backing up data from skeleton database: $skeletonName \n";
@@ -240,8 +243,10 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 		if (!empty($database['port'])) {
 			$portNumber = "-p " . $database['port'];
 		}
-
-		$tmpFile = ROOT . DS . APP_DIR . DS . 'tmp' . DS . 'cache' . DS . 'fixtures' . DS . 'db_dump_backup.custom';
+		
+		$cacheFolder = ROOT . DS . APP_DIR . DS . 'tmp' . DS . 'cache' . DS . 'fixtures';
+		$this->_ensureFolder($cacheFolder);
+		$tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
 		print "Deleting cached file: $tmpFile \n";
 		if (is_file($tmpFile)) {
 			unlink($tmpFile);
@@ -257,6 +262,15 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 
 		print "Backing up data from skeleton database: $testDbName \n\n";
 		exec("mysqldump --user=$testUser --password=$password $testDbName > $tmpFile", $output);
+	}
+	
+/**
+ * Find and import test_skel.sql file from app/Config/sql
+ *
+ * @param string $path
+ */
+	protected function _ensureFolder($path) {
+		$Folder = new Folder($path, true);
 	}
 }
 

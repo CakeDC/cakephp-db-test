@@ -65,7 +65,7 @@ class DbTestShell extends TestShell {
 
 	private function __importTestSkeleton() {
 		$path = null;
-		if ($this->params['import-database-file'] && file_exists($this->params['import-database-file'])) {
+		if (!empty($this->params['import-database-file']) && file_exists($this->params['import-database-file'])) {
 			$path = $this->params['import-database-file'];
 		}	
 		$skeletonDatabase = Configure::read('db.database.test_template');
