@@ -21,7 +21,7 @@ Plugin provides diferent db fixtures loading. Instead of loading fixtures each t
 
 3. Create folder app/tmp/cache/fixtures.
 
-4. To load actual template db data perform "cake db_test -i"
+4. To load actual template db data perform "cake DbTest.db_test -i"
 
 5. To run test use same testsuite params in command line but instead of 'testsuite' shell use 'DbTest.db_test'.
 
