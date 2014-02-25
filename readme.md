@@ -1,27 +1,40 @@
-Plugin provides diferent db fixtures loading. Instead of loading fixtures each time complete test schema loaded from temaplates database. Each test case wrapped in transaction and all changes happened in test case rewerted when it finished.
+DbTest Plugin
+========================
 
-## Setup ##
+[![Bake Status](https://secure.travis-ci.org/CakeDC/migrations.png?branch=master)](http://travis-ci.org/CakeDC/db_test)
+[![Test Coverage](https://coveralls.io/repos/CakeDC/migrations/badge.png?branch=master)](https://coveralls.io/r/CakeDC/db_test?branch=master)
+[![Downloads](https://poser.pugx.org/CakeDC/migrations/d/total.png)](https://packagist.org/packages/CakeDC/db_test)
+[![Latest Version](https://poser.pugx.org/CakeDC/migrations/v/stable.png)](https://packagist.org/packages/CakeDC/db_test)
 
-1. Define in database.php "test" and "test_template" data sources.
+The **DbTest** plugin enables developers to speeding up tests running on mysql database.
 
-	public $test = array(
-		'datasource' => 'Database/Mysql',
-		...
-		'database' => 'test_db',
-	);
+Requirements
+------------
 
-	public $test_template = array(
-		'datasource' => 'Database/Mysql',
-		...
-		'database' => 'test_db_template',
-	);
+* CakePHP 2.4+
+* PHP 5.2.8+
+* MySQL database with InnoDb engine
 
+Documentation
+-------------
 
-2. In app/Config/sql/test_db.sql put sql dump of template database.
+For documentation, as well as tutorials, see the [Docs](Docs/Home.md) directory of this repository.
 
-3. Create folder app/tmp/cache/fixtures.
+Support
+-------
 
-4. To load actual template db data perform "cake DbTest.db_test -i"
+For bugs and feature requests, please use the [issues](https://git.cakedc.com/cakedc/db_test/issues) section of this repository. 
 
-5. To run test use same testsuite params in command line but instead of 'testsuite' shell use 'DbTest.db_test'.
+Commercial support is also available, [contact us](http://cakedc.com/contact) for more information.
 
+Contributing
+------------
+
+If you'd like to contribute new features, enhancements or bug fixes to the plugin, just read our [Contribution Guidelines](http://cakedc.com/plugins) for detailed instructions.
+
+License
+-------
+
+Copyright 2007-2014 Cake Development Corporation (CakeDC). All rights reserved.
+
+Licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) License. Redistributions of the source code included in this repository must retain the copyright notice found in each file.
