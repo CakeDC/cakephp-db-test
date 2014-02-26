@@ -40,16 +40,16 @@ of test fixtures.
 Add next configuration setting into app/Config/database.php
 
 ```
-	public $test_template = array(
-		'datasource' => 'Database/Mysql',
-		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'username',
-		'password' => 'password',
-		'database' => 'template_database_name',
-		'prefix' => '',
-		'encoding' => 'utf8',
-	); 	
+public $test_template = array(
+	'datasource' => 'Database/Mysql',
+	'persistent' => false,
+	'host' => 'localhost',
+	'login' => 'username',
+	'password' => 'password',
+	'database' => 'template_database_name',
+	'prefix' => '',
+	'encoding' => 'utf8',
+);
 ```
 
 Login, password and database need to configure.

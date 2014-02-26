@@ -6,7 +6,7 @@ DbTest Plugin
 [![Downloads](https://poser.pugx.org/CakeDC/migrations/d/total.png)](https://packagist.org/packages/CakeDC/db_test)
 [![Latest Version](https://poser.pugx.org/CakeDC/migrations/v/stable.png)](https://packagist.org/packages/CakeDC/db_test)
 
-The **DbTest** plugin enables developers to speeding up tests running on mysql database.
+The **DbTest** plugin enables developers to speeding up tests running on **mysql** database.
 
 Requirements
 ------------
@@ -36,5 +36,3 @@ License
 -------
 
 Copyright 2007-2014 Cake Development Corporation (CakeDC). All rights reserved.
-
-Licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) License. Redistributions of the source code included in this repository must retain the copyright notice found in each file.
