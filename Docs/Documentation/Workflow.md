@@ -18,3 +18,24 @@ To update database structure need perform next steps:
 3. Execute `cake DbTest.db_test -i` to import sql file.
 4. Add modified sql file into repository.
 
+Importing legacy fixtures
+---------------------------------
+
+In case we migrating to DbTest from cakephp testsuite and have fixtures in files
+we can import them:
+
+```
+cake DbTest.FixtureImport import FixutreName --plugin PluginName
+```
+
+By default supposed that tables structures already loaded using migration process.
+But one can use key --import-structure to create table.
+
+Store database dump
+-----------------------------
+
+For handy storing dump of template database you can you next shell action.
+
+```
+cake DbTest.FixtureImport dump
+```
