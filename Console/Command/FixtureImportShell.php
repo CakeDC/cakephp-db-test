@@ -2,6 +2,7 @@
 
 App::uses('AppShell', 'Console/Command');
 App::uses('CakeTestFixture', 'TestSuite/Fixture');
+App::uses('Folder', 'Utility');
 
 class FixtureImportShell extends AppShell {
 
@@ -99,7 +100,7 @@ class FixtureImportShell extends AppShell {
 			$skeletonPassword = $skeletonDatabase['password'];
 
 			$dumpFolder = ROOT . DS . APP_DIR . DS . 'Config' . DS . 'sql';
-			$this->_ensureFolder($cacheFolder);
+			$this->_ensureFolder($dumpFolder);
 			$dumpFile = $dumpFolder . DS . 'test_db.sql';
 
 			print "Exporting data from skeleton database: $skeletonName \n";
