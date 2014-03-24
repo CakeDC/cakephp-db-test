@@ -8,8 +8,8 @@ The logic of DbTest different from testsuite in the way it handles fixtures.
 The CakePHP testsuite uses fixtures to initialize test database, DbTest don't use fixtures at all.
 Instead it uses an additional template database, that is initialized based on the app/Config/db_test.sql file.
 
-Generic cycle of test execution under DbTest.
---------------------------------------------------------------
+Generic cycle of test execution under DbTest
+--------------------------------------------
 
 * When test suite started with DbTest it, loads test database from template database snapshot.
 * Before test method started DbTest initialize transaction.
@@ -18,7 +18,7 @@ Generic cycle of test execution under DbTest.
 This way database modifications are quickly restored, but it makes it a requirement that the table has to use a transaction engine like InnoDb.
 
 Support
------------
+-------
 
 For bugs and feature requests, please use the [issues](https://git.cakedc.com/cakedc/db_test/issues) section of this repository.
 

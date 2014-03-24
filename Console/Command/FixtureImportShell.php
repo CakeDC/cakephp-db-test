@@ -1,5 +1,4 @@
 <?php
-
 App::uses('AppShell', 'Console/Command');
 App::uses('CakeTestFixture', 'TestSuite/Fixture');
 App::uses('Folder', 'Utility');
@@ -14,7 +13,7 @@ class FixtureImportShell extends AppShell {
 	public function main() {
 		$this->import();
 	}
-	
+
 /**
  * Get & configure the option parser
  *
@@ -54,20 +53,20 @@ class FixtureImportShell extends AppShell {
 			$this->out(__('Please define fixture name as first param of shell.'));
 			$this->_stop();
 		}
-		
+
 		$this->_initDb();
-	
+
 		$plugin = '';
 		if (!empty($this->params['plugin'])) {
 			$plugin = $this->params['plugin'] . '.';
 		}
-		
+
 		$class = Inflector::camelize($name) . 'Fixture';
 		$table = Inflector::pluralize(Inflector::underscore($name));
 		App::uses($class, $plugin . 'Test/Fixture');
 		$this->Fixture = new $class();
 		$this->Fixture->Schema = new CakeSchema(array('name' => 'TestSuite', 'connection' => 'test_template'));
-		
+
 		$schema = $this->Fixture->Schema->read();
 		$tables = $schema['tables'];
 		$fields = array();
@@ -163,7 +162,7 @@ class FixtureImportShell extends AppShell {
 				$fields = array();
 				foreach ($fixture->records as $record) {
 					$fields = array_merge($fields, array_keys(array_intersect_key($record, $fixture->fields)));
-				}				
+				}
 				$fields = array_unique($fields);
 				if ( !empty($actualFields)) {
 					$fields = array_intersect($actualFields, $fields);
@@ -204,7 +203,7 @@ class FixtureImportShell extends AppShell {
 		include_once APP . 'Config' . DS . 'database.php';
 		if (class_exists('DATABASE_CONFIG')) {
 			$this->Config = new DATABASE_CONFIG();
-		}	
+		}
 	}
 
 /**

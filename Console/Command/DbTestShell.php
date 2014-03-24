@@ -37,7 +37,7 @@ class DbTestShell extends TestShell {
 		$this->hr();
 
 		$args = $this->_parseArgs();
-		
+
 		if ($this->params['import-database-template']) {
 			$this->__importTestSkeleton();
 			unset($this->params['import-database-template']);
