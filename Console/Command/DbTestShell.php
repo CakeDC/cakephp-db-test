@@ -6,6 +6,11 @@ App::uses('DbTestSuiteCommand', 'DbTest.Lib/TestSuite/Command');
 
 class DbTestShell extends TestShell {
 
+/**
+ * Parses options from command line
+ *
+ * @return ConsoleOptionParser
+ */
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
 		$parser->description(array(
@@ -24,6 +29,8 @@ class DbTestShell extends TestShell {
 
 /**
  * Main entry point for the shell
+ *
+ * @return mixed
  */
 	public function main() {
 		include_once APP . 'Config' . DS . 'database.php';
@@ -41,7 +48,7 @@ class DbTestShell extends TestShell {
 		if ($this->params['import-database-template']) {
 			$this->__importTestSkeleton();
 			unset($this->params['import-database-template']);
-		} else if (empty($args['case'])) {
+		} elseif (empty($args['case'])) {
 			return $this->available();
 		}
 
@@ -53,21 +60,29 @@ class DbTestShell extends TestShell {
 /**
  * Overrides the CakeTest _run so we can setup our own TestSuiteCommand and TestRunner
  *
- * @param array $runnerArgs
- * @param array $options
+ * @param array $runnerArgs Command line args
+ * @param array $options Options for run
+ *
+ * @return void
  */
 	protected function _run($runnerArgs, $options = array()) {
 		restore_error_handler();
-		restore_error_handler(); 
+		restore_error_handler();
 		$testCli = new DbTestSuiteCommand('CakeTestLoader', $runnerArgs);
 		$testCli->run($options);
 	}
 
+/**
+ * Import test skeleton with given database file or default
+ *
+ * @return void
+ */
 	private function __importTestSkeleton() {
 		$path = null;
 		if (!empty($this->params['import-database-file']) && file_exists($this->params['import-database-file'])) {
 			$path = $this->params['import-database-file'];
-		}	
+			unset($this->params['import-database-file']);
+		}
 		$skeletonDatabase = Configure::read('db.database.test_template');
 		$testListener = new DbTestListener();
 		$testListener->setupDatabase($skeletonDatabase, true, $path);
