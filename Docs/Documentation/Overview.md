@@ -6,7 +6,7 @@ The **DbTest** plugin enables developers to speeding up tests running on mysql d
 The logic of DbTest different from testsuite in the way it handles fixtures.
 
 The CakePHP testsuite uses fixtures to initialize test database, DbTest don't use fixtures at all.
-Instead it uses an additional template database, that is initialized based on the app/Config/db_test.sql file.
+Instead it uses an additional template database, that is initialized based on the app/Config/sql/test_db.sql file.
 
 Generic cycle of test execution under DbTest
 --------------------------------------------
