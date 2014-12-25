@@ -125,6 +125,7 @@ class FixtureImportShell extends AppShell {
  * Run before all tests execute, should return SQL statement to create table for this fixture could be executed successfully.
  *
  * @param DboSource $db An instance of the database object used to create the fixture table
+ * @param string $fixture Fixture
  * @return boolean True on success, false on failure
  */
 	public function create($db, $fixture) {
@@ -153,7 +154,9 @@ class FixtureImportShell extends AppShell {
  * of this fixture could be executed successfully.
  *
  * @param DboSource $db An instance of the database into which the records will be inserted
- * @return boolean on success or if there are no records to insert, or false on failure
+ * @param string $fixture Fixture
+ * @param array $actualFields fields list
+ * @return bool on success or if there are no records to insert, or false on failure
  */
 	public function insert($db, $fixture, $actualFields = array()) {
 		if (!isset($this->_insert)) {
@@ -209,7 +212,7 @@ class FixtureImportShell extends AppShell {
 /**
  * Find and import test_skel.sql file from app/Config/sql
  *
- * @param string $path
+ * @param string $path path
  * @return void
  */
 	protected function _ensureFolder($path) {
