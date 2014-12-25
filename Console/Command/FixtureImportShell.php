@@ -103,7 +103,7 @@ class FixtureImportShell extends AppShell {
 			$dumpFile = $dumpFolder . DS . 'test_db.sql';
 
 			print "Exporting data from skeleton database: $skeletonName \n";
-			exec("mysqldump --user=$skeletonUser --password=$skeletonPassword $skeletonName > $dumpFile", $output);
+			exec("mysqldump --user=$skeletonUser --password=$skeletonPassword $skeletonName  | grep -v '/*!50013 DEFINER' > $dumpFile", $output);
 		}
 	}
 
