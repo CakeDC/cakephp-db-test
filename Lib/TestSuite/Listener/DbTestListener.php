@@ -220,7 +220,7 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 
 			if (!file_exists($tmpFile)) {
 				print "Backing up data from skeleton database: $skeletonName \n";
-				exec("mysqldump --user=$skeletonUser --password=$skeletonPassword $skeletonName > $tmpFile", $output);
+				exec("mysqldump --user=$skeletonUser --password=$skeletonPassword $skeletonName | grep -v '/*!50013 DEFINER' > $tmpFile", $output);
 			}
 
 			print "Restoring data to: $testDbName \n";
@@ -261,7 +261,7 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 		exec("mysql --user=$testUser --password=$password $testDbName < $testSkeletonFile", $output);
 
 		print "Backing up data from skeleton database: $testDbName \n\n";
-		exec("mysqldump --user=$testUser --password=$password $testDbName > $tmpFile", $output);
+		exec("mysqldump --user=$testUser --password=$password $testDbName | grep -v '/*!50013 DEFINER' > $tmpFile", $output);
 	}
 	
 /**
