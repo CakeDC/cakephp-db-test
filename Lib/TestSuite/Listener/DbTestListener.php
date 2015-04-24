@@ -74,7 +74,7 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
  * @param PHPUnit_Framework_TestSuite $suite
  */
 	public function startTestSuite(PHPUnit_Framework_TestSuite $suite) {
-		$database = Configure::read('db.database.test'); 
+		$database = Configure::read('db.database.test');
 		if (!empty($database) && get_class($suite) == 'PHPUnit_Framework_TestSuite') {
 
 			try{
@@ -147,13 +147,14 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 		$password = $database['password'];
 		$testDbName = $database['database'];
 		$testUser = $database['login'];
+		$dbHost = $database['host'];
 
 		$portNumber = '';
 		if (!empty($database['port'])) {
 			$portNumber = "-p " . $database['port'];
 		}
 		$success = false;
-		if ($this->__recreateTestDatabase($testDbName, $portNumber, $testUser, $password) === 0) {
+		if ($this->__recreateTestDatabase($testDbName, $portNumber, $testUser, $password, $dbHost) === 0) {
 			$success = true;
 		}
 
@@ -167,22 +168,23 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 /**
  * Recreate test database
  *
- * @param string $testDbName
- * @param string $portNumber
- * @param string $testUser
- * @param string $password
+ * @param string $testDbName database name
+ * @param string $portNumber database port number
+ * @param string $testUser database user
+ * @param string $password database password
+ * @param string $dbHost database host
  *
  * @return int - shell return code
  */
-	private function __recreateTestDatabase($testDbName, $portNumber, $testUser, $password) {
+	private function __recreateTestDatabase($testDbName, $portNumber, $testUser, $password, $dbHost) {
 		$output = array();
 		$success = 0;
 		print "Dropping database: $testDbName \n";
-		exec("mysqladmin -f --user=$testUser --password=$password drop $testDbName", $output, $success);
+		exec("mysqladmin -f --user=$testUser --password=$password --host=$dbHost drop $testDbName", $output, $success);
 
 		if (in_array($success, array(0, 1))) {
 			print "Creating database: $testDbName \n";
-			exec("mysqladmin -f --user=$testUser --password=$password create $testDbName", $output, $success);
+			exec("mysqladmin -f --user=$testUser --password=$password --host=$dbHost create $testDbName", $output, $success);
 		}
 
 		return $success;
@@ -201,6 +203,7 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 		$testDbName = $database['database'];
 		$testUser = $database['login'];
 		$password = $database['password'];
+		$dbHost = $database['host'];
 
 		$portNumber = '';
 		if (!empty($database['port'])) {
@@ -213,6 +216,7 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 			$skeletonName = $skeletonDatabase['database'];
 			$skeletonUser = $skeletonDatabase['login'];
 			$skeletonPassword = $skeletonDatabase['password'];
+			$skeletonHost = $skeletonDatabase['host'];
 
 			$cacheFolder = ROOT . DS . APP_DIR . DS . 'tmp' . DS . 'cache' . DS . 'fixtures';
 			$this->_ensureFolder($cacheFolder);
@@ -220,11 +224,11 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 
 			if (!file_exists($tmpFile)) {
 				print "Backing up data from skeleton database: $skeletonName \n";
-				exec("mysqldump --user=$skeletonUser --password=$skeletonPassword $skeletonName | grep -v '/*!50013 DEFINER' > $tmpFile", $output);
+				exec("mysqldump --host=$skeletonHost --user=$skeletonUser --password=$skeletonPassword $skeletonName | grep -v '/*!50013 DEFINER' > $tmpFile", $output);
 			}
 
 			print "Restoring data to: $testDbName \n";
-			exec("mysql --user=$testUser --password=$password $testDbName < $tmpFile", $output);
+			exec("mysql --host=$dbHost --user=$testUser --password=$password $testDbName < $tmpFile", $output);
 		}
 	}
 
@@ -238,12 +242,13 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 		$testDbName = $database['database'];
 		$testUser = $database['login'];
 		$password = $database['password'];
+		$dbHost = $database['host'];
 
 		$portNumber = '';
 		if (!empty($database['port'])) {
 			$portNumber = "-p " . $database['port'];
 		}
-		
+
 		$cacheFolder = ROOT . DS . APP_DIR . DS . 'tmp' . DS . 'cache' . DS . 'fixtures';
 		$this->_ensureFolder($cacheFolder);
 		$tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
@@ -258,12 +263,12 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 			$testSkeletonFile = $sqlFilePath;
 		}
 		print "Importing test skeleton from: $testSkeletonFile \n";
-		exec("mysql --user=$testUser --password=$password $testDbName < $testSkeletonFile", $output);
+		exec("mysql --host=$dbHost --user=$testUser --password=$password $testDbName < $testSkeletonFile", $output);
 
 		print "Backing up data from skeleton database: $testDbName \n\n";
-		exec("mysqldump --user=$testUser --password=$password $testDbName | grep -v '/*!50013 DEFINER' > $tmpFile", $output);
+		exec("mysqldump --host=$dbHost --user=$testUser --password=$password $testDbName | grep -v '/*!50013 DEFINER' > $tmpFile", $output);
 	}
-	
+
 /**
  * Find and import test_skel.sql file from app/Config/sql
  *
