@@ -80,6 +80,16 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
 	public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
 	}
 
+/**
+ * Called when a test is risky.
+ *
+ * @param PHPUnit_Framework_Test $test
+ * @param Exception              $e
+ * @param float                  $time
+ */
+	public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
+	}
+	
 	/**
 	 * Called at the beginning of a test (per test method in a class)
 	 *
