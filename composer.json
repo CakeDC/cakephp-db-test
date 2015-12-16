@@ -1,0 +1,30 @@
+{
+	"name": "cakedc/db_test",
+	"description": "DB Test Plugin for CakePHP",
+	"type": "cakephp-plugin",
+	"keywords": ["cakephp", "db_test"],
+	"homepage": "http://www.cakedc.com/",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Cake Development Corporation",
+			"email": "team@cakedc.com",
+			"homepage": "http://www.cakedc.com"
+		}
+	],
+	"support": {
+		"email": "team@cakedc.com",
+		"issues": "http://git.cakedc.com/cakedc/db_test/issues",
+		"forum": "http://stackoverflow.com/tags/cakedc",
+		"wiki": "https://git.cakedc.com/cakedc/db_test/blob/master/readme.md",
+		"irc": "irc://irc.freenode.org/cakephp",
+		"source": "http://git.cakedc.com/cakedc/db_test"
+	},
+	"require": {
+		"php": ">=5.3.0",
+		"composer/installers": "*"
+	},
+	"extra": {
+		"installer-name": "DbTest"
+	}
+}
