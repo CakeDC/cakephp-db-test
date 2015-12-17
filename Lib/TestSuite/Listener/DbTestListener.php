@@ -2,6 +2,7 @@
 require_once 'PHPUnit/Framework/TestListener.php';
 
 App::uses('Folder', 'Utility');
+App::uses('EngineFactory', 'DbTest.Lib/Engine');
 class DbTestListener implements PHPUnit_Framework_TestListener {
 
 	private $databaseLoaded = false;
@@ -81,7 +82,7 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 				$ds = ConnectionManager::getDataSource('test');
 			} catch (Exception $e) {
 				// create test database and schema
-				$this->setupDatabase($database, false);
+				$this->setupDatabase($database, true, false);
 				$ds = ConnectionManager::getDataSource('test');
 			}
 
@@ -117,7 +118,7 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 			$ds->close();
 		}
 
-		if ($this->setupDatabase($database)) {
+		if ($this->setupDatabase($database, false)) {
 			$this->__transferData($database);
 			$this->databaseLoaded = true;
 		}
@@ -139,52 +140,20 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
  * and transfers data from test_skel to test
  *
  * @param array $database
- * @param bool  $importTestSkeleton
+ * @param bool $createSchema
+ * @param bool $importTestSkeleton
  * @param string $sqlFilePath
  * @return bool
  */
-	public function setupDatabase($database, $importTestSkeleton = false, $sqlFilePath = null) {
-		$password = $database['password'];
-		$testDbName = $database['database'];
-		$testUser = $database['login'];
-		$dbHost = $database['host'];
+	public function setupDatabase($database, $createSchema, $importTestSkeleton = false, $sqlFilePath = null) {
+		$engine = EngineFactory::engine($database);
 
-		$portNumber = '';
-		if (!empty($database['port'])) {
-			$portNumber = "-p " . $database['port'];
+		$success = $engine->recreateTestDatabase($database);
+		if ($success && $createSchema) {
+			$success = $engine->createSchema($database);
 		}
-		$success = false;
-		if ($this->__recreateTestDatabase($testDbName, $portNumber, $testUser, $password, $dbHost) === 0) {
-			$success = true;
-		}
-
-		if($success && $importTestSkeleton) {
+		if ($success && $importTestSkeleton) {
 			$this->__importTestSkeleton($database, $sqlFilePath);
-		}
-
-		return $success;
-	}
-
-/**
- * Recreate test database
- *
- * @param string $testDbName database name
- * @param string $portNumber database port number
- * @param string $testUser database user
- * @param string $password database password
- * @param string $dbHost database host
- *
- * @return int - shell return code
- */
-	private function __recreateTestDatabase($testDbName, $portNumber, $testUser, $password, $dbHost) {
-		$output = array();
-		$success = 0;
-		print "Dropping database: $testDbName \n";
-		exec("mysqladmin -f --user=$testUser --password=$password --host=$dbHost drop $testDbName", $output, $success);
-
-		if (in_array($success, array(0, 1))) {
-			print "Creating database: $testDbName \n";
-			exec("mysqladmin -f --user=$testUser --password=$password --host=$dbHost create $testDbName", $output, $success);
 		}
 
 		return $success;
@@ -201,22 +170,9 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
  */
 	private function __transferData($database) {
 		$testDbName = $database['database'];
-		$testUser = $database['login'];
-		$password = $database['password'];
-		$dbHost = $database['host'];
-
-		$portNumber = '';
-		if (!empty($database['port'])) {
-			$portNumber = "-p " . $database['port'];
-		}
-
-		$output = array();
 		$skeletonDatabase = Configure::read('db.database.test_template');
 		if (!empty($skeletonDatabase)) {
 			$skeletonName = $skeletonDatabase['database'];
-			$skeletonUser = $skeletonDatabase['login'];
-			$skeletonPassword = $skeletonDatabase['password'];
-			$skeletonHost = $skeletonDatabase['host'];
 
 			$cacheFolder = ROOT . DS . APP_DIR . DS . 'tmp' . DS . 'cache' . DS . 'fixtures';
 			$this->_ensureFolder($cacheFolder);
@@ -224,11 +180,13 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 
 			if (!file_exists($tmpFile)) {
 				print "Backing up data from skeleton database: $skeletonName \n";
-				exec("mysqldump --host=$skeletonHost --user=$skeletonUser --password=$skeletonPassword $skeletonName | grep -v '/*!50013 DEFINER' > $tmpFile", $output);
+				$engine = EngineFactory::engine($skeletonDatabase);
+				$engine->export($skeletonDatabase, $tmpFile);
 			}
 
 			print "Restoring data to: $testDbName \n";
-			exec("mysql --host=$dbHost --user=$testUser --password=$password $testDbName < $tmpFile", $output);
+			$engine = EngineFactory::engine($database);
+			$engine->import($database, $tmpFile);
 		}
 	}
 
@@ -240,15 +198,6 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
  */
 	private function __importTestSkeleton($database, $sqlFilePath = null) {
 		$testDbName = $database['database'];
-		$testUser = $database['login'];
-		$password = $database['password'];
-		$dbHost = $database['host'];
-
-		$portNumber = '';
-		if (!empty($database['port'])) {
-			$portNumber = "-p " . $database['port'];
-		}
-
 		$cacheFolder = ROOT . DS . APP_DIR . DS . 'tmp' . DS . 'cache' . DS . 'fixtures';
 		$this->_ensureFolder($cacheFolder);
 		$tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
@@ -262,11 +211,12 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 		} else {
 			$testSkeletonFile = $sqlFilePath;
 		}
-		print "Importing test skeleton from: $testSkeletonFile \n";
-		exec("mysql --host=$dbHost --user=$testUser --password=$password $testDbName < $testSkeletonFile", $output);
 
+		$engine = EngineFactory::engine($database);
+		print "Importing test skeleton from: $testSkeletonFile \n";
+		$engine->import($database, $testSkeletonFile, array('format' => 'plain'));
 		print "Backing up data from skeleton database: $testDbName \n\n";
-		exec("mysqldump --host=$dbHost --user=$testUser --password=$password $testDbName | grep -v '/*!50013 DEFINER' > $tmpFile", $output);
+		$engine->export($database, $tmpFile);
 	}
 
 /**
