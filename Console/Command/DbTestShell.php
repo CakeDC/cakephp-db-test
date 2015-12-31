@@ -85,7 +85,7 @@ class DbTestShell extends TestShell {
 		}
 		$skeletonDatabase = Configure::read('db.database.test_template');
 		$testListener = new DbTestListener();
-		$testListener->setupDatabase($skeletonDatabase, true, $path);
+		$testListener->setupDatabase($skeletonDatabase, true, true, $path);
 	}
 
 }

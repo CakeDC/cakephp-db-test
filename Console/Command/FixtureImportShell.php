@@ -1,6 +1,7 @@
 <?php
 App::uses('AppShell', 'Console/Command');
 App::uses('CakeTestFixture', 'TestSuite/Fixture');
+App::uses('EngineFactory', 'DbTest.Lib/Engine');
 App::uses('Folder', 'Utility');
 
 class FixtureImportShell extends AppShell {
@@ -95,15 +96,14 @@ class FixtureImportShell extends AppShell {
 		$skeletonDatabase = $this->Config->test_template;
 		if (!empty($skeletonDatabase)) {
 			$skeletonName = $skeletonDatabase['database'];
-			$skeletonUser = $skeletonDatabase['login'];
-			$skeletonPassword = $skeletonDatabase['password'];
 
 			$dumpFolder = ROOT . DS . APP_DIR . DS . 'Config' . DS . 'sql';
 			$this->_ensureFolder($dumpFolder);
 			$dumpFile = $dumpFolder . DS . 'test_db.sql';
 
 			print "Exporting data from skeleton database: $skeletonName \n";
-			exec("mysqldump --user=$skeletonUser --password=$skeletonPassword $skeletonName  | grep -v '/*!50013 DEFINER' > $dumpFile", $output);
+			$engine = EngineFactory::engine($skeletonDatabase);
+			$engine->export($skeletonDatabase, $dumpFile, array('format' => 'plain'));
 		}
 	}
 
