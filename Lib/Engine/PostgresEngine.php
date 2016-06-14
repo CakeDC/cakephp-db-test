@@ -16,7 +16,16 @@ class PostgresEngine extends BaseEngine {
 		$databaseName = $database['database'];
 		$systemUser = 'postgres';
 
-		$terminateQuery = "select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = '$databaseName'";
+		$versionQuery = "SHOW SERVER_VERSION";
+		$this->_execute("psql $baseArgs -c \"$versionQuery\" $systemUser", $output, $success);
+		$version = trim(Hash::get($output, 2));
+
+		// The field was named 'procpid' before 9.2
+		$pidFieldName = 'pid';
+		if (strnatcmp($version, '9.2') === -1) {
+			$pidFieldName = 'procpid';
+		}
+		$terminateQuery = "select pg_terminate_backend(pg_stat_activity.$pidFieldName) from pg_stat_activity where pg_stat_activity.datname = '$databaseName'";
 		$this->_execute("psql $baseArgs -c \"$terminateQuery\" $systemUser", $output, $success);
 
 		$output = array();
@@ -24,7 +33,7 @@ class PostgresEngine extends BaseEngine {
 		print "Dropping database: $databaseName \n";
 		$this->_execute("dropdb $baseArgs $databaseName", $output, $success);
 
-        if ($this->isSucess($success)) {
+		if ($this->isSucess($success)) {
 			print "Creating database: $databaseName \n";
 			$this->_execute("createdb $baseArgs $databaseName", $output, $success);
 		}
@@ -119,7 +128,7 @@ class PostgresEngine extends BaseEngine {
  */
 	protected function _setPassword($database) {
 		$password = $database['password'];
-        putenv("PGPASSWORD=$password");
+		putenv("PGPASSWORD=$password");
 	}
 
 }
