@@ -129,10 +129,6 @@ class DbTestListener implements PHPUnit_Framework_TestListener {
 		}
 
 		$ds->cacheSources = false;
-
-		// this is required since if no fixtures are present,
-		// CakePhp for some reason runs against the 'default' database
-		ClassRegistry::config(array('ds' => 'test', 'testing' => true));
 	}
 
 /**
