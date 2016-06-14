@@ -5,6 +5,11 @@ App::uses('BaseEngine', 'DbTest.Lib/Engine');
 class PostgresEngine extends BaseEngine {
 
 /**
+ * System user name
+ */
+	const SYSTEM_USER = 'postgres';
+
+/**
  * Recreates test database.
  *
  * @param array $database Database configuration.
@@ -14,9 +19,14 @@ class PostgresEngine extends BaseEngine {
 		$baseArgs = $this->_getBaseArguments($database);
 		$this->_setPassword($database);
 		$databaseName = $database['database'];
-		$systemUser = 'postgres';
+		$systemUser = self::SYSTEM_USER;
 
-		$terminateQuery = "select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = '$databaseName'";
+		// The field was named 'procpid' before 9.2
+		$pidFieldName = 'pid';
+		if (strnatcmp($this->_getServerVersion($database), '9.2') === -1) {
+			$pidFieldName = 'procpid';
+		}
+		$terminateQuery = "select pg_terminate_backend(pg_stat_activity.$pidFieldName) from pg_stat_activity where pg_stat_activity.datname = '$databaseName'";
 		$this->_execute("psql $baseArgs -c \"$terminateQuery\" $systemUser", $output, $success);
 
 		$output = array();
@@ -24,7 +34,7 @@ class PostgresEngine extends BaseEngine {
 		print "Dropping database: $databaseName \n";
 		$this->_execute("dropdb $baseArgs $databaseName", $output, $success);
 
-        if ($this->isSucess($success)) {
+		if ($this->isSucess($success)) {
 			print "Creating database: $databaseName \n";
 			$this->_execute("createdb $baseArgs $databaseName", $output, $success);
 		}
@@ -119,7 +129,22 @@ class PostgresEngine extends BaseEngine {
  */
 	protected function _setPassword($database) {
 		$password = $database['password'];
-        putenv("PGPASSWORD=$password");
+		putenv("PGPASSWORD=$password");
 	}
 
+/**
+ * Get server version as a string.
+ * Example: '9.1.19'
+ *
+ * @param array $database Database configuration.
+ * @return string
+ */
+	protected function _getServerVersion($database) {
+		$baseArgs = $this->_getBaseArguments($database);
+		$this->_setPassword($database);
+		$systemUser = self::SYSTEM_USER;
+
+		$this->_execute("psql $baseArgs -c \"SHOW SERVER_VERSION\" $systemUser", $output, $success);
+		return trim(Hash::get($output, 2));
+	}
 }
