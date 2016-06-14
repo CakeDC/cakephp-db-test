@@ -91,7 +91,7 @@ class DbTestShell extends TestShell {
 	}
 
 /**
- * Import test skeleton with given database file or default
+ * Makes sure all the models use the 'test' database instead of 'default'
  *
  * @return void
  */
