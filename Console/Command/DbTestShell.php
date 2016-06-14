@@ -33,6 +33,8 @@ class DbTestShell extends TestShell {
  * @return mixed
  */
 	public function main() {
+		$this->__setCorrectModelsDatabase();
+
 		include_once APP . 'Config' . DS . 'database.php';
 		if (class_exists('DATABASE_CONFIG')) {
 			$config = new DATABASE_CONFIG();
@@ -88,4 +90,23 @@ class DbTestShell extends TestShell {
 		$testListener->setupDatabase($skeletonDatabase, true, true, $path);
 	}
 
+/**
+ * Import test skeleton with given database file or default
+ *
+ * @return void
+ */
+	private function __setCorrectModelsDatabase() {
+		// This is required since if no fixtures are present,
+		// CakePhp for some reason runs against the 'default' database
+		ClassRegistry::config(array('ds' => 'test', 'testing' => true));
+
+		// Set database to 'test' for models already loaded at bootstrap
+		$loadedClasses = ClassRegistry::keys();
+		foreach ($loadedClasses as $class) {
+			$classObject = ClassRegistry::getObject($class);
+			if ($classObject instanceof Model) {
+				$classObject->useDbConfig = 'test';
+			}
+		}
+	}
 }
