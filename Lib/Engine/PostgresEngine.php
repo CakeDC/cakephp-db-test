@@ -5,6 +5,11 @@ App::uses('BaseEngine', 'DbTest.Lib/Engine');
 class PostgresEngine extends BaseEngine {
 
 /**
+ * System user name
+ */
+	const SYSTEM_USER = 'postgres';
+
+/**
  * Recreates test database.
  *
  * @param array $database Database configuration.
@@ -14,15 +19,11 @@ class PostgresEngine extends BaseEngine {
 		$baseArgs = $this->_getBaseArguments($database);
 		$this->_setPassword($database);
 		$databaseName = $database['database'];
-		$systemUser = 'postgres';
-
-		$versionQuery = "SHOW SERVER_VERSION";
-		$this->_execute("psql $baseArgs -c \"$versionQuery\" $systemUser", $output, $success);
-		$version = trim(Hash::get($output, 2));
+		$systemUser = self::SYSTEM_USER;
 
 		// The field was named 'procpid' before 9.2
 		$pidFieldName = 'pid';
-		if (strnatcmp($version, '9.2') === -1) {
+		if (strnatcmp($this->_getServerVersion($database), '9.2') === -1) {
 			$pidFieldName = 'procpid';
 		}
 		$terminateQuery = "select pg_terminate_backend(pg_stat_activity.$pidFieldName) from pg_stat_activity where pg_stat_activity.datname = '$databaseName'";
@@ -131,4 +132,19 @@ class PostgresEngine extends BaseEngine {
 		putenv("PGPASSWORD=$password");
 	}
 
+/**
+ * Get server version as a string.
+ * Example: '9.1.19'
+ *
+ * @param array $database Database configuration.
+ * @return string
+ */
+	protected function _getServerVersion($database) {
+		$baseArgs = $this->_getBaseArguments($database);
+		$this->_setPassword($database);
+		$systemUser = self::SYSTEM_USER;
+
+		$this->_execute("psql $baseArgs -c \"SHOW SERVER_VERSION\" $systemUser", $output, $success);
+		return trim(Hash::get($output, 2));
+	}
 }
