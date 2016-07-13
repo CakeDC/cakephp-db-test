@@ -78,7 +78,9 @@ class MysqlEngine extends BaseEngine {
             $port = " --port=" . $database['port'];
         }
 
-        return "--host=$host $port --user=$user --password='$password'";
+		$quote = DS === '/' ? "'" : '"';
+		
+        return "--host=$host $port --user=$user --password=$quote$password$quote";
     }
 
 }
