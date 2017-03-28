@@ -42,7 +42,9 @@ class PostgresEngine extends BaseEngine {
         $baseArgs = $this->_getBaseArguments($database);
         $this->_setPassword($database);
         $testDbName = $database['database'];
-        $schema = $database['schema'];
+        if (!empty($database['schema'])) {
+            $schema = $database['schema'];
+        }
 
         if (!empty($schema)) {
             $this->_execute("psql $baseArgs -c \"create schema $schema;\" $testDbName", $output, $success);
@@ -66,7 +68,7 @@ class PostgresEngine extends BaseEngine {
         if (isset($options['format']) && $options['format'] == 'plain') {
             $command = "psql $baseArgs $testDbName < $file";
         } else {
-            $command = "pg_restore $baseArgs -j=8 -Fc -d $testDbName $file";
+            $command = "pg_restore $baseArgs -j 8 -Fc -d $testDbName $file";
         }
         return $this->_execute($command, $output);
     }
