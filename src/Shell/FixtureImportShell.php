@@ -4,6 +4,7 @@ namespace DbTest\Shell;
 
 use Cake\Core\Configure;
 use Cake\Console\Shell;
+use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use DbTest\Engine\EngineFactory;
 use DbTest\TestSuite\Fixture\FixtureInjector;
@@ -16,6 +17,7 @@ class FixtureImportShell extends Shell {
      * @return void
      */
     public function main() {
+		$this->_initDb();
         // $this->import();
     }
 
@@ -47,7 +49,8 @@ class FixtureImportShell extends Shell {
      */
     public function dump() {
         Configure::load('app', 'default', false);
-        $skeletonDatabase = Configure::read('Datasources.test_template');
+        $skeletonDatabase = ConnectionManager::get('test_template')->config();
+
         if (!empty($skeletonDatabase)) {
             $skeletonName = $skeletonDatabase['database'];
 
@@ -67,9 +70,9 @@ class FixtureImportShell extends Shell {
      * @return void
      */
     protected function _initDb() {
-        if ($this->_initialized) {
-            return;
-        }
+         if ($this->_initialized) {
+             return;
+         }
         $db = ConnectionManager::get('test_template');
         $db->cacheSources = false;
         $this->_db = $db;

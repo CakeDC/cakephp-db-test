@@ -4,6 +4,7 @@ namespace DbTest\Shell;
 
 use Cake\Core\Configure;
 use Cake\Console\Shell;
+use Cake\Datasource\ConnectionManager;
 use DbTest\TestSuite\Fixture\FixtureManager;
 
 class DbTestShell extends Shell {
@@ -59,9 +60,8 @@ class DbTestShell extends Shell {
             $path = $this->params['import-database-file'];
             unset($this->params['import-database-file']);
         }
-        $skeletonDatabase = Configure::read('Datasources.test_template');
+        $skeletonDatabase = ConnectionManager::get('test_template')->config();
         $manager = new FixtureManager();
         $manager->setupDatabase($skeletonDatabase, true, true, $path);
     }
-
 }

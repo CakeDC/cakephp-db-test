@@ -95,8 +95,7 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      * @param PHPUnit_Framework_Test $test
      */
     public function startTest(PHPUnit_Framework_Test $test) {
-        $ds = ConnectionManager::get('test');
-        $ds->begin();
+        ConnectionManager::get('test')->begin();
     }
 
     /**
@@ -106,8 +105,7 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      * @param float                  $time
      */
     public function endTest(PHPUnit_Framework_Test $test, $time) {
-        $ds = ConnectionManager::get('test');
-        $ds->rollback();
+        ConnectionManager::get('test')->rollback();
     }
 
     /**
@@ -117,7 +115,7 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      */
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite) {
         Configure::load('app', 'default', false);
-        $database = Configure::read('Datasources.test');
+        $database = ConnectionManager::get('test')->config();
         if (!empty($database) && get_class($suite) == 'PHPUnit_Framework_TestSuite') {
 
             try {
@@ -219,6 +217,4 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
         $this->_aliasConnections();
         $this->_initialized = true;
     }
-
 }
-

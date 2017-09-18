@@ -3,6 +3,7 @@
 namespace DbTest\TestSuite\Fixture;
 
 use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use DbTest\Engine\EngineFactory;
 
@@ -43,7 +44,7 @@ class FixtureManager {
      */
     public function transferData($database) {
         $testDbName = $database['database'];
-        $skeletonDatabase = Configure::read('Datasources.test_template');
+        $skeletonDatabase = ConnectionManager::get('test_template')->config();
         if (!empty($skeletonDatabase)) {
             $skeletonName = $skeletonDatabase['database'];
 
