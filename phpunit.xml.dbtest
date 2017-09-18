@@ -23,7 +23,7 @@
 	<listeners>
 		<listener
 		class="\DbTest\TestSuite\Fixture\FixtureInjector"
-		file="./vendor/cakedc/DbTest/src/TestSuite/Fixture/FixtureInjector.php">
+		file="./vendor/cakedc/db_test/src/TestSuite/Fixture/FixtureInjector.php">
 			<arguments>
 				<object class="\DbTest\TestSuite\Fixture\FixtureManager" />
 			</arguments>
