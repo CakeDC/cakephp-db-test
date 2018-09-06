@@ -16,7 +16,7 @@ class DbTestShell extends Shell {
      */
     public function getOptionParser() {
         $parser = parent::getOptionParser();
-        $parser->description([
+        $parser->setDescription([
             __d('cake_console', 'The Db Test Shell extends the CakePhp TestSuite and no longer needs fixtures defined.
 			Instead the test and test-template databases are synchronized before each test class is executed.
 			Transaction wrapping used to rollback test case changes.'),
