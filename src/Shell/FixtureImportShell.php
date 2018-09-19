@@ -6,6 +6,7 @@ use Cake\Core\Configure;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
+use Cake\Utility\Hash;
 use DbTest\Engine\EngineFactory;
 use DbTest\TestSuite\Fixture\FixtureInjector;
 
@@ -37,6 +38,9 @@ class FixtureImportShell extends Shell {
                       ->addOption('plugin', array(
                           'help' => __('Load fixture from the plugin folder.')
                       ))
+                    ->addOption('dump-folder', [
+                        'help' => __d('cake_console', 'Provides path to dump test_db.sql file.'),
+                    ])
                       ->addOption('fixture', array(
                           'help' => __('Comma separated list of directories to exclude.')
                       ));
@@ -54,7 +58,7 @@ class FixtureImportShell extends Shell {
         if (!empty($skeletonDatabase)) {
             $skeletonName = $skeletonDatabase['database'];
 
-            $dumpFolder = CONFIG . DS . 'sql';
+            $dumpFolder = Hash::get($this->params, 'dump-folder', CONFIG . DS . 'sql') ;
             $this->_ensureFolder($dumpFolder);
             $dumpFile = $dumpFolder . DS . 'test_db.sql';
 
