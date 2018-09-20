@@ -2,7 +2,8 @@
 
 namespace DbTest\Engine;
 
-interface EngineInterface {
+interface EngineInterface
+{
 
     /**
      * Recreates test database.
@@ -20,7 +21,7 @@ interface EngineInterface {
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function import($database, $file, $options = array());
+    public function import($database, $file, $options = []);
 
     /**
      * Export database.
@@ -30,6 +31,5 @@ interface EngineInterface {
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function export($database, $file, $options = array());
-
+    public function export($database, $file, $options = []);
 }

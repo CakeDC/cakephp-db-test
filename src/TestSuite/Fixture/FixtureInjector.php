@@ -11,7 +11,8 @@ use PHPUnit_Framework_Test;
 use PHPUnit_Framework_TestListener;
 use PHPUnit_Framework_TestSuite;
 
-class FixtureInjector implements PHPUnit_Framework_TestListener {
+class FixtureInjector implements PHPUnit_Framework_TestListener
+{
 
     /**
      * The instance of the fixture manager to use
@@ -32,7 +33,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      *
      * @param \Cake\TestSuite\Fixture\FixtureManager $manager The fixture manager
      */
-    public function __construct(FixtureManager $manager) {
+    public function __construct(FixtureManager $manager)
+    {
         $this->_fixtureManager = $manager;
     }
 
@@ -45,7 +47,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      * @param Exception              $e
      * @param float                  $time
      */
-    public function addError(PHPUnit_Framework_Test $test, Exception $e, $time) {
+    public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
     }
 
     /**
@@ -55,7 +58,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      * @param PHPUnit_Framework_AssertionFailedError $e
      * @param float                                  $time
      */
-    public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time) {
+    public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
+    {
     }
 
     /**
@@ -65,7 +69,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      * @param Exception              $e
      * @param float                  $time
      */
-    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
+    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
     }
 
     /**
@@ -76,7 +81,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      * @param Exception              $e
      * @param float                  $time
      */
-    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
+    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
     }
 
     /**
@@ -86,7 +92,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      * @param Exception              $e
      * @param float                  $time
      */
-    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time) {
+    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
     }
 
     /**
@@ -94,7 +101,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      *
      * @param PHPUnit_Framework_Test $test
      */
-    public function startTest(PHPUnit_Framework_Test $test) {
+    public function startTest(PHPUnit_Framework_Test $test)
+    {
         ConnectionManager::get('test')->begin();
     }
 
@@ -104,7 +112,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      * @param PHPUnit_Framework_Test $test
      * @param float                  $time
      */
-    public function endTest(PHPUnit_Framework_Test $test, $time) {
+    public function endTest(PHPUnit_Framework_Test $test, $time)
+    {
         ConnectionManager::get('test')->rollback();
     }
 
@@ -113,11 +122,11 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      *
      * @param PHPUnit_Framework_TestSuite $suite
      */
-    public function startTestSuite(PHPUnit_Framework_TestSuite $suite) {
+    public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
+    {
         Configure::load('app', 'default', false);
         $database = ConnectionManager::get('test')->config();
         if (!empty($database) && get_class($suite) == 'PHPUnit_Framework_TestSuite') {
-
             try {
                 $ds = ConnectionManager::get('test');
             } catch (Exception $e) {
@@ -141,7 +150,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      *
      * @param PHPUnit_Framework_TestSuite $suite
      */
-    public function endTestSuite(PHPUnit_Framework_TestSuite $suite) {
+    public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
+    {
     }
 
     /**
@@ -151,7 +161,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      * @param string $ds
      * @param string $database
      */
-    private function __loadDatabase($ds, $database) {
+    private function __loadDatabase($ds, $database)
+    {
         if ($ds->isConnected()) {
             // attempt to disconnect and close connection to db.
             $ds->disconnect();
@@ -174,7 +185,6 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
         $this->_initDb();
     }
 
-
     /**
      * Add aliases for all non test prefixed connections.
      *
@@ -183,7 +193,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      *
      * @return void
      */
-    protected function _aliasConnections() {
+    protected function _aliasConnections()
+    {
         $connections = ConnectionManager::configured();
         ConnectionManager::alias('test', 'default');
         $map = [];
@@ -210,7 +221,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener {
      *
      * @return void
      */
-    protected function _initDb() {
+    protected function _initDb()
+    {
         if ($this->_initialized) {
             return;
         }

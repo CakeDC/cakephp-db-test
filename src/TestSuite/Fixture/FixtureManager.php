@@ -7,7 +7,8 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use DbTest\Engine\EngineFactory;
 
-class FixtureManager {
+class FixtureManager
+{
 
     /**
      * Drops existing connections to test database, recreates db,
@@ -19,7 +20,8 @@ class FixtureManager {
      * @param string $sqlFilePath
      * @return bool
      */
-    public function setupDatabase($database, $createSchema, $importTestSkeleton = false, $sqlFilePath = null) {
+    public function setupDatabase($database, $createSchema, $importTestSkeleton = false, $sqlFilePath = null)
+    {
         $engine = EngineFactory::engine($database);
 
         $success = $engine->recreateTestDatabase($database);
@@ -42,7 +44,8 @@ class FixtureManager {
      *
      * @param string $database
      */
-    public function transferData($database) {
+    public function transferData($database)
+    {
         $testDbName = $database['database'];
         $skeletonDatabase = ConnectionManager::get('test_template')->config();
         if (!empty($skeletonDatabase)) {
@@ -70,7 +73,8 @@ class FixtureManager {
      * @param string $database
      * @param string $sqlFilePath
      */
-    private function __importTestSkeleton($database, $sqlFilePath = null) {
+    private function __importTestSkeleton($database, $sqlFilePath = null)
+    {
         $testDbName = $database['database'];
         $cacheFolder = CACHE . 'fixtures';
         $this->_ensureFolder($cacheFolder);
@@ -88,7 +92,7 @@ class FixtureManager {
 
         $engine = EngineFactory::engine($database);
         print "Importing test skeleton from: $testSkeletonFile \n";
-        $engine->import($database, $testSkeletonFile, array('format' => 'plain'));
+        $engine->import($database, $testSkeletonFile, ['format' => 'plain']);
         print "Backing up data from skeleton database: $testDbName \n\n";
         $engine->export($database, $tmpFile);
     }
@@ -98,8 +102,8 @@ class FixtureManager {
      *
      * @param string $path
      */
-    protected function _ensureFolder($path) {
+    protected function _ensureFolder($path)
+    {
         $Folder = new Folder($path, true);
     }
-
 }

@@ -2,7 +2,8 @@
 
 namespace DbTest\Engine;
 
-abstract class BaseEngine {
+abstract class BaseEngine
+{
 
     /**
      * Show commands and results on execution
@@ -27,7 +28,7 @@ abstract class BaseEngine {
      * @param array  $options  Additional options/
      * @return bool
      */
-    abstract public function import($database, $file, $options = array());
+    abstract public function import($database, $file, $options = []);
 
     /**
      * Export database.
@@ -37,13 +38,15 @@ abstract class BaseEngine {
      * @param array  $options  Additional options/
      * @return bool
      */
-    abstract public function export($database, $file, $options = array());
+    abstract public function export($database, $file, $options = []);
 
-    public function isSucess($check) {
-        $allowed = array(
+    public function isSucess($check)
+    {
+        $allowed = [
             0 => true,
             1 => true,
-        );
+        ];
+
         return isset($allowed[$check]) && $allowed[$check];
     }
 
@@ -53,7 +56,8 @@ abstract class BaseEngine {
      * @param array $database Database configuration.
      * @return bool
      */
-    public function createSchema($database) {
+    public function createSchema($database)
+    {
         return true;
     }
 
@@ -63,7 +67,8 @@ abstract class BaseEngine {
      * @param int    $return_var
      * @return string The last line from the result of the command
      */
-    protected function _execute($command, &$output = null, &$return_var = null) {
+    protected function _execute($command, &$output = null, &$return_var = null)
+    {
         if ($this->_verbose) {
             print($command . "\n");
         }
@@ -71,7 +76,7 @@ abstract class BaseEngine {
         if ($this->_verbose) {
             print(implode("\n", $output) . "\n");
         }
+
         return $result;
     }
-
 }

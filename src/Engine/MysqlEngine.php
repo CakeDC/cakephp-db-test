@@ -2,7 +2,8 @@
 
 namespace DbTest\Engine;
 
-class MysqlEngine extends BaseEngine {
+class MysqlEngine extends BaseEngine
+{
 
     /**
      * Recreates test database.
@@ -10,19 +11,20 @@ class MysqlEngine extends BaseEngine {
      * @param array $database Database configuration.
      * @return bool
      */
-    public function recreateTestDatabase($database) {
+    public function recreateTestDatabase($database)
+    {
         $databaseName = $database['database'];
         $baseArgs = $this->_getBaseArguments($database);
 
-        $output = array();
+        $output = [];
         $success = 0;
         print "Dropping database: $databaseName \n";
         $this->_execute("mysqladmin -f $baseArgs drop $databaseName", $output, $success);
 
-        if (in_array($success, array(
+        if (in_array($success, [
             0,
             1
-        ))) {
+        ])) {
             print "Creating database: $databaseName \n";
             $this->_execute("mysqladmin -f $baseArgs create $databaseName", $output, $success);
         }
@@ -38,10 +40,12 @@ class MysqlEngine extends BaseEngine {
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function import($database, $file, $options = array()) {
+    public function import($database, $file, $options = [])
+    {
         $databaseName = $database['database'];
         $baseArgs = $this->_getBaseArguments($database);
         $command = "mysql $baseArgs $databaseName < $file";
+
         return $this->_execute($command, $output);
     }
 
@@ -53,13 +57,15 @@ class MysqlEngine extends BaseEngine {
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function export($database, $file, $options = array()) {
+    public function export($database, $file, $options = [])
+    {
         $databaseName = $database['database'];
         $baseArgs = $this->_getBaseArguments($database);
         $command = "mysqldump $baseArgs $databaseName | grep -v '/*!50013 DEFINER'";
         if (!empty($file)) {
             $command .= " > $file";
         }
+
         return $this->_execute($command, $output);
     }
 
@@ -69,7 +75,8 @@ class MysqlEngine extends BaseEngine {
      * @param array $database Database configuration.
      * @return string
      */
-    protected function _getBaseArguments($database) {
+    protected function _getBaseArguments($database)
+    {
         $user = $database['username'];
         $password = $database['password'];
         $host = $database['host'];
@@ -78,9 +85,8 @@ class MysqlEngine extends BaseEngine {
             $port = " --port=" . $database['port'];
         }
 
-		$quote = DS === '/' ? "'" : '"';
-		
+        $quote = DS === '/' ? "'" : '"';
+
         return "--host=$host $port --user=$user --password=$quote$password$quote";
     }
-
 }

@@ -7,14 +7,16 @@ use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
 use DbTest\TestSuite\Fixture\FixtureManager;
 
-class DbTestShell extends Shell {
+class DbTestShell extends Shell
+{
 
     /**
      * Parses options from command line
      *
      * @return ConsoleOptionParser
      */
-    public function getOptionParser() {
+    public function getOptionParser()
+    {
         $parser = parent::getOptionParser();
         $parser->setDescription([
             __d('cake_console', 'The Db Test Shell extends the CakePhp TestSuite and no longer needs fixtures defined.
@@ -29,6 +31,7 @@ class DbTestShell extends Shell {
                ->addOption('import-database-file', [
                    'help' => __d('cake_console', 'Provides path to test_db.sql file'),
                ]);
+
         return $parser;
     }
 
@@ -37,7 +40,8 @@ class DbTestShell extends Shell {
      *
      * @return mixed
      */
-    public function main() {
+    public function main()
+    {
         Configure::load('app', 'default', false);
 
         $this->out(__d('cake_console', 'Db Test Shell'));
@@ -54,7 +58,8 @@ class DbTestShell extends Shell {
      *
      * @return void
      */
-    private function __importTestSkeleton() {
+    private function __importTestSkeleton()
+    {
         $path = null;
         if (!empty($this->params['import-database-file']) && file_exists($this->params['import-database-file'])) {
             $path = $this->params['import-database-file'];
