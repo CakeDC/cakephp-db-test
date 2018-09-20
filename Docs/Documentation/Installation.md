@@ -3,6 +3,24 @@ Installation
 
 To install the plugin, place the files in a directory labelled "DbTest/" in your "app/Plugin/" directory.
 
+Composer
+--------
+
+Add a repository to your composer.json and specify
+
+```
+"cakedc/db_test": "^3.0"
+```
+
+```
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@git.cakedc.com:cakedc/db_test.git"
+        }
+    ],
+```
+
 Git Submodule
 -------------
 
