@@ -22,17 +22,3 @@ Running test case
 
 Copy phpunit.xml.dbtest as phpunit.xml.dist in your project and then run `vendor/bin/phpunit`.
 
-Store database dump
--------------------
-
-Store a dump of the template database using:
-
-```
-bin/cake fixture_import dump
-```
-
-With `--import-database-file` you can specify the folder to add the sql file
-
-```
-bin/cake fixture_import dump --dump-folder=files
-```
