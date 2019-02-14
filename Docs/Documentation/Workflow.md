@@ -19,15 +19,6 @@ To update database structure the following steps need to beperformed:
 3. Execute `bin/cake db_test -i` to import sql file.
 4. Add modified sql file into repository.
 
-Store database dump
--------------------
-
-For handy storing dump of template database you can you next shell action.
-
-```
-bin/cake fixture_import dump
-```
-
 Running Tests
 -------------------
 Copy phpunit.xml.dbtest as phpunit.xml.dist in your project (modify if needed) and then run `phpunit`.
