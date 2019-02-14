@@ -14,10 +14,10 @@ class FixtureManager
      * Drops existing connections to test database, recreates db,
      * and transfers data from test_skel to test
      *
-     * @param array  $database
-     * @param bool   $createSchema
-     * @param bool   $importTestSkeleton
-     * @param string $sqlFilePath
+     * @param array  $database Database configuration
+     * @param bool   $createSchema true when schema will be created
+     * @param bool   $importTestSkeleton true when skeleton will be imported
+     * @param string $sqlFilePath Path to the sql script to import
      * @return bool
      */
     public function setupDatabase($database, $createSchema, $importTestSkeleton = false, $sqlFilePath = null)
@@ -42,7 +42,8 @@ class FixtureManager
      *
      * mysqlamdin must be in your path and be the proper version for your database
      *
-     * @param string $database
+     * @param string $database Database configuration
+     * @return void
      */
     public function transferData($database)
     {
@@ -68,10 +69,11 @@ class FixtureManager
     }
 
     /**
-     * Find and import test_skel.sql file from app/Config/sql
+     * Find and import test_db.sql file from app/Config/sql
      *
-     * @param string $database
-     * @param string $sqlFilePath
+     * @param string $database Database configuration.
+     * @param string $sqlFilePath Path to the sql script to import
+     * @return void
      */
     private function __importTestSkeleton($database, $sqlFilePath = null)
     {
@@ -98,9 +100,10 @@ class FixtureManager
     }
 
     /**
-     * Find and import test_skel.sql file from app/Config/sql
+     * Ensure folder exists
      *
-     * @param string $path
+     * @param string $path Path to folder
+     * @return void
      */
     protected function _ensureFolder($path)
     {

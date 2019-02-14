@@ -2,8 +2,8 @@
 
 namespace DbTest\Shell;
 
-use Cake\Core\Configure;
 use Cake\Console\Shell;
+use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use DbTest\TestSuite\Fixture\FixtureManager;
 
@@ -22,15 +22,13 @@ class DbTestShell extends Shell
             __d('cake_console', 'The Db Test Shell extends the CakePhp TestSuite and no longer needs fixtures defined.
 			Instead the test and test-template databases are synchronized before each test class is executed.
 			Transaction wrapping used to rollback test case changes.'),
-        ])
-               ->addOption('import-database-template', [
-                   'boolean' => true,
-                   'short' => 'i',
-                   'help' => __d('cake_console', 'Drops test template database and imports test_db.sql file from app/Config/sql'),
-               ])
-               ->addOption('import-database-file', [
-                   'help' => __d('cake_console', 'Provides path to test_db.sql file'),
-               ]);
+        ])->addOption('import-database-template', [
+            'boolean' => true,
+            'short' => 'i',
+            'help' => __d('cake_console', 'Drops test template database and imports test_db.sql file from app/Config/sql'),
+        ])->addOption('import-database-file', [
+            'help' => __d('cake_console', 'Provides path to test_db.sql file'),
+        ]);
 
         return $parser;
     }
@@ -51,6 +49,7 @@ class DbTestShell extends Shell
             $this->__importTestSkeleton();
             unset($this->params['import-database-template']);
         }
+        $this->out($this->getOptionParser()->help());
     }
 
     /**

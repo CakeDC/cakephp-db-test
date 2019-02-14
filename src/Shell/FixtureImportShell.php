@@ -2,8 +2,8 @@
 
 namespace DbTest\Shell;
 
-use Cake\Core\Configure;
 use Cake\Console\Shell;
+use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Hash;
@@ -20,34 +20,22 @@ class FixtureImportShell extends Shell
      */
     public function main()
     {
-        $this->_initDb();
-        // $this->import();
+        $this->out($this->getOptionParser()->help());
     }
 
     /**
      * Get & configure the option parser
      *
-     * @return void
+     * @return $this
      */
     public function getOptionParser()
     {
         $parser = parent::getOptionParser();
 
         return $parser->description(__('DbTest fixture importer:'))
-                      ->addOption('import-structure', [
-                          'boolean' => true,
-                          'default' => false,
-                          'help' => __('Creates table structure in template schema. By default imports data only.')
-                      ])
-                      ->addOption('plugin', [
-                          'help' => __('Load fixture from the plugin folder.')
-                      ])
-                    ->addOption('dump-folder', [
-                        'help' => __d('cake_console', 'Provides path to dump test_db.sql file.'),
-                    ])
-                      ->addOption('fixture', [
-                          'help' => __('Comma separated list of directories to exclude.')
-                      ]);
+            ->addOption('dump-folder', [
+                'help' => __d('cake_console', 'Provides path to dump test_db.sql file.'),
+            ]);
     }
 
     /**

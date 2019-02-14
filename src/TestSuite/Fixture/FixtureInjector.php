@@ -1,9 +1,9 @@
 <?php
 namespace DbTest\TestSuite\Fixture;
 
-use Cake\Filesystem\Folder;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
+use Cake\Filesystem\Folder;
 use DbTest\TestSuite\Fixture\FixtureManager;
 use Exception;
 use PHPUnit_Framework_AssertionFailedError;
@@ -32,6 +32,7 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
      * Constructor. Save internally the reference to the passed fixture manager
      *
      * @param \Cake\TestSuite\Fixture\FixtureManager $manager The fixture manager
+     * @return void
      */
     public function __construct(FixtureManager $manager)
     {
@@ -43,9 +44,10 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called when an error is encountered during a test
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
-     * @param float                  $time
+     * @param PHPUnit_Framework_Test $test  Failed Test
+     * @param Exception              $e     Exception encountered
+     * @param float                  $time  Time of occurrence
+     * @return void
      */
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
@@ -54,9 +56,10 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called when a failure is encountered during a test
      *
-     * @param PHPUnit_Framework_Test                 $test
-     * @param PHPUnit_Framework_AssertionFailedError $e
-     * @param float                                  $time
+     * @param PHPUnit_Framework_Test                 $test  Failed Test
+     * @param PHPUnit_Framework_AssertionFailedError $e     Failed Assertion
+     * @param float                                  $time  Time of occurrence
+     * @return void
      */
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
@@ -65,9 +68,10 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called if a test is incomplete
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
-     * @param float                  $time
+     * @param PHPUnit_Framework_Test $test  Incomplete Test
+     * @param Exception              $e     Exception encountered
+     * @param float                  $time  Time of occurrence
+     * @return void
      */
     public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
@@ -77,9 +81,10 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
      * Called when a test is skipped.
      * Tests are skipped when a test it was dependent on fails (using @depends)
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
-     * @param float                  $time
+     * @param PHPUnit_Framework_Test $test  Skipped Test
+     * @param Exception              $e     Exception encountered
+     * @param float                  $time  Time of occurrence
+     * @return void
      */
     public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
@@ -88,9 +93,10 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called when a test is risky.
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
-     * @param float                  $time
+     * @param PHPUnit_Framework_Test $test  Risky Test
+     * @param Exception              $e     Exception encountered
+     * @param float                  $time  Time of occurrence
+     * @return void
      */
     public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
@@ -99,7 +105,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called at the beginning of a test (per test method in a class)
      *
-     * @param PHPUnit_Framework_Test $test
+     * @param PHPUnit_Framework_Test $test  Test
+     * @return void
      */
     public function startTest(PHPUnit_Framework_Test $test)
     {
@@ -109,8 +116,9 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called when a test ends (per test method in a class)
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param float                  $time
+     * @param PHPUnit_Framework_Test $test  Ended Test
+     * @param float                  $time  Time of occurrence
+     * @return void
      */
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
@@ -120,7 +128,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called at the beginning of a suite. A suite is a collection of tests
      *
-     * @param PHPUnit_Framework_TestSuite $suite
+     * @param PHPUnit_Framework_TestSuite $suite    Suite
+     * @return void
      */
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
@@ -148,7 +157,8 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called at the end of a suite.
      *
-     * @param PHPUnit_Framework_TestSuite $suite
+     * @param PHPUnit_Framework_TestSuite $suite    Suite
+     * @return void
      */
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
@@ -158,8 +168,9 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
      * Disconnects from test database (if necessary), sets up, and reconnects.
      * Disable datasource caching and sets the datasource for the test run.
      *
-     * @param string $ds
-     * @param string $database
+     * @param string $ds        Directory Separator
+     * @param array $database   Database configuration
+     * @return void
      */
     private function __loadDatabase($ds, $database)
     {
