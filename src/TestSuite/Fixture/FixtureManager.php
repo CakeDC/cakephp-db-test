@@ -24,9 +24,9 @@ class FixtureManager
     {
         $engine = EngineFactory::engine($database);
 
-        $success = $engine->recreateTestDatabase($database);
+        $success = $engine->recreateTestDatabase();
         if ($success && $createSchema) {
-            $success = $engine->createSchema($database);
+            $success = $engine->createSchema();
         }
         if ($success && $importTestSkeleton) {
             $this->__importTestSkeleton($database, $sqlFilePath);
@@ -59,12 +59,12 @@ class FixtureManager
             if (!file_exists($tmpFile)) {
                 print "Backing up data from skeleton database: $skeletonName \n";
                 $engine = EngineFactory::engine($skeletonDatabase);
-                $engine->export($skeletonDatabase, $tmpFile);
+                $engine->export($tmpFile);
             }
 
             print "Restoring data to: $testDbName \n";
             $engine = EngineFactory::engine($database);
-            $engine->import($database, $tmpFile);
+            $engine->import($tmpFile);
         }
     }
 
@@ -94,9 +94,9 @@ class FixtureManager
 
         $engine = EngineFactory::engine($database);
         print "Importing test skeleton from: $testSkeletonFile \n";
-        $engine->import($database, $testSkeletonFile, ['format' => 'plain']);
+        $engine->import($testSkeletonFile, ['format' => 'plain']);
         print "Backing up data from skeleton database: $testDbName \n\n";
-        $engine->export($database, $tmpFile);
+        $engine->export($tmpFile);
     }
 
     /**

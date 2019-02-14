@@ -32,10 +32,10 @@ class FixtureImportShell extends Shell
     {
         $parser = parent::getOptionParser();
 
-        return $parser->description(__('DbTest fixture importer:'))
+        return $parser->setDescription(__('DbTest fixture importer:'))
             ->addOption('dump-folder', [
-                'help' => __d('cake_console', 'Provides path to dump test_db.sql file.'),
-            ]);
+                'help' => __d('DbTest', 'Provides path to dump test_db.sql file.'),
+            ])->addSubcommand('dump', ['help' => __d('DbTest', 'Dumps the template database')]);
     }
 
     /**
@@ -45,7 +45,6 @@ class FixtureImportShell extends Shell
      */
     public function dump()
     {
-        Configure::load('app', 'default', false);
         $skeletonDatabase = ConnectionManager::get('test_template')->config();
 
         if (!empty($skeletonDatabase)) {
@@ -57,7 +56,7 @@ class FixtureImportShell extends Shell
 
             print "Exporting data from skeleton database: $skeletonName \n";
             $engine = EngineFactory::engine($skeletonDatabase);
-            $engine->export($skeletonDatabase, $dumpFile, ['format' => 'plain']);
+            $engine->export($dumpFile, ['format' => 'plain']);
         }
     }
 

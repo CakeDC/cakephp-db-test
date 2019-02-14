@@ -11,7 +11,7 @@ interface EngineInterface
      * @param array $database Database configuration.
      * @return bool
      */
-    public function recreateTestDatabase($database);
+    public function recreateTestDatabase();
 
     /**
      * Import test skeleton database.
@@ -21,7 +21,7 @@ interface EngineInterface
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function import($database, $file, $options = []);
+    public function import($file, $options = []);
 
     /**
      * Export database.
@@ -31,5 +31,5 @@ interface EngineInterface
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function export($database, $file, $options = []);
+    public function export($file, $options = []);
 }

@@ -48,8 +48,9 @@ class DbTestShell extends Shell
         if ($this->params['import-database-template']) {
             $this->__importTestSkeleton();
             unset($this->params['import-database-template']);
+        } else {
+            $this->out($this->getOptionParser()->help());
         }
-        $this->out($this->getOptionParser()->help());
     }
 
     /**

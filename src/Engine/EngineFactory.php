@@ -3,6 +3,7 @@
 namespace DbTest\Engine;
 
 use Cake\Network\Exception\NotFoundException;
+use Cake\Core\Configure;
 
 class EngineFactory
 {
@@ -19,19 +20,14 @@ class EngineFactory
             throw new NotFoundException(__('Driver is not defined'));
         }
         $type = str_replace('Cake\\Database\\Driver\\', '', $database['driver']);
-        $supported = [
-            'Mysql',
-            'Postgres'
-        ];
-        if (!in_array($type, $supported)) {
+        $engineType = Configure::read('DbTest.supportedDrivers.' . $type);
+        if (empty($engineType)) {
             throw new NotFoundException(__('Database engine is not supported'));
         }
-        $namespace = 'DbTest\\Engine\\';
-        $engineType = $namespace . $type . 'Engine';
         if (!class_exists($engineType)) {
             throw new NotFoundException(__('Can\'t load engine ' . $engineType));
         }
-
-        return new $engineType();
+        
+        return new $engineType($database);
     }
 }

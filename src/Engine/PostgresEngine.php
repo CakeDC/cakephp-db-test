@@ -8,16 +8,14 @@ class PostgresEngine extends BaseEngine
     /**
      * Recreates test database.
      *
-     * @param array $database Database configuration.
      * @return bool
      */
-    public function recreateTestDatabase($database)
+    public function recreateTestDatabase()
     {
-        $baseArgs = $this->_getBaseArguments($database);
-        $this->_setPassword($database);
-        $databaseName = $database['database'];
+        $baseArgs = $this->_getBaseArguments();
+        $this->_setPassword();
+        $databaseName = $this->_database['database'];
         $systemUser = 'postgres';
-
         $terminateQuery = "select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = '$databaseName'";
         $this->_execute("psql $baseArgs -c \"$terminateQuery\" $systemUser", $output, $success);
 
@@ -37,16 +35,15 @@ class PostgresEngine extends BaseEngine
     /**
      * Create schema
      *
-     * @param array $database Database configuration.
      * @return bool
      */
-    public function createSchema($database)
+    public function createSchema()
     {
-        $baseArgs = $this->_getBaseArguments($database);
-        $this->_setPassword($database);
-        $testDbName = $database['database'];
-        if (!empty($database['schema'])) {
-            $schema = $database['schema'];
+        $baseArgs = $this->_getBaseArguments();
+        $this->_setPassword();
+        $testDbName = $this->_database['database'];
+        if (!empty($this->_database['schema'])) {
+            $schema = $this->_database['schema'];
         }
 
         if (!empty($schema)) {
@@ -59,15 +56,14 @@ class PostgresEngine extends BaseEngine
     /**
      * Import test skeleton database.
      *
-     * @param array  $database Database configuration.
      * @param string $file     Sql file path.
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function import($database, $file, $options = [])
+    public function import($file, $options = [])
     {
-        $baseArgs = $this->_getBaseArguments($database);
-        $testDbName = $database['database'];
+        $baseArgs = $this->_getBaseArguments();
+        $testDbName = $this->_database['database'];
         $this->_setPassword($database);
 
         if (isset($options['format']) && $options['format'] == 'plain') {
@@ -82,17 +78,15 @@ class PostgresEngine extends BaseEngine
     /**
      * Export database.
      *
-     * @param array  $database Database configuration.
      * @param string $file     Sql file path.
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function export($database, $file, $options = [])
+    public function export($file, $options = [])
     {
-        $baseArgs = $this->_getBaseArguments($database);
-        $this->_setPassword($database);
-        $testDbName = $database['database'];
-
+        $baseArgs = $this->_getBaseArguments();
+        $this->_setPassword();
+        $testDbName = $this->_database['database'];
         $format = ' -Fc ';
         if (isset($options['format']) && $options['format'] == 'plain') {
             $format = " -Fp ";
@@ -106,16 +100,15 @@ class PostgresEngine extends BaseEngine
     /**
      * Format common arguments.
      *
-     * @param array $database Database configuration.
      * @return string
      */
-    protected function _getBaseArguments($database)
+    protected function _getBaseArguments()
     {
-        $user = $database['username'];
-        $host = $database['host'];
+        $user = $this->_database['username'];
+        $host = $this->_database['host'];
         $port = '';
-        if (!empty($database['port'])) {
-            $port = " --port=" . $database['port'];
+        if (!empty($this->_database['port'])) {
+            $port = " --port=" . $this->_database['port'];
         }
 
         return "--host=$host $port --username=$user";
@@ -124,12 +117,11 @@ class PostgresEngine extends BaseEngine
     /**
      * Set current db password.
      *
-     * @param array $database Database configuration.
      * @return void
      */
-    protected function _setPassword($database)
+    protected function _setPassword()
     {
-        $password = $database['password'];
+        $password = $this->_database['password'];
         putenv("PGPASSWORD=$password");
     }
 }

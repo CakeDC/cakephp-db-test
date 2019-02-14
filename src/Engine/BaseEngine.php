@@ -2,8 +2,11 @@
 
 namespace DbTest\Engine;
 
+use DbTest\Engine\Traits\ExecuteTrait;
+
 abstract class BaseEngine
 {
+    use ExecuteTrait;
 
     /**
      * Show commands and results on execution
@@ -13,12 +16,30 @@ abstract class BaseEngine
     protected $_verbose = false;
 
     /**
+     * Database configuration
+     *
+     * @var bool
+     */
+    protected $_database = [];
+
+    /**
+     * Constructor method
+     *
+     * @param $database
+     * @return void
+     */
+    public function __construct($database)
+    {
+        $this->_database = $database;
+    }
+
+    /**
      * Recreates test database.
      *
      * @param array $database Database configuration.
      * @return bool
      */
-    abstract public function recreateTestDatabase($database);
+    abstract public function recreateTestDatabase();
 
     /**
      * Import test skeleton database.
@@ -28,7 +49,7 @@ abstract class BaseEngine
      * @param array  $options  Additional options/
      * @return bool
      */
-    abstract public function import($database, $file, $options = []);
+    abstract public function import($file, $options = []);
 
     /**
      * Export database.
@@ -38,7 +59,7 @@ abstract class BaseEngine
      * @param array  $options  Additional options/
      * @return bool
      */
-    abstract public function export($database, $file, $options = []);
+    abstract public function export($file, $options = []);
 
     /**
      * Check if success.
@@ -62,29 +83,8 @@ abstract class BaseEngine
      * @param array $database Database configuration.
      * @return bool
      */
-    public function createSchema($database)
+    public function createSchema()
     {
         return true;
-    }
-
-    /**
-     * Execute an external program
-     *
-     * @param string $command       The command that will be executed.
-     * @param array  $output        Command output
-     * @param int    $return_var    Return status of the executed command
-     * @return string The last line from the result of the command
-     */
-    protected function _execute($command, &$output = null, &$return_var = null)
-    {
-        if ($this->_verbose) {
-            print($command . "\n");
-        }
-        $result = exec($command, $output, $return_var);
-        if ($this->_verbose) {
-            print(implode("\n", $output) . "\n");
-        }
-
-        return $result;
     }
 }
