@@ -52,7 +52,7 @@ If any updates are added, go back to the base of your own repository, commit and
 Configuration
 -------------
 
-Plugin require additional database connection to database snapshot, that named template and uses as unchangeable source
+Plugin requires additional database connection to database snapshot named template and uses as unchangeable source
 of test fixtures.
 
 Add next configuration setting into app/Config/database.php

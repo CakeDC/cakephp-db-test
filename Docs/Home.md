@@ -1,14 +1,15 @@
 Home
 ====
 
-The **DbTest** plugin enables developers to speeding up tests running on mysql database.
+The **DbTest** plugin enables developers to speeding up tests running on MySQL or PostgreSQL database.
 
 Requirements
 ------------
 
-* CakePHP 2.4+
-* PHP 5.2.8+
+* CakePHP 3.5+
+* PHP 5.6.0+
 * MySQL database with InnoDb engine
+* PostgreSQL database
 
 Documentation
 -------------

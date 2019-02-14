@@ -4,34 +4,21 @@ Examples
 Import template database
 ------------------------
 
-Importing template database form sql file
+Importing template database form sql file, by default it will load `config/sql/test_db.sql`
 
 ```
-cake DbTest.db_test -i
+bin/cake db_test -i
+```
+
+Use `--import-database-file` to specify the sql file to be loaded
+
+```
+bin/cake db_test -i --import-database-file=files/dump.sql
 ```
 
 
 Running test case
 -----------------
 
-Execute test case using DbTest.
+Copy phpunit.xml.dbtest as phpunit.xml.dist in your project and then run `vendor/bin/phpunit`.
 
-```
-cake DbTest.db_test app TestName
-```
-
-Store database dump
--------------------
-
-For handy storing dump of template database you can you next shell action.
-
-```
-cake DbTest.FixtureImport dump
-```
-
-Importing legacy fixtures
--------------------------
-
-```
-cake DbTest.FixtureImport import FixutreName --plugin PluginName
-```

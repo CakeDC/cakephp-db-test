@@ -40,7 +40,13 @@ abstract class BaseEngine
      */
     abstract public function export($database, $file, $options = []);
 
-    public function isSucess($check)
+    /**
+     * Check if success.
+     *
+     * @param int $check Check value
+     * @return bool
+     */
+    public function isSuccess($check)
     {
         $allowed = [
             0 => true,
@@ -62,9 +68,11 @@ abstract class BaseEngine
     }
 
     /**
-     * @param string $command The command that will be executed.
-     * @param array  $output
-     * @param int    $return_var
+     * Execute an external program
+     *
+     * @param string $command       The command that will be executed.
+     * @param array  $output        Command output
+     * @param int    $return_var    Return status of the executed command
      * @return string The last line from the result of the command
      */
     protected function _execute($command, &$output = null, &$return_var = null)

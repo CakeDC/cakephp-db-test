@@ -26,12 +26,12 @@ class PostgresEngine extends BaseEngine
         print "Dropping database: $databaseName \n";
         $this->_execute("dropdb $baseArgs $databaseName", $output, $success);
 
-        if ($this->isSucess($success)) {
+        if ($this->isSuccess($success)) {
             print "Creating database: $databaseName \n";
             $this->_execute("createdb $baseArgs $databaseName", $output, $success);
         }
 
-        return $this->isSucess($success);
+        return $this->isSuccess($success);
     }
 
     /**
@@ -53,7 +53,7 @@ class PostgresEngine extends BaseEngine
             $this->_execute("psql $baseArgs -c \"create schema $schema;\" $testDbName", $output, $success);
         }
 
-        return $this->isSucess($success);
+        return $this->isSuccess($success);
     }
 
     /**
@@ -125,7 +125,7 @@ class PostgresEngine extends BaseEngine
      * Set current db password.
      *
      * @param array $database Database configuration.
-     * @return string
+     * @return void
      */
     protected function _setPassword($database)
     {
