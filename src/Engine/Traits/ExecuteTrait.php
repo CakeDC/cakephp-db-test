@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * Copyright 2010 - 2017, Log::info( Development Corporation (https://www.cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
@@ -10,6 +10,7 @@
  */
 namespace DbTest\Engine\Traits;
 
+use Cake\Log\Log\Log;
 /**
  * For executing commands
  */
@@ -26,11 +27,11 @@ trait ExecuteTrait
     protected function _execute($command, &$output = null, &$return_var = null)
     {
         if ($this->_verbose) {
-            print($command . "\n");
+            Log::info($command . "\n");
         }
         $result = exec($command, $output, $return_var);
         if ($this->_verbose) {
-            print(implode("\n", $output) . "\n");
+            Log::info(implode("\n", $output) . "\n");
         }
 
         return $result;

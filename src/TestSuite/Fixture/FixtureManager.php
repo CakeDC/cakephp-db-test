@@ -6,6 +6,7 @@ use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use DbTest\Engine\EngineFactory;
+use Cake\Log\Log;
 
 class FixtureManager
 {
@@ -57,12 +58,12 @@ class FixtureManager
             $tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
 
             if (!file_exists($tmpFile)) {
-                print "Backing up data from skeleton database: $skeletonName \n";
+                Log::info("Backing up data from skeleton database: $skeletonName \n");
                 $engine = EngineFactory::engine($skeletonDatabase);
                 $engine->export($tmpFile);
             }
 
-            print "Restoring data to: $testDbName \n";
+            Log::info("Restoring data to: $testDbName \n");
             $engine = EngineFactory::engine($database);
             $engine->import($tmpFile);
         }
@@ -81,7 +82,7 @@ class FixtureManager
         $cacheFolder = CACHE . 'fixtures';
         $this->_ensureFolder($cacheFolder);
         $tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
-        print "Deleting cached file: $tmpFile \n";
+        Log::info("Deleting cached file: $tmpFile \n");
         if (is_file($tmpFile)) {
             unlink($tmpFile);
         }
@@ -93,9 +94,9 @@ class FixtureManager
         }
 
         $engine = EngineFactory::engine($database);
-        print "Importing test skeleton from: $testSkeletonFile \n";
+        Log::info("Importing test skeleton from: $testSkeletonFile \n");
         $engine->import($testSkeletonFile, ['format' => 'plain']);
-        print "Backing up data from skeleton database: $testDbName \n\n";
+        Log::info("Backing up data from skeleton database: $testDbName \n\n");
         $engine->export($tmpFile);
     }
 

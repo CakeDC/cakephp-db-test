@@ -9,6 +9,7 @@ use Cake\Filesystem\Folder;
 use Cake\Utility\Hash;
 use DbTest\Engine\EngineFactory;
 use DbTest\TestSuite\Fixture\FixtureInjector;
+use Cake\Log\Log;
 
 class FixtureImportShell extends Shell
 {
@@ -54,7 +55,7 @@ class FixtureImportShell extends Shell
             $this->_ensureFolder($dumpFolder);
             $dumpFile = $dumpFolder . DS . 'test_db.sql';
 
-            print "Exporting data from skeleton database: $skeletonName \n";
+            Log::info("Exporting data from skeleton database: $skeletonName \n");
             $engine = EngineFactory::engine($skeletonDatabase);
             $engine->export($dumpFile, ['format' => 'plain']);
         }

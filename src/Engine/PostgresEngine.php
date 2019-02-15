@@ -2,6 +2,8 @@
 
 namespace DbTest\Engine;
 
+use Cake\Log\Log;
+
 class PostgresEngine extends BaseEngine
 {
 
@@ -21,11 +23,11 @@ class PostgresEngine extends BaseEngine
 
         $output = [];
         $success = 0;
-        print "Dropping database: $databaseName \n";
+        Log::info("Dropping database: $databaseName \n");
         $this->_execute("dropdb $baseArgs $databaseName", $output, $success);
 
         if ($this->isSuccess($success)) {
-            print "Creating database: $databaseName \n";
+            Log::info( "Creating database: $databaseName \n");
             $this->_execute("createdb $baseArgs $databaseName", $output, $success);
         }
 

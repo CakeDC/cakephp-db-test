@@ -2,6 +2,8 @@
 
 namespace DbTest\Engine;
 
+use Cake\Log\Log;
+
 class MysqlEngine extends BaseEngine
 {
 
@@ -17,10 +19,10 @@ class MysqlEngine extends BaseEngine
         $baseArgs = $this->_getBaseArguments();
         $output = [];
         $success = 0;
-        print "Dropping database: $databaseName \n";
+        Log::info("Dropping database: $databaseName \n");
         $this->_execute("mysqladmin -f $baseArgs drop $databaseName", $output, $success);
         if ($this->isSuccess($success)) {
-            print "Creating database: $databaseName \n";
+            Log::info( "Creating database: $databaseName \n");
             $this->_execute("mysqladmin -f $baseArgs create $databaseName", $output, $success);
         }
 
