@@ -6,12 +6,13 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use DbTest\TestSuite\Fixture\FixtureManager;
 use Exception;
-use PHPUnit_Framework_AssertionFailedError;
-use PHPUnit_Framework_Test;
-use PHPUnit_Framework_TestListener;
-use PHPUnit_Framework_TestSuite;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestListener;
+use PHPUnit\Framework\TestSuite;
+use PHPUnit\Framework\Warning;
 
-class FixtureInjector implements PHPUnit_Framework_TestListener
+class FixtureInjector implements TestListener
 {
 
     /**
@@ -44,36 +45,59 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called when an error is encountered during a test
      *
-     * @param PHPUnit_Framework_Test $test  Failed Test
-     * @param Exception              $e     Exception encountered
-     * @param float                  $time  Time of occurrence
+     * @param Test      $test  Failed Test
+     * @param Exception $e     Exception encountered
+     * @param float     $time  Time of occurrence
      * @return void
      */
-    public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addError(Test $test, Exception $e, $time)
+    {
+    }
+
+    /**
+     * A warning occurred.
+     *
+     * @param Test    $test
+     * @param Warning $e
+     * @param float   $time
+     */
+    public function addWarning(Test $test, Warning $e, $time)
     {
     }
 
     /**
      * Called when a failure is encountered during a test
      *
-     * @param PHPUnit_Framework_Test                 $test  Failed Test
-     * @param PHPUnit_Framework_AssertionFailedError $e     Failed Assertion
-     * @param float                                  $time  Time of occurrence
+     * @param Test                  $test  Failed Test
+     * @param AssertionFailedError  $e     Failed Assertion
+     * @param float                 $time  Time of occurrence
      * @return void
      */
-    public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
+    public function addFailure(Test $test, AssertionFailedError $e, $time)
     {
     }
 
     /**
      * Called if a test is incomplete
      *
-     * @param PHPUnit_Framework_Test $test  Incomplete Test
-     * @param Exception              $e     Exception encountered
-     * @param float                  $time  Time of occurrence
+     * @param Test      $test  Incomplete Test
+     * @param Exception $e     Exception encountered
+     * @param float     $time  Time of occurrence
      * @return void
      */
-    public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addIncompleteTest(Test $test, Exception $e, $time)
+    {
+    }
+
+    /**
+     * Called when a test is risky.
+     *
+     * @param Test      $test  Risky Test
+     * @param Exception $e     Exception encountered
+     * @param float     $time  Time of occurrence
+     * @return void
+     */
+    public function addRiskyTest(Test $test, Exception $e, $time)
     {
     }
 
@@ -81,34 +105,22 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
      * Called when a test is skipped.
      * Tests are skipped when a test it was dependent on fails (using @depends)
      *
-     * @param PHPUnit_Framework_Test $test  Skipped Test
-     * @param Exception              $e     Exception encountered
-     * @param float                  $time  Time of occurrence
+     * @param Test      $test  Skipped Test
+     * @param Exception $e     Exception encountered
+     * @param float     $time  Time of occurrence
      * @return void
      */
-    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
-    {
-    }
-
-    /**
-     * Called when a test is risky.
-     *
-     * @param PHPUnit_Framework_Test $test  Risky Test
-     * @param Exception              $e     Exception encountered
-     * @param float                  $time  Time of occurrence
-     * @return void
-     */
-    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addSkippedTest(Test $test, Exception $e, $time)
     {
     }
 
     /**
      * Called at the beginning of a test (per test method in a class)
      *
-     * @param PHPUnit_Framework_Test $test  Test
+     * @param Test  $test  Test
      * @return void
      */
-    public function startTest(PHPUnit_Framework_Test $test)
+    public function startTest(Test $test)
     {
         ConnectionManager::get('test')->begin();
     }
@@ -116,11 +128,11 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called when a test ends (per test method in a class)
      *
-     * @param PHPUnit_Framework_Test $test  Ended Test
-     * @param float                  $time  Time of occurrence
+     * @param Test  $test  Ended Test
+     * @param float $time  Time of occurrence
      * @return void
      */
-    public function endTest(PHPUnit_Framework_Test $test, $time)
+    public function endTest(Test $test, $time)
     {
         ConnectionManager::get('test')->rollback();
     }
@@ -128,14 +140,14 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called at the beginning of a suite. A suite is a collection of tests
      *
-     * @param PHPUnit_Framework_TestSuite $suite    Suite
+     * @param TestSuite $suite    Suite
      * @return void
      */
-    public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
+    public function startTestSuite(TestSuite $suite)
     {
         Configure::load('app', 'default', false);
         $database = ConnectionManager::get('test')->config();
-        if (!empty($database) && get_class($suite) == 'PHPUnit_Framework_TestSuite') {
+        if (!empty($database) && get_class($suite) == 'PHPUnit\Framework\TestSuite') {
             try {
                 $ds = ConnectionManager::get('test');
             } catch (Exception $e) {
@@ -157,10 +169,10 @@ class FixtureInjector implements PHPUnit_Framework_TestListener
     /**
      * Called at the end of a suite.
      *
-     * @param PHPUnit_Framework_TestSuite $suite    Suite
+     * @param TestSuite $suite    Suite
      * @return void
      */
-    public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
+    public function endTestSuite(TestSuite $suite)
     {
     }
 
