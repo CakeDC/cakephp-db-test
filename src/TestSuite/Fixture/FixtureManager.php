@@ -1,11 +1,19 @@
 <?php
+/**
+ * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+namespace CakeDC\DbTest\TestSuite\Fixture;
 
-namespace DbTest\TestSuite\Fixture;
-
+use CakeDC\DbTest\Engine\EngineFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
-use DbTest\Engine\EngineFactory;
 use Cake\Log\Log;
 
 class FixtureManager
@@ -58,12 +66,12 @@ class FixtureManager
             $tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
 
             if (!file_exists($tmpFile)) {
-                Log::info("Backing up data from skeleton database: $skeletonName \n");
+                Log::info(__d('cake_d_c/db_test', "Backing up data from skeleton database: $skeletonName \n"));
                 $engine = EngineFactory::engine($skeletonDatabase);
                 $engine->export($tmpFile);
             }
 
-            Log::info("Restoring data to: $testDbName \n");
+            Log::info(__d('cake_d_c/db_test', "Restoring data to: $testDbName \n"));
             $engine = EngineFactory::engine($database);
             $engine->import($tmpFile);
         }
@@ -82,7 +90,7 @@ class FixtureManager
         $cacheFolder = CACHE . 'fixtures';
         $this->_ensureFolder($cacheFolder);
         $tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
-        Log::info("Deleting cached file: $tmpFile \n");
+        Log::info(__d('cake_d_c/db_test', "Deleting cached file: $tmpFile \n"));
         if (is_file($tmpFile)) {
             unlink($tmpFile);
         }
@@ -94,9 +102,9 @@ class FixtureManager
         }
 
         $engine = EngineFactory::engine($database);
-        Log::info("Importing test skeleton from: $testSkeletonFile \n");
+        Log::info(__d('cake_d_c/db_test', "Importing test skeleton from: $testSkeletonFile \n"));
         $engine->import($testSkeletonFile, ['format' => 'plain']);
-        Log::info("Backing up data from skeleton database: $testDbName \n\n");
+        Log::info(__d('cake_d_c/db_test', "Backing up data from skeleton database: $testDbName \n\n"));
         $engine->export($tmpFile);
     }
 

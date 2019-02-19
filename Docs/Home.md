@@ -10,7 +10,7 @@ Requirements
 * PHP 5.6.0+
 * MySQL database with InnoDb engine
 * PostgreSQL database
-* Phpunit 5.*
+* Phpunit 6.*
 
 Documentation
 -------------

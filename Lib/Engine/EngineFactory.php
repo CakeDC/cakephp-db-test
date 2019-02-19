@@ -14,7 +14,7 @@ class EngineFactory
     public static function engine($database)
     {
         if (empty($database['datasource'])) {
-            throw new NotFoundException(__('Datasource is not defined'));
+            throw new NotFoundException(__d('cake_d_c/db_test', 'Datasource is not defined'));
         }
         $type = str_replace('Database/', '', $database['datasource']);
         $supported = ['Mysql', 'Postgres'];

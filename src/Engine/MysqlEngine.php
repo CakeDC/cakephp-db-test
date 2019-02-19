@@ -1,6 +1,14 @@
 <?php
-
-namespace DbTest\Engine;
+/**
+ * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+namespace CakeDC\DbTest\Engine;
 
 use Cake\Log\Log;
 
@@ -19,10 +27,10 @@ class MysqlEngine extends BaseEngine
         $baseArgs = $this->_getBaseArguments();
         $output = [];
         $success = 0;
-        Log::info("Dropping database: $databaseName \n");
+        Log::info(__d('cake_d_c/db_test', "Dropping database: $databaseName \n"));
         $this->_execute("mysqladmin -f $baseArgs drop $databaseName", $output, $success);
         if ($this->isSuccess($success)) {
-            Log::info( "Creating database: $databaseName \n");
+            Log::info(__d('cake_d_c/db_test',  "Creating database: $databaseName \n"));
             $this->_execute("mysqladmin -f $baseArgs create $databaseName", $output, $success);
         }
 
