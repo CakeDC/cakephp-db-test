@@ -5,7 +5,7 @@ Adding new fixture
 ------------------
 
 1. Using any database modification tool (phpmysql, navicat, mysql) modify templates database.
-2. Execute `bin/cake fixture_import dump` this will create `config/test_db.sql`
+2. Execute `bin/cake fixture_import dump` this will create `config/sql/test_db.sql`
 3. Execute `bin/cake db_test -i` to import sql file.
 4. Add modified sql file into repository.
 
