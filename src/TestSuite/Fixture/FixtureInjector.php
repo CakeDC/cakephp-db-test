@@ -42,11 +42,13 @@ class FixtureInjector implements TestListener
      * Constructor. Save internally the reference to the passed fixture manager
      *
      * @param \Cake\TestSuite\Fixture\FixtureManager $manager The fixture manager
+     * @param bool $verbose Show commands and results on execution
      * @return void
      */
-    public function __construct(FixtureManager $manager)
+    public function __construct(FixtureManager $manager, $verbose = false)
     {
         $this->_fixtureManager = $manager;
+		$this->_fixtureManager->setVerbose($verbose);
     }
 
     private $databaseLoaded = false;

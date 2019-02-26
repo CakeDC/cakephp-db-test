@@ -22,3 +22,8 @@ To update database structure the following steps need to beperformed:
 Running Tests
 -------------------
 Copy phpunit.xml.dbtest as phpunit.xml.dist in your project (modify if needed) and then run `phpunit`.
+
+Debug Test Suite
+-------------------
+Verbose mode enabled by second parameter of FixtureInjector set to true.
+It is defined in phpunit.xml.dist in arguments section of FixtureInjector listener.

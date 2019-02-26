@@ -10,7 +10,7 @@
  */
 namespace CakeDC\DbTest\Engine\Traits;
 
-use Cake\Log\Log\Log;
+use Cake\Log\Log;
 /**
  * For executing commands
  */

@@ -27,6 +27,7 @@
             file="./vendor/cakedc/DbTest/src/TestSuite/Fixture/FixtureInjector.php">
             <arguments>
                 <object class="\DbTest\TestSuite\Fixture\FixtureManager" />
+                <boolean></boolean>
             </arguments>
         </listener>
     </listeners>

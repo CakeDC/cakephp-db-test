@@ -74,7 +74,7 @@ class PostgresEngine extends BaseEngine
     {
         $baseArgs = $this->_getBaseArguments();
         $testDbName = $this->_database['database'];
-        $this->_setPassword($database);
+        $this->_setPassword($this->_database);
 
         if (isset($options['format']) && $options['format'] == 'plain') {
             $command = "psql $baseArgs $testDbName < $file";

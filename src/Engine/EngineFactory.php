@@ -20,9 +20,10 @@ class EngineFactory
      * Creates new engine instance.
      *
      * @param array $database Database configuration.
+     * @param bool $verbose Show commands and results on execution
      * @return BaseEngine
      */
-    public static function engine($database)
+    public static function engine($database, $verbose = false)
     {
         if (empty($database['driver'])) {
             throw new NotFoundException(__d('cake_d_c/db_test', 'Driver is not defined'));
@@ -36,6 +37,6 @@ class EngineFactory
             throw new NotFoundException(__d('cake_d_c/db_test', 'Can\'t load engine ' . $engineType));
         }
 
-        return new $engineType($database);
+        return new $engineType($database, $verbose);
     }
 }

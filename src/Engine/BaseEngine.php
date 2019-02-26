@@ -34,11 +34,13 @@ abstract class BaseEngine
      * Constructor method
      *
      * @param $database
+     * @param bool $verbose Show commands and results on execution
      * @return void
      */
-    public function __construct($database)
+    public function __construct($database, $verbose = false)
     {
         $this->_database = $database;
+		$this->_verbose = $verbose;
     }
 
     /**

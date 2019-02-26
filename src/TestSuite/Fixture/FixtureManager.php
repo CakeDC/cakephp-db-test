@@ -18,6 +18,13 @@ use Cake\Log\Log;
 
 class FixtureManager
 {
+	
+    /**
+     * Show commands and results on execution
+     *
+     * @var bool
+     */
+    protected $_verbose = false;
 
     /**
      * Drops existing connections to test database, recreates db,
@@ -31,7 +38,7 @@ class FixtureManager
      */
     public function setupDatabase($database, $createSchema, $importTestSkeleton = false, $sqlFilePath = null)
     {
-        $engine = EngineFactory::engine($database);
+        $engine = EngineFactory::engine($database, $this->_verbose);
 
         $success = $engine->recreateTestDatabase();
         if ($success && $createSchema) {
@@ -67,12 +74,12 @@ class FixtureManager
 
             if (!file_exists($tmpFile)) {
                 Log::info(__d('cake_d_c/db_test', "Backing up data from skeleton database: $skeletonName \n"));
-                $engine = EngineFactory::engine($skeletonDatabase);
+                $engine = EngineFactory::engine($skeletonDatabase, $this->_verbose);
                 $engine->export($tmpFile);
             }
 
             Log::info(__d('cake_d_c/db_test', "Restoring data to: $testDbName \n"));
-            $engine = EngineFactory::engine($database);
+            $engine = EngineFactory::engine($database, $this->_verbose);
             $engine->import($tmpFile);
         }
     }
@@ -101,11 +108,22 @@ class FixtureManager
             $testSkeletonFile = $sqlFilePath;
         }
 
-        $engine = EngineFactory::engine($database);
+        $engine = EngineFactory::engine($database, $this->_verbose);
         Log::info(__d('cake_d_c/db_test', "Importing test skeleton from: $testSkeletonFile \n"));
         $engine->import($testSkeletonFile, ['format' => 'plain']);
         Log::info(__d('cake_d_c/db_test', "Backing up data from skeleton database: $testDbName \n\n"));
         $engine->export($tmpFile);
+    }
+
+    /**
+     * Set verbose mode.
+     *
+     * @param bool $verbose
+     * @return void
+     */
+    public function setVerbose($verbose)
+    {
+        $this->_verbose = $verbose;
     }
 
     /**
@@ -118,4 +136,5 @@ class FixtureManager
     {
         $Folder = new Folder($path, true);
     }
+	
 }
