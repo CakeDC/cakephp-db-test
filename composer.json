@@ -1,5 +1,5 @@
 {
-    "name": "cakedc/db-test",
+    "name": "cakedc/cakephp-db-test",
     "description": "DbTest plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
