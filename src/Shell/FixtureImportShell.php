@@ -1,14 +1,23 @@
 <?php
+/**
+ * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+namespace CakeDC\DbTest\Shell;
 
-namespace DbTest\Shell;
-
+use CakeDC\DbTest\Engine\EngineFactory;
+use CakeDC\DbTest\TestSuite\Fixture\FixtureInjector;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Hash;
-use DbTest\Engine\EngineFactory;
-use DbTest\TestSuite\Fixture\FixtureInjector;
+use Cake\Log\Log;
 
 class FixtureImportShell extends Shell
 {
@@ -32,10 +41,10 @@ class FixtureImportShell extends Shell
     {
         $parser = parent::getOptionParser();
 
-        return $parser->description(__('DbTest fixture importer:'))
+        return $parser->setDescription(__d('cake_d_c/db_test', 'DbTest fixture importer:'))
             ->addOption('dump-folder', [
-                'help' => __d('cake_console', 'Provides path to dump test_db.sql file.'),
-            ]);
+                'help' => __d('cake_d_c/db_test', 'Provides path to dump test_db.sql file.'),
+            ])->addSubcommand('dump', ['help' => __d('cake_d_c/db_test', 'Dumps the template database')]);
     }
 
     /**
@@ -45,7 +54,6 @@ class FixtureImportShell extends Shell
      */
     public function dump()
     {
-        Configure::load('app', 'default', false);
         $skeletonDatabase = ConnectionManager::get('test_template')->config();
 
         if (!empty($skeletonDatabase)) {
@@ -55,9 +63,9 @@ class FixtureImportShell extends Shell
             $this->_ensureFolder($dumpFolder);
             $dumpFile = $dumpFolder . DS . 'test_db.sql';
 
-            print "Exporting data from skeleton database: $skeletonName \n";
+            $this->out(__d('cake_d_c/db_test', "Exporting data from skeleton database: $skeletonName \n"));
             $engine = EngineFactory::engine($skeletonDatabase);
-            $engine->export($skeletonDatabase, $dumpFile, ['format' => 'plain']);
+            $engine->export($dumpFile, ['format' => 'plain']);
         }
     }
 

@@ -1,6 +1,16 @@
 <?php
+/**
+ * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+namespace CakeDC\DbTest\Engine;
 
-namespace DbTest\Engine;
+use Cake\Log\Log;
 
 class MysqlEngine extends BaseEngine
 {
@@ -11,21 +21,16 @@ class MysqlEngine extends BaseEngine
      * @param array $database Database configuration.
      * @return bool
      */
-    public function recreateTestDatabase($database)
+    public function recreateTestDatabase()
     {
-        $databaseName = $database['database'];
-        $baseArgs = $this->_getBaseArguments($database);
-
+        $databaseName = $this->_database['database'];
+        $baseArgs = $this->_getBaseArguments();
         $output = [];
         $success = 0;
-        print "Dropping database: $databaseName \n";
+        Log::info(__d('cake_d_c/db_test', "Dropping database: $databaseName \n"));
         $this->_execute("mysqladmin -f $baseArgs drop $databaseName", $output, $success);
-
-        if (in_array($success, [
-            0,
-            1
-        ])) {
-            print "Creating database: $databaseName \n";
+        if ($this->isSuccess($success)) {
+            Log::info(__d('cake_d_c/db_test',  "Creating database: $databaseName \n"));
             $this->_execute("mysqladmin -f $baseArgs create $databaseName", $output, $success);
         }
 
@@ -35,15 +40,14 @@ class MysqlEngine extends BaseEngine
     /**
      * Import test skeleton database.
      *
-     * @param array  $database Database configuration.
      * @param string $file     Sql file path.
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function import($database, $file, $options = [])
+    public function import($file, $options = [])
     {
-        $databaseName = $database['database'];
-        $baseArgs = $this->_getBaseArguments($database);
+        $databaseName = $this->_database['database'];
+        $baseArgs = $this->_getBaseArguments();
         $command = "mysql $baseArgs $databaseName < $file";
 
         return $this->_execute($command, $output);
@@ -52,15 +56,14 @@ class MysqlEngine extends BaseEngine
     /**
      * Export database.
      *
-     * @param array  $database Database configuration.
      * @param string $file     Sql file path.
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function export($database, $file, $options = [])
+    public function export($file, $options = [])
     {
-        $databaseName = $database['database'];
-        $baseArgs = $this->_getBaseArguments($database);
+        $databaseName = $this->_database['database'];
+        $baseArgs = $this->_getBaseArguments();
         $command = "mysqldump $baseArgs $databaseName | grep -v '/*!50013 DEFINER'";
         if (!empty($file)) {
             $command .= " > $file";
@@ -72,19 +75,17 @@ class MysqlEngine extends BaseEngine
     /**
      * Format common arguments.
      *
-     * @param array $database Database configuration.
      * @return string
      */
-    protected function _getBaseArguments($database)
+    protected function _getBaseArguments()
     {
-        $user = $database['username'];
-        $password = $database['password'];
-        $host = $database['host'];
+        $user = $this->_database['username'];
+        $password = $this->_database['password'];
+        $host = $this->_database['host'];
         $port = '';
-        if (!empty($database['port'])) {
-            $port = " --port=" . $database['port'];
+        if (!empty($this->_database['port'])) {
+            $port = " --port=" . $this->_database['port'];
         }
-
         $quote = DS === '/' ? "'" : '"';
 
         return "--host=$host $port --user=$user --password=$quote$password$quote";

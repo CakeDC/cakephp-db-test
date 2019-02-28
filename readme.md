@@ -6,14 +6,16 @@ DbTest Plugin
 [![Downloads](https://poser.pugx.org/CakeDC/migrations/d/total.png)](https://packagist.org/packages/CakeDC/db_test)
 [![Latest Version](https://poser.pugx.org/CakeDC/migrations/v/stable.png)](https://packagist.org/packages/CakeDC/db_test)
 
-The **DbTest** plugin enables developers to speeding up tests running on **mysql** database.
+The **DbTest** plugin enables developers to speeding up tests running on MySQL or PostgreSQL database.
 
 Requirements
 ------------
 
-* CakePHP 2.4+
-* PHP 5.2.8+
+* CakePHP 3.5+
+* PHP 5.6.0+
 * MySQL database with InnoDb engine
+* PostgreSQL database
+* Phpunit 6.*
 
 Documentation
 -------------
@@ -35,4 +37,4 @@ If you'd like to contribute new features, enhancements or bug fixes to the plugi
 License
 -------
 
-Copyright 2007-2014 Cake Development Corporation (CakeDC). All rights reserved.
+Copyright 2007-2019 Cake Development Corporation (CakeDC). All rights reserved.

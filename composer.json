@@ -1,23 +1,23 @@
 {
-    "name": "cakedc/DbTest",
+    "name": "cakedc/db-test",
     "description": "DbTest plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
         "php": ">=5.6.0",
-        "cakephp/cakephp": ">=3.5.0 <4.0.0" 
+        "cakephp/cakephp": ">=3.5.0 <4.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
     },
     "autoload": {
         "psr-4": {
-            "DbTest\\": "src"
+            "CakeDC\\DbTest\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "DbTest\\Test\\": "tests",
+            "CakeDC\\DbTest\\Test\\": "tests",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }
-} 
+}

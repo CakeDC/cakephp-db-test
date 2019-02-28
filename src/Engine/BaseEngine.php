@@ -1,9 +1,20 @@
 <?php
+/**
+ * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+namespace CakeDC\DbTest\Engine;
 
-namespace DbTest\Engine;
+use CakeDC\DbTest\Engine\Traits\ExecuteTrait;
 
 abstract class BaseEngine
 {
+    use ExecuteTrait;
 
     /**
      * Show commands and results on execution
@@ -13,12 +24,32 @@ abstract class BaseEngine
     protected $_verbose = false;
 
     /**
+     * Database configuration
+     *
+     * @var bool
+     */
+    protected $_database = [];
+
+    /**
+     * Constructor method
+     *
+     * @param $database
+     * @param bool $verbose Show commands and results on execution
+     * @return void
+     */
+    public function __construct($database, $verbose = false)
+    {
+        $this->_database = $database;
+		$this->_verbose = $verbose;
+    }
+
+    /**
      * Recreates test database.
      *
      * @param array $database Database configuration.
      * @return bool
      */
-    abstract public function recreateTestDatabase($database);
+    abstract public function recreateTestDatabase();
 
     /**
      * Import test skeleton database.
@@ -28,7 +59,7 @@ abstract class BaseEngine
      * @param array  $options  Additional options/
      * @return bool
      */
-    abstract public function import($database, $file, $options = []);
+    abstract public function import($file, $options = []);
 
     /**
      * Export database.
@@ -38,7 +69,7 @@ abstract class BaseEngine
      * @param array  $options  Additional options/
      * @return bool
      */
-    abstract public function export($database, $file, $options = []);
+    abstract public function export($file, $options = []);
 
     /**
      * Check if success.
@@ -62,29 +93,8 @@ abstract class BaseEngine
      * @param array $database Database configuration.
      * @return bool
      */
-    public function createSchema($database)
+    public function createSchema()
     {
         return true;
-    }
-
-    /**
-     * Execute an external program
-     *
-     * @param string $command       The command that will be executed.
-     * @param array  $output        Command output
-     * @param int    $return_var    Return status of the executed command
-     * @return string The last line from the result of the command
-     */
-    protected function _execute($command, &$output = null, &$return_var = null)
-    {
-        if ($this->_verbose) {
-            print($command . "\n");
-        }
-        $result = exec($command, $output, $return_var);
-        if ($this->_verbose) {
-            print(implode("\n", $output) . "\n");
-        }
-
-        return $result;
     }
 }

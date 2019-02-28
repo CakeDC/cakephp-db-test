@@ -1,14 +1,30 @@
 <?php
+/**
+ * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+namespace CakeDC\DbTest\TestSuite\Fixture;
 
-namespace DbTest\TestSuite\Fixture;
-
+use CakeDC\DbTest\Engine\EngineFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
-use DbTest\Engine\EngineFactory;
+use Cake\Log\Log;
 
 class FixtureManager
 {
+	
+    /**
+     * Show commands and results on execution
+     *
+     * @var bool
+     */
+    protected $_verbose = false;
 
     /**
      * Drops existing connections to test database, recreates db,
@@ -22,11 +38,11 @@ class FixtureManager
      */
     public function setupDatabase($database, $createSchema, $importTestSkeleton = false, $sqlFilePath = null)
     {
-        $engine = EngineFactory::engine($database);
+        $engine = EngineFactory::engine($database, $this->_verbose);
 
-        $success = $engine->recreateTestDatabase($database);
+        $success = $engine->recreateTestDatabase();
         if ($success && $createSchema) {
-            $success = $engine->createSchema($database);
+            $success = $engine->createSchema();
         }
         if ($success && $importTestSkeleton) {
             $this->__importTestSkeleton($database, $sqlFilePath);
@@ -57,14 +73,14 @@ class FixtureManager
             $tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
 
             if (!file_exists($tmpFile)) {
-                print "Backing up data from skeleton database: $skeletonName \n";
-                $engine = EngineFactory::engine($skeletonDatabase);
-                $engine->export($skeletonDatabase, $tmpFile);
+                Log::info(__d('cake_d_c/db_test', "Backing up data from skeleton database: $skeletonName \n"));
+                $engine = EngineFactory::engine($skeletonDatabase, $this->_verbose);
+                $engine->export($tmpFile);
             }
 
-            print "Restoring data to: $testDbName \n";
-            $engine = EngineFactory::engine($database);
-            $engine->import($database, $tmpFile);
+            Log::info(__d('cake_d_c/db_test', "Restoring data to: $testDbName \n"));
+            $engine = EngineFactory::engine($database, $this->_verbose);
+            $engine->import($tmpFile);
         }
     }
 
@@ -81,7 +97,7 @@ class FixtureManager
         $cacheFolder = CACHE . 'fixtures';
         $this->_ensureFolder($cacheFolder);
         $tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
-        print "Deleting cached file: $tmpFile \n";
+        Log::info(__d('cake_d_c/db_test', "Deleting cached file: $tmpFile \n"));
         if (is_file($tmpFile)) {
             unlink($tmpFile);
         }
@@ -92,11 +108,22 @@ class FixtureManager
             $testSkeletonFile = $sqlFilePath;
         }
 
-        $engine = EngineFactory::engine($database);
-        print "Importing test skeleton from: $testSkeletonFile \n";
-        $engine->import($database, $testSkeletonFile, ['format' => 'plain']);
-        print "Backing up data from skeleton database: $testDbName \n\n";
-        $engine->export($database, $tmpFile);
+        $engine = EngineFactory::engine($database, $this->_verbose);
+        Log::info(__d('cake_d_c/db_test', "Importing test skeleton from: $testSkeletonFile \n"));
+        $engine->import($testSkeletonFile, ['format' => 'plain']);
+        Log::info(__d('cake_d_c/db_test', "Backing up data from skeleton database: $testDbName \n\n"));
+        $engine->export($tmpFile);
+    }
+
+    /**
+     * Set verbose mode.
+     *
+     * @param bool $verbose
+     * @return void
+     */
+    public function setVerbose($verbose)
+    {
+        $this->_verbose = $verbose;
     }
 
     /**
@@ -109,4 +136,5 @@ class FixtureManager
     {
         $Folder = new Folder($path, true);
     }
+	
 }

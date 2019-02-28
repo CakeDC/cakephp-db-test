@@ -6,7 +6,7 @@ Overview
 The logic of DbTest differs from testsuite in the way that fixtures are handled.
 
 CakePHP TestSuite uses fixtures to initialize test database, DbTest doesn't use fixtures at all.
-Instead, it uses an additional template database that is initialized based on the file **app/Config/sql/test_db.sql**
+Instead, it uses an additional template database that is initialized based on the file **config/sql/test_db.sql**
 
 Generic cycle of test execution under DbTest
 --------------------------------------------

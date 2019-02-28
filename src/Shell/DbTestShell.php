@@ -1,11 +1,19 @@
 <?php
+/**
+ * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+namespace CakeDC\DbTest\Shell;
 
-namespace DbTest\Shell;
-
+use CakeDC\DbTest\TestSuite\Fixture\FixtureManager;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use DbTest\TestSuite\Fixture\FixtureManager;
 
 class DbTestShell extends Shell
 {
@@ -19,15 +27,15 @@ class DbTestShell extends Shell
     {
         $parser = parent::getOptionParser();
         $parser->setDescription([
-            __d('cake_console', 'The Db Test Shell extends the CakePhp TestSuite and no longer needs fixtures defined.
+            __d('cake_d_c/db_test', 'The Db Test Shell extends the CakePhp TestSuite and no longer needs fixtures defined.
 			Instead the test and test-template databases are synchronized before each test class is executed.
 			Transaction wrapping used to rollback test case changes.'),
         ])->addOption('import-database-template', [
             'boolean' => true,
             'short' => 'i',
-            'help' => __d('cake_console', 'Drops test template database and imports test_db.sql file from app/Config/sql'),
+            'help' => __d('cake_d_c/db_test', 'Drops test template database and imports test_db.sql file from app/Config/sql'),
         ])->addOption('import-database-file', [
-            'help' => __d('cake_console', 'Provides path to test_db.sql file'),
+            'help' => __d('cake_d_c/db_test', 'Provides path to test_db.sql file'),
         ]);
 
         return $parser;
@@ -42,14 +50,15 @@ class DbTestShell extends Shell
     {
         Configure::load('app', 'default', false);
 
-        $this->out(__d('cake_console', 'Db Test Shell'));
+        $this->out(__d('cake_d_c/db_test', 'Db Test Shell'));
         $this->hr();
 
         if ($this->params['import-database-template']) {
             $this->__importTestSkeleton();
             unset($this->params['import-database-template']);
+        } else {
+            $this->out($this->getOptionParser()->help());
         }
-        $this->out($this->getOptionParser()->help());
     }
 
     /**
