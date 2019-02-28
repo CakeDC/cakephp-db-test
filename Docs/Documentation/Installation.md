@@ -44,3 +44,9 @@ PHPUnit
 -------
 Copy phpunit.xml.dbtest as phpunit.xml.dist in your project (modify if needed)
 
+Fixture database
+----------------
+
+Note from now on, you will NOT use fixture files, but rely on a "fixture database" allowing you to run migrations to it, modify your fixture data with your sql editor, or import fixtures from the live database using a regular table or database import tool, for example `mysqldump`.
+
+
