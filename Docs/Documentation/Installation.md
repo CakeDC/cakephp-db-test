@@ -43,7 +43,7 @@ Add the next configuration setting into app.php
 
 PHPUnit
 -------
-Copy phpunit.xml.dbtest as phpunit.xml.dist in your project (modify if needed)
+Copy https://github.com/CakeDC/cakephp-db-test/blob/master/phpunit.xml.dbtest as phpunit.xml.dist in your project (modify if needed)
 
 Fixture database
 ----------------
