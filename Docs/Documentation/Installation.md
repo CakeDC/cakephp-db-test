@@ -5,7 +5,14 @@ Composer
 --------
 
 ```
-composer require cakedc/db-test
+composer require cakedc/cakephp-db-test
+```
+
+Load the plugin
+---------------
+
+```
+bin/cake plugin load CakeDC/DbTest
 ```
 
 Configuration
@@ -19,27 +26,27 @@ Add the next configuration setting into app.php
 
 ```php
 'Datasources' => [
-    test_template => [
-        public $test_template = [
+    // ...
+    'test_template' => [
         	'driver' => 'Cake\Database\Driver\Mysql',
         	'persistent' => false,
         	'host' => 'localhost',
-        	'username' => 'username',
-        	'password' => 'password',
-        	'database' => 'template_database_name',
+        	'username' => 'my_app',
+        	'password' => 'secret',
+        	'database' => 'template_test_myapp',
         	'prefix' => '',
         	'encoding' => 'utf8',
-        ];
-    ]
-]
-```
-
-Load the plugin in your bootstrap.php
-```php
-Plugin::load('CakeDC/DbTest', ['bootstrap' => true]);
+    ],
+    // ...
 ```
 
 PHPUnit
--------------
+-------
 Copy phpunit.xml.dbtest as phpunit.xml.dist in your project (modify if needed)
+
+Fixture database
+----------------
+
+Note from now on, you will NOT use fixture files, but rely on a "fixture database" allowing you to run migrations to it, modify your fixture data with your sql editor, or import fixtures from the live database using a regular table or database import tool, for example `mysqldump`.
+
 
