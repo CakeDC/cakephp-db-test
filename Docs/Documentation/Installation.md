@@ -5,7 +5,14 @@ Composer
 --------
 
 ```
-composer require cakedc/db-test
+composer require cakedc/cakephp-db-test
+```
+
+Load the plugin
+---------------
+
+```
+bin/cake plugin load CakeDC/DbTest
 ```
 
 Configuration
