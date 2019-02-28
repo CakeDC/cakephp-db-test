@@ -14,6 +14,7 @@ Load the plugin
 ```
 bin/cake plugin load CakeDC/DbTest
 ```
+Note you'll need this plugin loaded in the `cli` section of your `Application::bootstrap`, around the line loading Bake Plugin: `$this->addPlugin('Bake');`
 
 Configuration
 -------------
