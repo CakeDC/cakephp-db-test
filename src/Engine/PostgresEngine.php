@@ -35,7 +35,7 @@ class PostgresEngine extends BaseEngine
         $this->_execute("dropdb $baseArgs $databaseName", $output, $success);
 
         if ($this->isSuccess($success)) {
-            Log::info(__d('cake_d_c/db_test',  "Creating database: $databaseName \n"));
+            Log::info(__d('cake_d_c/db_test', "Creating database: $databaseName \n"));
             $this->_execute("createdb $baseArgs $databaseName", $output, $success);
         }
 

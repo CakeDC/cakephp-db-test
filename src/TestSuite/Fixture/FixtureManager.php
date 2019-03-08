@@ -18,7 +18,7 @@ use Cake\Log\Log;
 
 class FixtureManager
 {
-	
+
     /**
      * Show commands and results on execution
      *
@@ -136,5 +136,4 @@ class FixtureManager
     {
         $Folder = new Folder($path, true);
     }
-	
 }

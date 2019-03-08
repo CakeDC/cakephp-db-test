@@ -48,7 +48,7 @@ class FixtureInjector implements TestListener
     public function __construct(FixtureManager $manager, $verbose = false)
     {
         $this->_fixtureManager = $manager;
-		$this->_fixtureManager->setVerbose($verbose);
+        $this->_fixtureManager->setVerbose($verbose);
     }
 
     private $databaseLoaded = false;

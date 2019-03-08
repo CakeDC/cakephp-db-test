@@ -40,7 +40,7 @@ abstract class BaseEngine
     public function __construct($database, $verbose = false)
     {
         $this->_database = $database;
-		$this->_verbose = $verbose;
+        $this->_verbose = $verbose;
     }
 
     /**
@@ -54,8 +54,8 @@ abstract class BaseEngine
     /**
      * Import test skeleton database.
      *
-     * @param array  $database Database configuration.
-     * @param string $file     Sql file path.
+     * @param array  $file Database configuration.
+     * @param string $options     Sql file path.
      * @param array  $options  Additional options/
      * @return bool
      */
@@ -64,8 +64,8 @@ abstract class BaseEngine
     /**
      * Export database.
      *
-     * @param array  $database Database configuration.
-     * @param string $file     Sql file path.
+     * @param array  $file Database configuration.
+     * @param string $options     Sql file path.
      * @param array  $options  Additional options/
      * @return bool
      */

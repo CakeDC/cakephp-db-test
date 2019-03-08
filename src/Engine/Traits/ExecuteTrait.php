@@ -11,6 +11,7 @@
 namespace CakeDC\DbTest\Engine\Traits;
 
 use Cake\Log\Log;
+
 /**
  * For executing commands
  */

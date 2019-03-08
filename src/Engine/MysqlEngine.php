@@ -30,7 +30,7 @@ class MysqlEngine extends BaseEngine
         Log::info(__d('cake_d_c/db_test', "Dropping database: $databaseName \n"));
         $this->_execute("mysqladmin -f $baseArgs drop $databaseName", $output, $success);
         if ($this->isSuccess($success)) {
-            Log::info(__d('cake_d_c/db_test',  "Creating database: $databaseName \n"));
+            Log::info(__d('cake_d_c/db_test', "Creating database: $databaseName \n"));
             $this->_execute("mysqladmin -f $baseArgs create $databaseName", $output, $success);
         }
 
