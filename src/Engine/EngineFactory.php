@@ -8,6 +8,7 @@
  * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
 namespace CakeDC\DbTest\Engine;
 
 use Cake\Network\Exception\NotFoundException;
@@ -15,7 +16,6 @@ use Cake\Core\Configure;
 
 class EngineFactory
 {
-
     /**
      * Creates new engine instance.
      *
@@ -28,15 +28,32 @@ class EngineFactory
         if (empty($database['driver'])) {
             throw new NotFoundException(__d('cake_d_c/db_test', 'Driver is not defined'));
         }
-        $type = str_replace('Cake\\Database\\Driver\\', '', $database['driver']);
-        $engineType = Configure::read('DbTest.supportedDrivers.' . $type);
-        if (empty($engineType)) {
-            throw new NotFoundException(__d('cake_d_c/db_test', 'Database engine is not supported'));
-        }
-        if (!class_exists($engineType)) {
-            throw new NotFoundException(__d('cake_d_c/db_test', 'Can\'t load engine ' . $engineType));
+        $engineClass = static::getEngineClass($database['driver']);
+
+        return new $engineClass($database, $verbose);
+    }
+
+    /**
+     * Translate a cake engine into a DbTest engine
+     * @param $driver
+     */
+    protected static function getEngineClass($driver)
+    {
+        $engineMap = [
+            'Mysql' => '\\CakeDC\\DbTest\\Engine\\MysqlEngine',
+            'Postgres' => '\\CakeDC\\DbTest\\Engine\\PostgresEngine'
+        ];
+
+        $type = str_replace('Cake\\Database\\Driver\\', '', $driver);
+        if (!in_array($type, array_keys($engineMap))) {
+            throw new NotFoundException(__d('cake_d_c/db_test', 'Database engine {0} is not supported', $type));
         }
 
-        return new $engineType($database, $verbose);
+        $engineClass = $engineMap[$type];
+        if (!class_exists($engineClass)) {
+            throw new NotFoundException(__d('cake_d_c/db_test', 'Can\'t load engine ' . $engineClass));
+        }
+
+        return $engineClass;
     }
 }

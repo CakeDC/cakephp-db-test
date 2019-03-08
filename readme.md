@@ -1,10 +1,10 @@
 DbTest Plugin
 ========================
 
-[![Bake Status](https://secure.travis-ci.org/CakeDC/migrations.png?branch=master)](http://travis-ci.org/CakeDC/db_test)
-[![Test Coverage](https://coveralls.io/repos/CakeDC/migrations/badge.png?branch=master)](https://coveralls.io/r/CakeDC/db_test?branch=master)
-[![Downloads](https://poser.pugx.org/CakeDC/migrations/d/total.png)](https://packagist.org/packages/CakeDC/db_test)
-[![Latest Version](https://poser.pugx.org/CakeDC/migrations/v/stable.png)](https://packagist.org/packages/CakeDC/db_test)
+[![Bake Status](https://secure.travis-ci.org/CakeDC/cakephp-db-test.png?branch=master)](http://travis-ci.org/CakeDC/cakephp-db-test)
+[![Test Coverage](https://coveralls.io/repos/CakeDC/cakephp-db-test/badge.png?branch=master)](https://coveralls.io/r/CakeDC/cakephp-db-test?branch=master)
+[![Downloads](https://poser.pugx.org/CakeDC/cakephp-db-test/d/total.png)](https://packagist.org/packages/CakeDC/cakephp-db-test)
+[![Latest Version](https://poser.pugx.org/CakeDC/cakephp-db-test/v/stable.png)](https://packagist.org/packages/CakeDC/cakephp-db-test)
 
 The **DbTest** plugin enables developers to speeding up tests running on MySQL or PostgreSQL database.
 
@@ -38,3 +38,5 @@ License
 -------
 
 Copyright 2007-2019 Cake Development Corporation (CakeDC). All rights reserved.
+
+Licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) License. Redistributions of the source code included in this repository must retain the copyright notice found in each file.

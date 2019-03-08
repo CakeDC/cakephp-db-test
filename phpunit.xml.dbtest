@@ -23,10 +23,10 @@
     <!-- Setup a listener for fixtures -->
     <listeners>
         <listener
-            class="\DbTest\TestSuite\Fixture\FixtureInjector"
-            file="./vendor/cakedc/DbTest/src/TestSuite/Fixture/FixtureInjector.php">
+            class="\CakeDC\DbTest\TestSuite\Fixture\FixtureInjector"
+            file="./vendor/cakedc/cakephp-db-test/src/TestSuite/Fixture/FixtureInjector.php">
             <arguments>
-                <object class="\DbTest\TestSuite\Fixture\FixtureManager" />
+                <object class="\CakeDC\DbTest\TestSuite\Fixture\FixtureManager" />
                 <boolean></boolean>
             </arguments>
         </listener>
