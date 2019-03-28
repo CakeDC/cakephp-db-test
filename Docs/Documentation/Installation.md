@@ -29,6 +29,7 @@ Add the next configuration setting into app.php
 'Datasources' => [
     // ...
     'test_template' => [
+            'className' => 'Cake\Database\Connection',
         	'driver' => 'Cake\Database\Driver\Mysql',
         	'persistent' => false,
         	'host' => 'localhost',
