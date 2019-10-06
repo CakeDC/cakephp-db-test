@@ -41,10 +41,11 @@ class FixtureImportShell extends Shell
     {
         $parser = parent::getOptionParser();
 
-        return $parser->setDescription(__d('cake_d_c/db_test', 'DbTest fixture importer:'))
-            ->addOption('dump-folder', [
-                'help' => __d('cake_d_c/db_test', 'Provides path to dump test_db.sql file.'),
-            ])->addSubcommand('dump', ['help' => __d('cake_d_c/db_test', 'Dumps the template database')]);
+        return $parser
+            ->setDescription(__d('cake_d_c/db_test', 'DbTest fixture importer:'))
+            ->addSubcommand('dump', [
+                'help' => __d('cake_d_c/db_test', 'Dumps the template database, create files by default in config/sql, 1 per table, to store current contents of the test_template datasource')
+            ]);
     }
 
     /**
@@ -59,13 +60,11 @@ class FixtureImportShell extends Shell
         if (!empty($skeletonDatabase)) {
             $skeletonName = $skeletonDatabase['database'];
 
-            $dumpFolder = Hash::get($this->params, 'dump-folder', CONFIG . DS . 'sql');
+            $dumpFolder = Hash::get($this->params, 'dump-folder', CONFIG . 'sql');
             $this->_ensureFolder($dumpFolder);
-            $dumpFile = $dumpFolder . DS . 'test_db.sql';
-
             $this->out(__d('cake_d_c/db_test', "Exporting data from skeleton database: $skeletonName \n"));
             $engine = EngineFactory::engine($skeletonDatabase);
-            $engine->export($dumpFile, ['format' => 'plain']);
+            $engine->export($dumpFolder, ['format' => 'plain']);
         }
     }
 

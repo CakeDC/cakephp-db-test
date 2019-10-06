@@ -103,7 +103,7 @@ class FixtureManager
         }
 
         if (empty($sqlFilePath)) {
-            $testSkeletonFile = CONFIG . 'sql' . DS . 'test_db.sql';
+            $testSkeletonFile = CONFIG . 'sql';
         } else {
             $testSkeletonFile = $sqlFilePath;
         }

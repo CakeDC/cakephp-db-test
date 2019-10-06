@@ -10,6 +10,7 @@
  */
 namespace CakeDC\DbTest\Engine;
 
+use Cake\Filesystem\File;
 use Cake\Log\Log;
 
 class MysqlEngine extends BaseEngine
@@ -40,36 +41,55 @@ class MysqlEngine extends BaseEngine
     /**
      * Import test skeleton database.
      *
-     * @param string $file     Sql file path.
+     * @param string $path Path to the folder containing all the sql files
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function import($file, $options = [])
+    public function import($path, $options = [])
     {
         $databaseName = $this->_database['database'];
         $baseArgs = $this->_getBaseArguments();
-        $command = "mysql $baseArgs $databaseName < $file";
+        $files = glob("$path/*.sql");
+        if (!$files) {
+            throw new \OutOfBoundsException(sprintf('No sql files found in %s', $path));
+        }
+        $tmpFile = tempnam(TMP, 'dbtest_');
+        foreach ($files as $file) {
+            file_put_contents($tmpFile, file_get_contents($file), FILE_APPEND);
+        }
+        $command = "mysql $baseArgs $databaseName < $tmpFile";
+        dd($command);
+        $result = $this->_execute($command, $output);
+        unlink($tmpFile);
 
-        return $this->_execute($command, $output);
+        return $result;
     }
 
     /**
      * Export database.
      *
-     * @param string $file     Sql file path.
+     * @param string $path base folder to export tables, one per file
      * @param array  $options  Additional options/
      * @return bool
      */
-    public function export($file, $options = [])
+    public function export($path, $options = [])
     {
+        if (!$path) {
+            throw new \OutOfBoundsException('Base path is required to store all tables, 1 per file');
+        }
         $databaseName = $this->_database['database'];
         $baseArgs = $this->_getBaseArguments();
-        $command = "mysqldump $baseArgs $databaseName | grep -v '/*!50013 DEFINER'";
-        if (!empty($file)) {
-            $command .= " > $file";
-        }
 
-        return $this->_execute($command, $output);
+        $tablesCommand = "mysql -B -s -e 'show tables' $baseArgs $databaseName";
+        $tables = $this->_execute($tablesCommand, $tablesOutput);
+        if (!$tablesOutput) {
+            throw new \OutOfBoundsException('No tables found in database %s', $databaseName);
+        }
+        foreach ($tablesOutput as $tableName) {
+            $command = "mysqldump $baseArgs $databaseName $tableName | grep -v '/*!50013 DEFINER'";
+            $command .= " > \"$path/$tableName.sql\"";
+            $this->_execute($command, $output);
+        }
     }
 
     /**
@@ -79,8 +99,8 @@ class MysqlEngine extends BaseEngine
      */
     protected function _getBaseArguments()
     {
-        $user = $this->_database['username'];
-        $password = $this->_database['password'];
+        $user = isset($this->_database['username']) ? $this->_database['username'] : null;
+        $password = isset($this->_database['password']) ? $this->_database['password'] : null;
         $host = $this->_database['host'];
         $port = '';
         if (!empty($this->_database['port'])) {
