@@ -11,13 +11,11 @@
 namespace CakeDC\DbTest\Shell;
 
 use CakeDC\DbTest\Engine\EngineFactory;
-use CakeDC\DbTest\TestSuite\Fixture\FixtureInjector;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
-use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Hash;
-use Cake\Log\Log;
 
 class FixtureImportShell extends Shell
 {
@@ -35,9 +33,9 @@ class FixtureImportShell extends Shell
     /**
      * Get & configure the option parser
      *
-     * @return $this
+     * @return ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
 
@@ -85,7 +83,7 @@ class FixtureImportShell extends Shell
     }
 
     /**
-     * Find and import test_skel.sql file from app/Config/sql
+     * Find and import test_skel. sql file from app/Config/sql
      *
      * @param string $path path
      * @return void
