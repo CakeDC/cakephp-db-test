@@ -18,7 +18,6 @@ class MysqlEngine extends BaseEngine
     /**
      * Recreates test database.
      *
-     * @param array $database Database configuration.
      * @return bool
      */
     public function recreateTestDatabase()

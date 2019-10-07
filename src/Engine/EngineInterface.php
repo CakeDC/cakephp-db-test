@@ -16,7 +16,6 @@ interface EngineInterface
     /**
      * Recreates test database.
      *
-     * @param array $database Database configuration.
      * @return bool
      */
     public function recreateTestDatabase();
@@ -24,9 +23,8 @@ interface EngineInterface
     /**
      * Import test skeleton database.
      *
-     * @param array  $file Database configuration.
-     * @param string $options     Sql file path.
-     * @param array  $options  Additional options/
+     * @param string $file Sql file path.
+     * @param array $options Additional options.
      * @return bool
      */
     public function import($file, $options = []);
@@ -34,9 +32,8 @@ interface EngineInterface
     /**
      * Export database.
      *
-     * @param array  $file Database configuration.
-     * @param string $options     Sql file path.
-     * @param array  $options  Additional options/
+     * @param string $file Sql file path.
+     * @param array $options Additional options.
      * @return bool
      */
     public function export($file, $options = []);
