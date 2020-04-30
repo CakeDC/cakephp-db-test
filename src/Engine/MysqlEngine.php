@@ -64,7 +64,7 @@ class MysqlEngine extends BaseEngine
     {
         $databaseName = $this->_database['database'];
         $baseArgs = $this->_getBaseArguments();
-        $command = "mysqldump $baseArgs $databaseName | grep -v -a '/*!50013 DEFINER'";
+        $command = "mysqldump --extended-insert=FALSE $baseArgs $databaseName | grep -v -a '/*!50013 DEFINER'";
         if (!empty($file)) {
             $command .= " > $file";
         }
