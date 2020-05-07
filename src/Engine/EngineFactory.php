@@ -11,8 +11,7 @@
 
 namespace CakeDC\DbTest\Engine;
 
-use Cake\Network\Exception\NotFoundException;
-use Cake\Core\Configure;
+use Cake\Http\Exception\NotFoundException;
 
 class EngineFactory
 {
@@ -35,6 +34,7 @@ class EngineFactory
 
     /**
      * Translate a cake engine into a DbTest engine
+     *
      * @param $driver
      */
     protected static function getEngineClass($driver)

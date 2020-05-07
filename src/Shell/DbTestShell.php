@@ -11,6 +11,7 @@
 namespace CakeDC\DbTest\Shell;
 
 use CakeDC\DbTest\TestSuite\Fixture\FixtureManager;
+use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -23,7 +24,7 @@ class DbTestShell extends Shell
      *
      * @return ConsoleOptionParser
      */
-    public function getOptionParser()
+    public function getOptionParser(): ConsoleOptionParser
     {
         $parser = parent::getOptionParser();
         $parser->setDescription([

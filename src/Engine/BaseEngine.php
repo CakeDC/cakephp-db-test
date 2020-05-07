@@ -46,7 +46,6 @@ abstract class BaseEngine
     /**
      * Recreates test database.
      *
-     * @param array $database Database configuration.
      * @return bool
      */
     abstract public function recreateTestDatabase();
@@ -54,9 +53,8 @@ abstract class BaseEngine
     /**
      * Import test skeleton database.
      *
-     * @param array  $file Database configuration.
-     * @param string $options     Sql file path.
-     * @param array  $options  Additional options/
+     * @param string $file Sql file path.
+     * @param array $options Additional options.
      * @return bool
      */
     abstract public function import($file, $options = []);
@@ -64,9 +62,8 @@ abstract class BaseEngine
     /**
      * Export database.
      *
-     * @param array  $file Database configuration.
-     * @param string $options     Sql file path.
-     * @param array  $options  Additional options/
+     * @param string $file Sql file path.
+     * @param array $options Additional options.
      * @return bool
      */
     abstract public function export($file, $options = []);
@@ -90,7 +87,6 @@ abstract class BaseEngine
     /**
      * Create schema
      *
-     * @param array $database Database configuration.
      * @return bool
      */
     public function createSchema()

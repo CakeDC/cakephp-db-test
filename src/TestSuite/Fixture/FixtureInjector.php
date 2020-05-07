@@ -20,6 +20,7 @@ use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestListener;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Warning;
+use Throwable;
 
 class FixtureInjector implements TestListener
 {
@@ -61,7 +62,7 @@ class FixtureInjector implements TestListener
      * @param float     $time  Time of occurrence
      * @return void
      */
-    public function addError(Test $test, Exception $e, $time)
+    public function addError(Test $test, Throwable $t, float $time): void
     {
     }
 
@@ -72,7 +73,7 @@ class FixtureInjector implements TestListener
      * @param Warning $e
      * @param float   $time
      */
-    public function addWarning(Test $test, Warning $e, $time)
+    public function addWarning(Test $test, Warning $e, float $time): void
     {
     }
 
@@ -84,7 +85,7 @@ class FixtureInjector implements TestListener
      * @param float                 $time  Time of occurrence
      * @return void
      */
-    public function addFailure(Test $test, AssertionFailedError $e, $time)
+    public function addFailure(Test $test, AssertionFailedError $e, float $time): void
     {
     }
 
@@ -92,11 +93,11 @@ class FixtureInjector implements TestListener
      * Called if a test is incomplete
      *
      * @param Test      $test  Incomplete Test
-     * @param Exception $e     Exception encountered
+     * @param Throwable $e     Exception encountered
      * @param float     $time  Time of occurrence
      * @return void
      */
-    public function addIncompleteTest(Test $test, Exception $e, $time)
+    public function addIncompleteTest(Test $test, \Throwable $t, float $time): void
     {
     }
 
@@ -104,11 +105,11 @@ class FixtureInjector implements TestListener
      * Called when a test is risky.
      *
      * @param Test      $test  Risky Test
-     * @param Exception $e     Exception encountered
+     * @param Throwable $e     Exception encountered
      * @param float     $time  Time of occurrence
      * @return void
      */
-    public function addRiskyTest(Test $test, Exception $e, $time)
+    public function addRiskyTest(Test $test, \Throwable $t, float $time): void
     {
     }
 
@@ -117,11 +118,11 @@ class FixtureInjector implements TestListener
      * Tests are skipped when a test it was dependent on fails (using @depends)
      *
      * @param Test      $test  Skipped Test
-     * @param Exception $e     Exception encountered
+     * @param Throwable $e     Exception encountered
      * @param float     $time  Time of occurrence
      * @return void
      */
-    public function addSkippedTest(Test $test, Exception $e, $time)
+    public function addSkippedTest(Test $test, Throwable $e, float $time): void
     {
     }
 
@@ -131,7 +132,7 @@ class FixtureInjector implements TestListener
      * @param Test  $test  Test
      * @return void
      */
-    public function startTest(Test $test)
+    public function startTest(Test $test): void
     {
         ConnectionManager::get('test')->begin();
     }
@@ -143,7 +144,7 @@ class FixtureInjector implements TestListener
      * @param float $time  Time of occurrence
      * @return void
      */
-    public function endTest(Test $test, $time)
+    public function endTest(Test $test, float $time): void
     {
         ConnectionManager::get('test')->rollback();
     }
@@ -154,7 +155,7 @@ class FixtureInjector implements TestListener
      * @param TestSuite $suite    Suite
      * @return void
      */
-    public function startTestSuite(TestSuite $suite)
+    public function startTestSuite(TestSuite $suite): void
     {
         Configure::load('app', 'default', false);
         $database = ConnectionManager::get('test')->config();
@@ -183,7 +184,7 @@ class FixtureInjector implements TestListener
      * @param TestSuite $suite    Suite
      * @return void
      */
-    public function endTestSuite(TestSuite $suite)
+    public function endTestSuite(TestSuite $suite): void
     {
     }
 
