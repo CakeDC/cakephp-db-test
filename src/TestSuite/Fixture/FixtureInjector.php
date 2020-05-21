@@ -157,7 +157,6 @@ class FixtureInjector implements TestListener
      */
     public function startTestSuite(TestSuite $suite): void
     {
-        Configure::load('app', 'default', false);
         $database = ConnectionManager::get('test')->config();
         if (!empty($database) && get_class($suite) == 'PHPUnit\Framework\TestSuite') {
             try {
