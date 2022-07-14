@@ -68,6 +68,9 @@ class MysqlEngine extends BaseEngine
         if (Configure::read('DbTest.dumpExtendedInserts') !== true) {
             $command .= " --extended-insert=FALSE";
         }
+        if (Configure::read('DbTest.dumpNoTablespaces') === true) {
+            $command .= " --no-tablespaces";
+        }
         $command .= " $baseArgs $databaseName | grep -v -a '/*!50013 DEFINER'";
         if (!empty($file)) {
             $command .= " > $file";

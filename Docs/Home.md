@@ -19,4 +19,5 @@ Documentation
 * [Installation](Documentation/Installation.md)
 * [Examples](Documentation/Examples.md)
 * [Workflow](Documentation/Workflow.md)
+* [Configuration](Documentation/Configuration.md)
 
