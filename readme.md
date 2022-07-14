@@ -37,6 +37,6 @@ If you'd like to contribute new features, enhancements or bug fixes to the plugi
 License
 -------
 
-Copyright 2007-2019 Cake Development Corporation (CakeDC). All rights reserved.
+Copyright 2007-2020 Cake Development Corporation (CakeDC). All rights reserved.
 
 Licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) License. Redistributions of the source code included in this repository must retain the copyright notice found in each file.

@@ -10,6 +10,7 @@
  */
 namespace CakeDC\DbTest\Engine;
 
+use Cake\Core\Configure;
 use Cake\Log\Log;
 
 class MysqlEngine extends BaseEngine
@@ -63,7 +64,11 @@ class MysqlEngine extends BaseEngine
     {
         $databaseName = $this->_database['database'];
         $baseArgs = $this->_getBaseArguments();
-        $command = "mysqldump --extended-insert=FALSE $baseArgs $databaseName | grep -v -a '/*!50013 DEFINER'";
+        $command = "mysqldump";
+        if (Configure::read('DbTest.dumpExtendedInserts') !== true) {
+            $command .= " --extended-insert=FALSE";
+        }
+        $command .= " $baseArgs $databaseName | grep -v -a '/*!50013 DEFINER'";
         if (!empty($file)) {
             $command .= " > $file";
         }
