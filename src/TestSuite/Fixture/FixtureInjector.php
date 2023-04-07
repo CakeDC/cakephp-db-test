@@ -214,7 +214,6 @@ class FixtureInjector implements TestListener
             $ds->connect();
         }
 
-        $ds->cacheSources = false;
 
         $this->_initDb();
     }

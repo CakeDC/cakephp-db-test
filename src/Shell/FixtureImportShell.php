@@ -78,7 +78,6 @@ class FixtureImportShell extends Shell
             return;
         }
         $db = ConnectionManager::get('test_template');
-        $db->cacheSources = false;
         $this->_db = $db;
     }
 
