@@ -28,7 +28,7 @@ abstract class BaseEngine
      *
      * @var bool
      */
-    protected $_database = [];
+    protected array $_database = [];
 
     /**
      * Constructor method

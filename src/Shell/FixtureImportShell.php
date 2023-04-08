@@ -14,7 +14,7 @@ use CakeDC\DbTest\Engine\EngineFactory;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
-use Cake\Filesystem\Folder;
+use Shim\Filesystem\Folder;
 use Cake\Utility\Hash;
 
 class FixtureImportShell extends Shell

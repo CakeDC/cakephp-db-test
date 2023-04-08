@@ -13,7 +13,7 @@ namespace CakeDC\DbTest\TestSuite\Fixture;
 use CakeDC\DbTest\TestSuite\Fixture\FixtureManager;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\Filesystem\Folder;
+use Shim\Filesystem\Folder;
 use Exception;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Test;

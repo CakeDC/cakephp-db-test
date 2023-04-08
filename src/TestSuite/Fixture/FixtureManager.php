@@ -13,7 +13,7 @@ namespace CakeDC\DbTest\TestSuite\Fixture;
 use CakeDC\DbTest\Engine\EngineFactory;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Cake\Filesystem\Folder;
+use Shim\Filesystem\Folder;
 use Cake\Log\Log;
 
 class FixtureManager
