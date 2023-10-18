@@ -197,9 +197,9 @@ class FixtureInjector implements TestListener
      */
     private function __loadDatabase($ds, $database)
     {
-        if ($ds->isConnected()) {
+        if ($ds->getDriver()->isConnected()) {
             // attempt to disconnect and close connection to db.
-            $ds->disconnect();
+            $ds->getDriver()->disconnect();
             $ds->close();
         }
 
@@ -208,10 +208,10 @@ class FixtureInjector implements TestListener
             $this->databaseLoaded = true;
         }
 
-        if (!$ds->isConnected()) {
+        if (!$ds->getDriver()->isConnected()) {
             // reconnect
-            $ds->disconnect();
-            $ds->connect();
+            $ds->getDriver()->disconnect();
+            $ds->getDriver()->connect();
         }
 
 
