@@ -1,25 +1,26 @@
 <?php
+declare(strict_types=1);
+
 /**
- * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ * Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @copyright Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace CakeDC\DbTest\Shell;
 
-use CakeDC\DbTest\Engine\EngineFactory;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
-use Shim\Filesystem\Folder;
 use Cake\Utility\Hash;
+use CakeDC\DbTest\Engine\EngineFactory;
+use Shim\Filesystem\Folder;
 
 class FixtureImportShell extends Shell
 {
-
     /**
      * Import fixture shell main method
      *
@@ -33,7 +34,7 @@ class FixtureImportShell extends Shell
     /**
      * Get & configure the option parser
      *
-     * @return ConsoleOptionParser
+     * @return \Cake\Console\ConsoleOptionParser
      */
     public function getOptionParser(): ConsoleOptionParser
     {

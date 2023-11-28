@@ -1,11 +1,13 @@
 <?php
+declare(strict_types=1);
+
 /**
- * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ * Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @copyright Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace CakeDC\DbTest\Engine;
@@ -14,7 +16,6 @@ use Cake\Log\Log;
 
 class PostgresEngine extends BaseEngine
 {
-
     /**
      * Recreates test database.
      *
@@ -100,7 +101,7 @@ class PostgresEngine extends BaseEngine
         $testDbName = $this->_database['database'];
         $format = ' -Fc ';
         if (isset($options['format']) && $options['format'] == 'plain') {
-            $format = " -Fp ";
+            $format = ' -Fp ';
         }
 
         $command = "pg_dump $baseArgs  -Z=0 --file=$file $format $testDbName";
@@ -119,7 +120,7 @@ class PostgresEngine extends BaseEngine
         $host = $this->_database['host'];
         $port = '';
         if (!empty($this->_database['port'])) {
-            $port = " --port=" . $this->_database['port'];
+            $port = ' --port=' . $this->_database['port'];
         }
 
         return "--host=$host $port --username=$user";

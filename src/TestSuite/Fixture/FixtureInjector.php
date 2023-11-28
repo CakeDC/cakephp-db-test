@@ -1,19 +1,18 @@
 <?php
+declare(strict_types=1);
+
 /**
- * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ * Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @copyright Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace CakeDC\DbTest\TestSuite\Fixture;
 
-use CakeDC\DbTest\TestSuite\Fixture\FixtureManager;
-use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Shim\Filesystem\Folder;
 use Exception;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Test;
@@ -24,7 +23,6 @@ use Throwable;
 
 class FixtureInjector implements TestListener
 {
-
     /**
      * The instance of the fixture manager to use
      *
@@ -57,8 +55,8 @@ class FixtureInjector implements TestListener
     /**
      * Called when an error is encountered during a test
      *
-     * @param Test      $test  Failed Test
-     * @param Exception $e     Exception encountered
+     * @param \PHPUnit\Framework\Test      $test  Failed Test
+     * @param \Exception $t     Exception encountered
      * @param float     $time  Time of occurrence
      * @return void
      */
@@ -69,8 +67,8 @@ class FixtureInjector implements TestListener
     /**
      * A warning occurred.
      *
-     * @param Test    $test
-     * @param Warning $e
+     * @param \PHPUnit\Framework\Test    $test
+     * @param \PHPUnit\Framework\Warning $e
      * @param float   $time
      */
     public function addWarning(Test $test, Warning $e, float $time): void
@@ -80,8 +78,8 @@ class FixtureInjector implements TestListener
     /**
      * Called when a failure is encountered during a test
      *
-     * @param Test                  $test  Failed Test
-     * @param AssertionFailedError  $e     Failed Assertion
+     * @param \PHPUnit\Framework\Test                  $test  Failed Test
+     * @param \PHPUnit\Framework\AssertionFailedError  $e     Failed Assertion
      * @param float                 $time  Time of occurrence
      * @return void
      */
@@ -92,8 +90,8 @@ class FixtureInjector implements TestListener
     /**
      * Called if a test is incomplete
      *
-     * @param Test      $test  Incomplete Test
-     * @param Throwable $e     Exception encountered
+     * @param \PHPUnit\Framework\Test      $test  Incomplete Test
+     * @param \Throwable $t     Exception encountered
      * @param float     $time  Time of occurrence
      * @return void
      */
@@ -104,8 +102,8 @@ class FixtureInjector implements TestListener
     /**
      * Called when a test is risky.
      *
-     * @param Test      $test  Risky Test
-     * @param Throwable $e     Exception encountered
+     * @param \PHPUnit\Framework\Test      $test  Risky Test
+     * @param \Throwable $t     Exception encountered
      * @param float     $time  Time of occurrence
      * @return void
      */
@@ -117,8 +115,8 @@ class FixtureInjector implements TestListener
      * Called when a test is skipped.
      * Tests are skipped when a test it was dependent on fails (using @depends)
      *
-     * @param Test      $test  Skipped Test
-     * @param Throwable $e     Exception encountered
+     * @param \PHPUnit\Framework\Test      $test  Skipped Test
+     * @param \Throwable $e     Exception encountered
      * @param float     $time  Time of occurrence
      * @return void
      */
@@ -129,7 +127,7 @@ class FixtureInjector implements TestListener
     /**
      * Called at the beginning of a test (per test method in a class)
      *
-     * @param Test  $test  Test
+     * @param \PHPUnit\Framework\Test  $test  Test
      * @return void
      */
     public function startTest(Test $test): void
@@ -140,7 +138,7 @@ class FixtureInjector implements TestListener
     /**
      * Called when a test ends (per test method in a class)
      *
-     * @param Test  $test  Ended Test
+     * @param \PHPUnit\Framework\Test  $test  Ended Test
      * @param float $time  Time of occurrence
      * @return void
      */
@@ -152,7 +150,7 @@ class FixtureInjector implements TestListener
     /**
      * Called at the beginning of a suite. A suite is a collection of tests
      *
-     * @param TestSuite $suite    Suite
+     * @param \PHPUnit\Framework\TestSuite $suite    Suite
      * @return void
      */
     public function startTestSuite(TestSuite $suite): void
@@ -180,7 +178,7 @@ class FixtureInjector implements TestListener
     /**
      * Called at the end of a suite.
      *
-     * @param TestSuite $suite    Suite
+     * @param \PHPUnit\Framework\TestSuite $suite    Suite
      * @return void
      */
     public function endTestSuite(TestSuite $suite): void
