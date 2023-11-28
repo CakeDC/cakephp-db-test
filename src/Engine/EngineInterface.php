@@ -19,7 +19,7 @@ interface EngineInterface
      *
      * @return bool
      */
-    public function recreateTestDatabase();
+    public function recreateTestDatabase(): bool;
 
     /**
      * Import test skeleton database.
@@ -28,7 +28,7 @@ interface EngineInterface
      * @param array $options Additional options.
      * @return bool
      */
-    public function import($file, $options = []);
+    public function import(string $file, array $options = []): bool;
 
     /**
      * Export database.
@@ -37,5 +37,5 @@ interface EngineInterface
      * @param array $options Additional options.
      * @return bool
      */
-    public function export($file, $options = []);
+    public function export(string $file, array $options = []): bool;
 }

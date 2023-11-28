@@ -14,15 +14,14 @@ namespace CakeDC\DbTest\Engine;
 
 use Cake\Core\Configure;
 use Cake\Log\Log;
+use function Cake\I18n\__d;
 
 class MysqlEngine extends BaseEngine
 {
     /**
-     * Recreates test database.
-     *
-     * @return bool
+     * @inheritdoc
      */
-    public function recreateTestDatabase()
+    public function recreateTestDatabase(): bool
     {
         $databaseName = $this->_database['database'];
         $baseArgs = $this->_getBaseArguments();
@@ -39,13 +38,9 @@ class MysqlEngine extends BaseEngine
     }
 
     /**
-     * Import test skeleton database.
-     *
-     * @param string $file     Sql file path.
-     * @param array  $options  Additional options/
-     * @return bool
+     * @inheritdoc
      */
-    public function import($file, $options = [])
+    public function import(string $file, array $options = []): bool
     {
         $databaseName = $this->_database['database'];
         $baseArgs = $this->_getBaseArguments();
@@ -55,13 +50,9 @@ class MysqlEngine extends BaseEngine
     }
 
     /**
-     * Export database.
-     *
-     * @param string $file     Sql file path.
-     * @param array  $options  Additional options/
-     * @return bool
+     * @inheritdoc
      */
-    public function export($file, $options = [])
+    public function export(string $file, array $options = []): bool
     {
         $databaseName = $this->_database['database'];
         $baseArgs = $this->_getBaseArguments();
@@ -85,7 +76,7 @@ class MysqlEngine extends BaseEngine
      *
      * @return string
      */
-    protected function _getBaseArguments()
+    protected function _getBaseArguments(): string
     {
         $user = $this->_database['username'];
         $password = $this->_database['password'];

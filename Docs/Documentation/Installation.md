@@ -15,7 +15,7 @@ Load the plugin
 bin/cake plugin load CakeDC/DbTest
 ```
 Note you'll need this plugin loaded in the `cli` section of your `Application::bootstrap`, around the line loading
-Bake Plugin: `$this->addPlugin('Bake');`
+Bake Plugin: `$this->addPlugin('DbTestPlugin');`
 
 Configuration
 -------------
@@ -30,8 +30,8 @@ Add the next configuration setting into app.php
 'Datasources' => [
     // ...
     'test_template' => [
-            'className' => 'Cake\Database\Connection',
-        	'driver' => 'Cake\Database\Driver\Mysql',
+            'className' => \Cake\Database\Connection::class,
+        	'driver' => \Cake\Database\Driver\Mysql::class,
         	'persistent' => false,
         	'host' => 'localhost',
         	'username' => 'my_app',

@@ -17,6 +17,6 @@ use Cake\Core\BasePlugin;
 /**
  * Plugin loader
  */
-class Plugin extends BasePlugin
+class DbTestPlugin extends BasePlugin
 {
 }

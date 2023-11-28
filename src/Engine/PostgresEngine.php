@@ -13,15 +13,14 @@ declare(strict_types=1);
 namespace CakeDC\DbTest\Engine;
 
 use Cake\Log\Log;
+use function Cake\I18n\__d;
 
 class PostgresEngine extends BaseEngine
 {
     /**
-     * Recreates test database.
-     *
-     * @return bool
+     * @inheritdoc
      */
-    public function recreateTestDatabase()
+    public function recreateTestDatabase(): bool
     {
         $baseArgs = $this->_getBaseArguments();
         $this->_setPassword();
@@ -48,11 +47,11 @@ class PostgresEngine extends BaseEngine
      *
      * @return bool
      */
-    public function createSchema()
+    public function createSchema(): bool
     {
         $baseArgs = $this->_getBaseArguments();
         $this->_setPassword();
-        $success = false;
+        $success = 0;
         $testDbName = $this->_database['database'];
         if (!empty($this->_database['schema'])) {
             $schema = $this->_database['schema'];
@@ -66,13 +65,9 @@ class PostgresEngine extends BaseEngine
     }
 
     /**
-     * Import test skeleton database.
-     *
-     * @param string $file     Sql file path.
-     * @param array  $options  Additional options/
-     * @return bool
+     * @inheritdoc
      */
-    public function import($file, $options = [])
+    public function import(string $file, array $options = []): bool
     {
         $baseArgs = $this->_getBaseArguments();
         $testDbName = $this->_database['database'];
@@ -88,13 +83,9 @@ class PostgresEngine extends BaseEngine
     }
 
     /**
-     * Export database.
-     *
-     * @param string $file     Sql file path.
-     * @param array  $options  Additional options/
-     * @return bool
+     * @inheritdoc
      */
-    public function export($file, $options = [])
+    public function export(string $file, array $options = []): bool
     {
         $baseArgs = $this->_getBaseArguments();
         $this->_setPassword();
@@ -114,7 +105,7 @@ class PostgresEngine extends BaseEngine
      *
      * @return string
      */
-    protected function _getBaseArguments()
+    protected function _getBaseArguments(): string
     {
         $user = $this->_database['username'];
         $host = $this->_database['host'];
@@ -131,7 +122,7 @@ class PostgresEngine extends BaseEngine
      *
      * @return void
      */
-    protected function _setPassword()
+    protected function _setPassword(): void
     {
         $password = $this->_database['password'];
         putenv("PGPASSWORD=$password");

@@ -14,7 +14,7 @@ namespace CakeDC\DbTest\Engine;
 
 use CakeDC\DbTest\Engine\Traits\ExecuteTrait;
 
-abstract class BaseEngine
+abstract class BaseEngine implements EngineInterface
 {
     use ExecuteTrait;
 
@@ -23,52 +23,26 @@ abstract class BaseEngine
      *
      * @var bool
      */
-    protected $_verbose = false;
+    protected bool $_verbose = false;
 
     /**
      * Database configuration
      *
-     * @var bool
+     * @var array
      */
     protected array $_database = [];
 
     /**
      * Constructor method
      *
-     * @param $database
+     * @param array $database
      * @param bool $verbose Show commands and results on execution
-     * @return void
      */
-    public function __construct($database, $verbose = false)
+    public function __construct(array $database, bool $verbose = false)
     {
         $this->_database = $database;
         $this->_verbose = $verbose;
     }
-
-    /**
-     * Recreates test database.
-     *
-     * @return bool
-     */
-    abstract public function recreateTestDatabase();
-
-    /**
-     * Import test skeleton database.
-     *
-     * @param string $file Sql file path.
-     * @param array $options Additional options.
-     * @return bool
-     */
-    abstract public function import($file, $options = []);
-
-    /**
-     * Export database.
-     *
-     * @param string $file Sql file path.
-     * @param array $options Additional options.
-     * @return bool
-     */
-    abstract public function export($file, $options = []);
 
     /**
      * Check if success.
@@ -76,7 +50,7 @@ abstract class BaseEngine
      * @param int $check Check value
      * @return bool
      */
-    public function isSuccess($check)
+    public function isSuccess(int $check): bool
     {
         $allowed = [
             0 => true,
@@ -91,7 +65,7 @@ abstract class BaseEngine
      *
      * @return bool
      */
-    public function createSchema()
+    public function createSchema(): bool
     {
         return true;
     }

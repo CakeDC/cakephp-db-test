@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 namespace CakeDC\DbTest\TestSuite\Fixture;
 
+use Cake\Datasource\ConnectionInterface;
 use Cake\Datasource\ConnectionManager;
 use Exception;
 use PHPUnit\Framework\AssertionFailedError;
@@ -189,16 +190,16 @@ class FixtureInjector implements TestListener
      * Disconnects from test database (if necessary), sets up, and reconnects.
      * Disable datasource caching and sets the datasource for the test run.
      *
-     * @param string $ds        Directory Separator
+     * @param \Cake\Datasource\ConnectionInterface $ds        Directory Separator
      * @param array $database   Database configuration
      * @return void
      */
-    private function __loadDatabase($ds, $database)
+    private function __loadDatabase(ConnectionInterface $ds, $database)
     {
-        if ($ds->isConnected()) {
+
+        if ($ds->getDriver()->isConnected()) {
             // attempt to disconnect and close connection to db.
-            $ds->disconnect();
-            $ds->close();
+            $ds->getDriver()->disconnect();
         }
 
         if ($this->_fixtureManager->setupDatabase($database, false)) {
@@ -206,10 +207,10 @@ class FixtureInjector implements TestListener
             $this->databaseLoaded = true;
         }
 
-        if (!$ds->isConnected()) {
+        if (!$ds->getDriver()->isConnected()) {
             // reconnect
-            $ds->disconnect();
-            $ds->connect();
+            $ds->getDriver()->disconnect();
+            $ds->getDriver()->connect();
         }
 
         $ds->cacheSources = false;
