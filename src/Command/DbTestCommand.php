@@ -22,20 +22,22 @@ use function Cake\I18n\__d;
 class DbTestCommand extends Command
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
         return parent::buildOptionParser($parser)
             ->setDescription([
-                __d('cake_d_c/db_test', 'The Db Test Shell extends the CakePhp TestSuite and no longer needs fixtures defined.
+                __d('cake_d_c/db_test', 'The Db Test Shell extends the CakePhp TestSuite and no ' .
+                    'longer needs fixtures defined.
                     Instead the test and test-template databases are synchronized before each test class is executed.
                     Transaction wrapping used to rollback test case changes.'),
             ])
             ->addOption('import-database-template', [
                 'boolean' => true,
                 'short' => 'i',
-                'help' => __d('cake_d_c/db_test', 'Drops test template database and imports test_db.sql file from app/Config/sql'),
+                'help' => __d('cake_d_c/db_test', 'Drops test template database and imports ' .
+                    'test_db.sql file from app/Config/sql'),
             ])
             ->addOption('import-database-file', [
                 'short' => 'f',
@@ -44,7 +46,7 @@ class DbTestCommand extends Command
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {

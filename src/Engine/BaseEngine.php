@@ -35,7 +35,7 @@ abstract class BaseEngine implements EngineInterface
     /**
      * Constructor method
      *
-     * @param array $database
+     * @param array $database database configuration
      * @param bool $verbose Show commands and results on execution
      */
     public function __construct(array $database, bool $verbose = false)

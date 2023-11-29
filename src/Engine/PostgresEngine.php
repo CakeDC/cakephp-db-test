@@ -18,7 +18,7 @@ use function Cake\I18n\__d;
 class PostgresEngine extends BaseEngine
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function recreateTestDatabase(): bool
     {
@@ -26,7 +26,8 @@ class PostgresEngine extends BaseEngine
         $this->_setPassword();
         $databaseName = $this->_database['database'];
         $systemUser = 'postgres';
-        $terminateQuery = "select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = '$databaseName'";
+        $terminateQuery = 'select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity ' .
+            "where pg_stat_activity.datname = '$databaseName'";
         $this->_execute("psql $baseArgs -c \"$terminateQuery\" $systemUser", $output, $success);
 
         $output = [];
@@ -65,7 +66,7 @@ class PostgresEngine extends BaseEngine
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function import(string $file, array $options = []): bool
     {
@@ -83,7 +84,7 @@ class PostgresEngine extends BaseEngine
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function export(string $file, array $options = []): bool
     {

@@ -19,7 +19,7 @@ use function Cake\I18n\__d;
 class MysqlEngine extends BaseEngine
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function recreateTestDatabase(): bool
     {
@@ -38,7 +38,7 @@ class MysqlEngine extends BaseEngine
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function import(string $file, array $options = []): bool
     {
@@ -50,7 +50,7 @@ class MysqlEngine extends BaseEngine
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function export(string $file, array $options = []): bool
     {

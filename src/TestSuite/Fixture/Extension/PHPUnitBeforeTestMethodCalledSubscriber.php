@@ -21,6 +21,10 @@ use PHPUnit\Event\Test\BeforeTestMethodCalledSubscriber;
  */
 class PHPUnitBeforeTestMethodCalledSubscriber implements BeforeTestMethodCalledSubscriber
 {
+    /**
+     * @param \PHPUnit\Event\Test\BeforeTestMethodCalled $event Event
+     * @return void
+     */
     public function notify(BeforeTestMethodCalled $event): void
     {
         ConnectionManager::get('test')->begin();

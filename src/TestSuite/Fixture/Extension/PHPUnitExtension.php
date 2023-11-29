@@ -23,6 +23,12 @@ use PHPUnit\TextUI\Configuration\Configuration;
  */
 class PHPUnitExtension implements Extension
 {
+    /**
+     * @param \PHPUnit\TextUI\Configuration\Configuration $configuration Configuration
+     * @param \PHPUnit\Runner\Extension\Facade $facade Facade
+     * @param \PHPUnit\Runner\Extension\ParameterCollection $parameters Parameters
+     * @return void
+     */
     public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters): void
     {
         $fixtureManager = new FixtureManager();

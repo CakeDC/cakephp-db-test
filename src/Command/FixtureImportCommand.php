@@ -19,7 +19,7 @@ use function Cake\I18n\__d;
 class FixtureImportCommand extends Command
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function buildOptionParser(ConsoleOptionParser $parser): ConsoleOptionParser
     {
@@ -37,7 +37,7 @@ class FixtureImportCommand extends Command
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function execute(Arguments $args, ConsoleIo $io)
     {

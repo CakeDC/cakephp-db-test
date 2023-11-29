@@ -121,7 +121,7 @@ class FixtureManager
     /**
      * Set verbose mode.
      *
-     * @param bool $verbose
+     * @param bool $verbose Verbose
      * @return void
      */
     public function setVerbose(bool $verbose): void

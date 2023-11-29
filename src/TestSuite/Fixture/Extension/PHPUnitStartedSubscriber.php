@@ -33,13 +33,16 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
      */
     protected bool $initialized;
 
+    /**
+     * @param \CakeDC\DbTest\TestSuite\Fixture\FixtureManager $fixtureManager Fixture Manager instance
+     */
     public function __construct(
         private readonly FixtureManager $fixtureManager
     ) {
     }
 
     /**
-     * @param \PHPUnit\Event\TestSuite\Started $event
+     * @param \PHPUnit\Event\TestSuite\Started $event Event
      * @return void
      */
     public function notify(Started $event): void
@@ -132,7 +135,6 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
     protected function initDb(): void
     {
         if ($this->initialized) {
-
             return;
         }
         $this->aliasConnections();

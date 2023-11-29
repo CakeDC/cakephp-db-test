@@ -37,7 +37,7 @@ class EngineFactory
     /**
      * Translate a cake engine into a DbTest engine
      *
-     * @param string $driver
+     * @param string $driver Driver name
      * @return string
      */
     protected static function getEngineClass(string $driver): string

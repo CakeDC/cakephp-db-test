@@ -21,6 +21,10 @@ use PHPUnit\Event\Test\AfterTestMethodFinishedSubscriber;
  */
 class PHPUnitAfterTestMethodFinishedSubscriber implements AfterTestMethodFinishedSubscriber
 {
+    /**
+     * @param \PHPUnit\Event\Test\AfterTestMethodFinished $event Event
+     * @return void
+     */
     public function notify(AfterTestMethodFinished $event): void
     {
         ConnectionManager::get('test')->rollback();
