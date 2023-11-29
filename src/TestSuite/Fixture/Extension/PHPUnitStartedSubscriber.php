@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace CakeDC\DbTest\TestSuite\Fixture\Extension;
 
 use Cake\Database\Connection;
-use Cake\Datasource\ConnectionInterface;
 use Cake\Datasource\ConnectionManager;
 use CakeDC\DbTest\TestSuite\Fixture\FixtureManager;
 use Exception;
@@ -74,11 +73,11 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
      * Disconnects from test database (if necessary), sets up, and reconnects.
      * Disable datasource caching and sets the datasource for the test run.
      *
-     * @param \Cake\Datasource\ConnectionInterface $ds Directory Separator
+     * @param \Cake\Database\Connection $ds Directory Separator
      * @param array $database Database configuration
      * @return void
      */
-    protected function loadDatabase(ConnectionInterface $ds, array $database): void
+    protected function loadDatabase(Connection $ds, array $database): void
     {
         if ($ds->getDriver()->isConnected()) {
             // attempt to disconnect and close connection to db.
