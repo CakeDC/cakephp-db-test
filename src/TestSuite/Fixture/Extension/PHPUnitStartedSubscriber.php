@@ -27,11 +27,11 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
     /**
      * @var true
      */
-    protected bool $databaseLoaded;
+    protected bool $databaseLoaded = false;
     /**
      * @var true
      */
-    protected bool $initialized;
+    protected bool $initialized = false;
 
     /**
      * @param \CakeDC\DbTest\TestSuite\Fixture\FixtureManager $fixtureManager Fixture Manager instance
