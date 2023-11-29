@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 namespace CakeDC\DbTest\TestSuite\Fixture\Extension;
 
+use Cake\Database\Connection;
 use Cake\Datasource\ConnectionManager;
 use PHPUnit\Event\Test\AfterTestMethodFinished;
 use PHPUnit\Event\Test\AfterTestMethodFinishedSubscriber;
@@ -27,6 +28,8 @@ class PHPUnitAfterTestMethodFinishedSubscriber implements AfterTestMethodFinishe
      */
     public function notify(AfterTestMethodFinished $event): void
     {
-        ConnectionManager::get('test')->rollback();
+        $connection = ConnectionManager::get('test');
+        assert($connection instanceof Connection);
+        $connection->rollback();
     }
 }

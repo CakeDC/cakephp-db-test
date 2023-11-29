@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 namespace CakeDC\DbTest\TestSuite\Fixture\Extension;
 
+use Cake\Database\Connection;
 use Cake\Datasource\ConnectionManager;
 use PHPUnit\Event\Test\BeforeTestMethodCalled;
 use PHPUnit\Event\Test\BeforeTestMethodCalledSubscriber;
@@ -27,6 +28,8 @@ class PHPUnitBeforeTestMethodCalledSubscriber implements BeforeTestMethodCalledS
      */
     public function notify(BeforeTestMethodCalled $event): void
     {
-        ConnectionManager::get('test')->begin();
+        $connection = ConnectionManager::get('test');
+        assert($connection instanceof Connection);
+        $connection->begin();
     }
 }

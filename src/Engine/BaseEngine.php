@@ -57,13 +57,11 @@ abstract class BaseEngine implements EngineInterface
             1 => true,
         ];
 
-        return isset($allowed[$check]) && $allowed[$check];
+        return isset($allowed[$check]);
     }
 
     /**
-     * Create schema
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function createSchema(): bool
     {

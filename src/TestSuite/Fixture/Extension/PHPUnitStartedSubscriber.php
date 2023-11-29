@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 namespace CakeDC\DbTest\TestSuite\Fixture\Extension;
 
+use Cake\Database\Connection;
 use Cake\Datasource\ConnectionInterface;
 use Cake\Datasource\ConnectionManager;
 use CakeDC\DbTest\TestSuite\Fixture\FixtureManager;
@@ -47,7 +48,9 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
      */
     public function notify(Started $event): void
     {
-        $database = ConnectionManager::get('test')->config();
+        $connection = ConnectionManager::get('test');
+        assert($connection instanceof Connection);
+        $database = $connection->config();
 
         try {
             $ds = ConnectionManager::get('test');
@@ -56,7 +59,7 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
             $this->fixtureManager->setupDatabase($database, true, false);
             $ds = ConnectionManager::get('test');
         }
-
+        assert($ds instanceof Connection);
         // rollback transaction. gives us a 'fresh' copy of the database for the next
         // test suite to run
         $ds->rollback();

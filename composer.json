@@ -9,7 +9,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",
-        "cakephp/cakephp-codesniffer": "^4.0"
+        "cakephp/cakephp-codesniffer": "^4.0",
+        "ext-mbstring": "*"
     },
     "autoload": {
         "psr-4": {

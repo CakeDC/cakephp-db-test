@@ -44,9 +44,7 @@ class PostgresEngine extends BaseEngine
     }
 
     /**
-     * Create schema
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function createSchema(): bool
     {

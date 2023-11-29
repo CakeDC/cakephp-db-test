@@ -15,6 +15,7 @@ namespace CakeDC\DbTest\TestSuite\Fixture;
 use Cake\Datasource\ConnectionManager;
 use Cake\Log\Log;
 use CakeDC\DbTest\Engine\EngineFactory;
+use function Cake\I18n\__d;
 
 class FixtureManager
 {

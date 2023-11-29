@@ -38,4 +38,11 @@ interface EngineInterface
      * @return bool
      */
     public function export(string $file, array $options = []): bool;
+
+    /**
+     * Create database schema
+     *
+     * @return bool
+     */
+    public function createSchema(): bool;
 }
