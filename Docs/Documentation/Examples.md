@@ -10,10 +10,10 @@ Importing template database form sql file, by default it will load `config/sql/t
 bin/cake db_test -i
 ```
 
-Use `--import-database-file` to specify the sql file to be loaded
+Use `-f` to specify the sql file to be loaded
 
 ```
-bin/cake db_test -i --import-database-file=files/dump.sql
+bin/cake db_test -i -f=files/dump.sql
 ```
 
 

@@ -1,24 +1,25 @@
 <?php
+declare(strict_types=1);
+
 /**
- * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ * Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @copyright Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace CakeDC\DbTest\Engine;
 
 interface EngineInterface
 {
-
     /**
      * Recreates test database.
      *
      * @return bool
      */
-    public function recreateTestDatabase();
+    public function recreateTestDatabase(): bool;
 
     /**
      * Import test skeleton database.
@@ -27,7 +28,7 @@ interface EngineInterface
      * @param array $options Additional options.
      * @return bool
      */
-    public function import($file, $options = []);
+    public function import(string $file, array $options = []): bool;
 
     /**
      * Export database.
@@ -36,5 +37,12 @@ interface EngineInterface
      * @param array $options Additional options.
      * @return bool
      */
-    public function export($file, $options = []);
+    public function export(string $file, array $options = []): bool;
+
+    /**
+     * Create database schema
+     *
+     * @return bool
+     */
+    public function createSchema(): bool;
 }

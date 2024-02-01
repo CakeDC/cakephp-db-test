@@ -1,27 +1,27 @@
 <?php
+declare(strict_types=1);
+
 /**
- * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ * Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @copyright Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace CakeDC\DbTest\Engine;
 
 use Cake\Core\Configure;
 use Cake\Log\Log;
+use function Cake\I18n\__d;
 
 class MysqlEngine extends BaseEngine
 {
-
     /**
-     * Recreates test database.
-     *
-     * @return bool
+     * @inheritDoc
      */
-    public function recreateTestDatabase()
+    public function recreateTestDatabase(): bool
     {
         $databaseName = $this->_database['database'];
         $baseArgs = $this->_getBaseArguments();
@@ -38,13 +38,9 @@ class MysqlEngine extends BaseEngine
     }
 
     /**
-     * Import test skeleton database.
-     *
-     * @param string $file     Sql file path.
-     * @param array  $options  Additional options/
-     * @return bool
+     * @inheritDoc
      */
-    public function import($file, $options = [])
+    public function import(string $file, array $options = []): bool
     {
         $databaseName = $this->_database['database'];
         $baseArgs = $this->_getBaseArguments();
@@ -54,22 +50,18 @@ class MysqlEngine extends BaseEngine
     }
 
     /**
-     * Export database.
-     *
-     * @param string $file     Sql file path.
-     * @param array  $options  Additional options/
-     * @return bool
+     * @inheritDoc
      */
-    public function export($file, $options = [])
+    public function export(string $file, array $options = []): bool
     {
         $databaseName = $this->_database['database'];
         $baseArgs = $this->_getBaseArguments();
-        $command = "mysqldump";
+        $command = 'mysqldump';
         if (Configure::read('DbTest.dumpExtendedInserts') !== true) {
-            $command .= " --extended-insert=FALSE";
+            $command .= ' --extended-insert=FALSE';
         }
         if (Configure::read('DbTest.dumpNoTablespaces') === true) {
-            $command .= " --no-tablespaces";
+            $command .= ' --no-tablespaces';
         }
         $command .= " $baseArgs $databaseName | grep -v -a '/*!50013 DEFINER'";
         if (!empty($file)) {
@@ -84,14 +76,14 @@ class MysqlEngine extends BaseEngine
      *
      * @return string
      */
-    protected function _getBaseArguments()
+    protected function _getBaseArguments(): string
     {
         $user = $this->_database['username'];
         $password = $this->_database['password'];
         $host = $this->_database['host'];
         $port = '';
         if (!empty($this->_database['port'])) {
-            $port = " --port=" . $this->_database['port'];
+            $port = ' --port=' . $this->_database['port'];
         }
         $quote = DS === '/' ? "'" : '"';
 

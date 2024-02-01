@@ -15,7 +15,8 @@ Generic cycle of test execution under DbTest
 * Before test method starts, DbTest initializes the transaction.
 * After test method finishes, DbTest rollbacks transaction.
 
-This way database modifications are quickly restored, but requires that the table uses a transaction engine like InnoDb.
+This way database modifications are quickly restored, but requires that the table uses a transaction engine
+like InnoDb.
 
 Support
 -------
@@ -27,11 +28,13 @@ Commercial support is also available, [contact us](http://cakedc.com/contact) fo
 Contributing
 ------------
 
-If you'd like to contribute new features, enhancements or bug fixes to the plugin, just read our [Contribution Guidelines](http://cakedc.com/plugins) for detailed instructions.
+If you'd like to contribute new features, enhancements or bug fixes to the plugin, just read our
+[Contribution Guidelines](http://cakedc.com/plugins) for detailed instructions.
 
 License
 -------
 
-Copyright 2007-2014 Cake Development Corporation (CakeDC). All rights reserved.
+Copyright 2013-2023 Cake Development Corporation (CakeDC). All rights reserved.
 
-Licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) License. Redistributions of the source code included in this repository must retain the copyright notice found in each file.
+Licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) License. Redistributions of the source code included in this repository
+must retain the copyright notice found in each file.

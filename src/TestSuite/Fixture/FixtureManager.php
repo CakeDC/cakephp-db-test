@@ -1,43 +1,47 @@
 <?php
+declare(strict_types=1);
+
 /**
- * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ * Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @copyright Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace CakeDC\DbTest\TestSuite\Fixture;
 
-use CakeDC\DbTest\Engine\EngineFactory;
-use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
-use Shim\Filesystem\Folder;
 use Cake\Log\Log;
+use CakeDC\DbTest\Engine\EngineFactory;
+use function Cake\I18n\__d;
 
 class FixtureManager
 {
-
     /**
      * Show commands and results on execution
      *
      * @var bool
      */
-    protected $_verbose = false;
+    protected bool $_verbose = false;
 
     /**
      * Drops existing connections to test database, recreates db,
      * and transfers data from test_skel to test
      *
-     * @param array  $database Database configuration
-     * @param bool   $createSchema true when schema will be created
-     * @param bool   $importTestSkeleton true when skeleton will be imported
-     * @param string $sqlFilePath Path to the sql script to import
+     * @param array $database Database configuration
+     * @param bool $createSchema true when schema will be created
+     * @param bool $importTestSkeleton true when skeleton will be imported
+     * @param string|null $sqlFilePath Path to the sql script to import
      * @return bool
      */
-    public function setupDatabase($database, $createSchema, $importTestSkeleton = false, $sqlFilePath = null)
-    {
+    public function setupDatabase(
+        array $database,
+        bool $createSchema,
+        bool $importTestSkeleton = false,
+        ?string $sqlFilePath = null
+    ): bool {
         $engine = EngineFactory::engine($database, $this->_verbose);
 
         $success = $engine->recreateTestDatabase();
@@ -58,10 +62,10 @@ class FixtureManager
      *
      * mysqlamdin must be in your path and be the proper version for your database
      *
-     * @param string $database Database configuration
+     * @param array $database Database configuration
      * @return void
      */
-    public function transferData($database)
+    public function transferData(array $database): void
     {
         $testDbName = $database['database'];
         $skeletonDatabase = ConnectionManager::get('test_template')->config();
@@ -87,11 +91,11 @@ class FixtureManager
     /**
      * Find and import test_db.sql file from app/Config/sql
      *
-     * @param string $database Database configuration.
-     * @param string $sqlFilePath Path to the sql script to import
+     * @param array $database Database configuration.
+     * @param string|null $sqlFilePath Path to the sql script to import
      * @return void
      */
-    private function __importTestSkeleton($database, $sqlFilePath = null)
+    private function __importTestSkeleton(array $database, ?string $sqlFilePath = null): void
     {
         $testDbName = $database['database'];
         $cacheFolder = CACHE . 'fixtures';
@@ -118,10 +122,10 @@ class FixtureManager
     /**
      * Set verbose mode.
      *
-     * @param bool $verbose
+     * @param bool $verbose Verbose
      * @return void
      */
-    public function setVerbose($verbose)
+    public function setVerbose(bool $verbose): void
     {
         $this->_verbose = $verbose;
     }
@@ -132,8 +136,14 @@ class FixtureManager
      * @param string $path Path to folder
      * @return void
      */
-    protected function _ensureFolder($path)
+    protected function _ensureFolder(string $path): void
     {
-        $Folder = new Folder($path, true);
+        if (!is_dir($path)) {
+            mkdir(
+                directory: $path,
+                permissions: 0755,
+                recursive: true
+            );
+        }
     }
 }

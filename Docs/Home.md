@@ -6,11 +6,11 @@ The **DbTest** plugin enables developers to speeding up tests running on MySQL o
 Requirements
 ------------
 
-* CakePHP 3.5+
-* PHP 5.6.0+
+* CakePHP 5.0+
+* PHP 8.1+
 * MySQL database with InnoDb engine
 * PostgreSQL database
-* Phpunit 6.*
+* Phpunit 10.*
 
 Documentation
 -------------

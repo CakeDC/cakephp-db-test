@@ -1,18 +1,20 @@
 <?php
+declare(strict_types=1);
+
 /**
- * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ * Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @copyright Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace CakeDC\DbTest\Engine;
 
 use CakeDC\DbTest\Engine\Traits\ExecuteTrait;
 
-abstract class BaseEngine
+abstract class BaseEngine implements EngineInterface
 {
     use ExecuteTrait;
 
@@ -21,52 +23,26 @@ abstract class BaseEngine
      *
      * @var bool
      */
-    protected $_verbose = false;
+    protected bool $_verbose = false;
 
     /**
      * Database configuration
      *
-     * @var bool
+     * @var array
      */
     protected array $_database = [];
 
     /**
      * Constructor method
      *
-     * @param $database
+     * @param array $database database configuration
      * @param bool $verbose Show commands and results on execution
-     * @return void
      */
-    public function __construct($database, $verbose = false)
+    public function __construct(array $database, bool $verbose = false)
     {
         $this->_database = $database;
         $this->_verbose = $verbose;
     }
-
-    /**
-     * Recreates test database.
-     *
-     * @return bool
-     */
-    abstract public function recreateTestDatabase();
-
-    /**
-     * Import test skeleton database.
-     *
-     * @param string $file Sql file path.
-     * @param array $options Additional options.
-     * @return bool
-     */
-    abstract public function import($file, $options = []);
-
-    /**
-     * Export database.
-     *
-     * @param string $file Sql file path.
-     * @param array $options Additional options.
-     * @return bool
-     */
-    abstract public function export($file, $options = []);
 
     /**
      * Check if success.
@@ -74,22 +50,20 @@ abstract class BaseEngine
      * @param int $check Check value
      * @return bool
      */
-    public function isSuccess($check)
+    public function isSuccess(int $check): bool
     {
         $allowed = [
             0 => true,
             1 => true,
         ];
 
-        return isset($allowed[$check]) && $allowed[$check];
+        return isset($allowed[$check]);
     }
 
     /**
-     * Create schema
-     *
-     * @return bool
+     * @inheritDoc
      */
-    public function createSchema()
+    public function createSchema(): bool
     {
         return true;
     }

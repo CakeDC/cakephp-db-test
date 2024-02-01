@@ -1,32 +1,33 @@
 <?php
+declare(strict_types=1);
+
 /**
- * Copyright 2010 - 2019, Cake Development Corporation (https://www.cakedc.com)
+ * Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010 - 2017, Cake Development Corporation (https://www.cakedc.com)
+ * @copyright Copyright 2013 - 2023, Cake Development Corporation (https://www.cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace CakeDC\DbTest\Engine;
 
 use Cake\Log\Log;
+use function Cake\I18n\__d;
 
 class PostgresEngine extends BaseEngine
 {
-
     /**
-     * Recreates test database.
-     *
-     * @return bool
+     * @inheritDoc
      */
-    public function recreateTestDatabase()
+    public function recreateTestDatabase(): bool
     {
         $baseArgs = $this->_getBaseArguments();
         $this->_setPassword();
         $databaseName = $this->_database['database'];
         $systemUser = 'postgres';
-        $terminateQuery = "select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity where pg_stat_activity.datname = '$databaseName'";
+        $terminateQuery = 'select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity ' .
+            "where pg_stat_activity.datname = '$databaseName'";
         $this->_execute("psql $baseArgs -c \"$terminateQuery\" $systemUser", $output, $success);
 
         $output = [];
@@ -43,15 +44,13 @@ class PostgresEngine extends BaseEngine
     }
 
     /**
-     * Create schema
-     *
-     * @return bool
+     * @inheritDoc
      */
-    public function createSchema()
+    public function createSchema(): bool
     {
         $baseArgs = $this->_getBaseArguments();
         $this->_setPassword();
-        $success = false;
+        $success = 0;
         $testDbName = $this->_database['database'];
         if (!empty($this->_database['schema'])) {
             $schema = $this->_database['schema'];
@@ -65,13 +64,9 @@ class PostgresEngine extends BaseEngine
     }
 
     /**
-     * Import test skeleton database.
-     *
-     * @param string $file     Sql file path.
-     * @param array  $options  Additional options/
-     * @return bool
+     * @inheritDoc
      */
-    public function import($file, $options = [])
+    public function import(string $file, array $options = []): bool
     {
         $baseArgs = $this->_getBaseArguments();
         $testDbName = $this->_database['database'];
@@ -87,20 +82,16 @@ class PostgresEngine extends BaseEngine
     }
 
     /**
-     * Export database.
-     *
-     * @param string $file     Sql file path.
-     * @param array  $options  Additional options/
-     * @return bool
+     * @inheritDoc
      */
-    public function export($file, $options = [])
+    public function export(string $file, array $options = []): bool
     {
         $baseArgs = $this->_getBaseArguments();
         $this->_setPassword();
         $testDbName = $this->_database['database'];
         $format = ' -Fc ';
         if (isset($options['format']) && $options['format'] == 'plain') {
-            $format = " -Fp ";
+            $format = ' -Fp ';
         }
 
         $command = "pg_dump $baseArgs  -Z=0 --file=$file $format $testDbName";
@@ -113,13 +104,13 @@ class PostgresEngine extends BaseEngine
      *
      * @return string
      */
-    protected function _getBaseArguments()
+    protected function _getBaseArguments(): string
     {
         $user = $this->_database['username'];
         $host = $this->_database['host'];
         $port = '';
         if (!empty($this->_database['port'])) {
-            $port = " --port=" . $this->_database['port'];
+            $port = ' --port=' . $this->_database['port'];
         }
 
         return "--host=$host $port --username=$user";
@@ -130,7 +121,7 @@ class PostgresEngine extends BaseEngine
      *
      * @return void
      */
-    protected function _setPassword()
+    protected function _setPassword(): void
     {
         $password = $this->_database['password'];
         putenv("PGPASSWORD=$password");
