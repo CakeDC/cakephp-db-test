@@ -14,6 +14,12 @@ use Cake\Log\Log;
 
 class PostgresEngine extends BaseEngine
 {
+    /**
+     * Default timezone for date normalization
+     *
+     * @var string
+     */
+    protected $_defaultTimezone = 'UTC';
 
     /**
      * Recreates test database.
@@ -102,10 +108,12 @@ class PostgresEngine extends BaseEngine
         if (isset($options['format']) && $options['format'] == 'plain') {
             $format = " -Fp ";
         }
+        $this->_setTimezone();
+        $tzOptions = $this->_getTimezoneOptions();
+        $command = "pg_dump $baseArgs $tzOptions -Z 0 --file=$file $format $testDbName";
+        $result = $this->_execute($command, $output);
 
-        $command = "pg_dump $baseArgs  -Z 0 --file=$file $format $testDbName";
-
-        return $this->_execute($command, $output);
+        return $result;
     }
 
     /**
@@ -134,5 +142,40 @@ class PostgresEngine extends BaseEngine
     {
         $password = $this->_database['password'];
         putenv("PGPASSWORD=$password");
+    }
+
+    /**
+     * Set timezone environment variable for consistent date formats
+     *
+     * @return void
+     */
+    protected function _setTimezone()
+    {
+        $timezone = $this->_getTimezone();
+        putenv("PGTZ=$timezone");
+    }
+
+    /**
+     * Get timezone from configuration or use default
+     *
+     * @return string
+     */
+    protected function _getTimezone()
+    {
+        if (!empty($this->_database['timezone'])) {
+            return $this->_database['timezone'];
+        }
+
+        return $this->_defaultTimezone;
+    }
+
+    /**
+     * Get command line options for setting timezone
+     *
+     * @return string
+     */
+    protected function _getTimezoneOptions()
+    {
+        return "--no-owner --no-privileges --no-tablespaces --no-security-labels --no-comments";
     }
 }
