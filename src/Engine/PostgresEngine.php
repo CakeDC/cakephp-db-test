@@ -94,7 +94,7 @@ class PostgresEngine extends BaseEngine
             $format = ' -Fp ';
         }
 
-        $command = "pg_dump $baseArgs  -Z=0 --file=$file $format $testDbName";
+        $command = "pg_dump $baseArgs  --compress=0 --file=$file $format $testDbName";
 
         return $this->_execute($command, $output);
     }
