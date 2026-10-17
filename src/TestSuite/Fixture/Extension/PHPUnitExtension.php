@@ -37,7 +37,7 @@ class PHPUnitExtension implements Extension
 
         $facade->registerSubscribers(
             new PHPUnitStartedSubscriber($fixtureManager),
-            new PHPUnitBeforeTestMethodCalledSubscriber(),
+            new PHPUnitPreparationStartedSubscriber(),
             new PHPUnitAfterTestMethodFinishedSubscriber()
         );
     }
