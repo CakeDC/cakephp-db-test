@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+
+  pull_request:
+    branches:
+      - '*'
+
+permissions:
+  contents: read
+
+jobs:
+  testsuite:
+    name: PHP ${{ matrix.php-version }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        # composer.json declares php >=8.1 and cakephp/cakephp ^5.0.
+        # CakePHP 5.0-5.2 allow PHP 8.1; 5.3+ requires PHP 8.2, so on 8.1
+        # composer resolves 5.2.x and on 8.2+ the latest 5.x. Test the whole
+        # declared range: 8.1 (min) -> 8.5 (newest).
+        php-version: ['8.1', '8.2', '8.3', '8.4', '8.5']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, intl, apcu, sqlite3, pdo_sqlite
+          ini-values: apc.enable_cli=1
+          coverage: none
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ hashFiles('composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-${{ matrix.php-version }}-
+
+      - name: Install dependencies
+        # composer.lock is gitignored, so resolve dependencies on each run.
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit
+
+  cs-stan:
+    name: Coding Standard & Static Analysis
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl, apcu
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Run PHP CodeSniffer
+        run: composer cs-check
+
+      # NOTE: phpstan/psalm are pinned to 1.10.14 / 5.10.0 in .phive/phars.xml;
+      # those versions do not run on PHP 8.2+ (fatal in better-reflection) and
+      # report pre-existing findings. Modernize the pins in a separate change
+      # before wiring them back into CI as a blocking step.
