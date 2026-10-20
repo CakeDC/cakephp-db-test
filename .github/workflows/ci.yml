@@ -2,6 +2,9 @@ name: CI
 
 on:
   push:
+    branches:
+      - 2.next-cake4
+      - 3.next-cake5
 
   pull_request:
     branches:
@@ -55,8 +58,8 @@ jobs:
       - name: Run integration tests
         run: composer test-integration
 
-  cs-stan:
-    name: Coding Standard & Static Analysis
+  cs:
+    name: Coding Standard
     runs-on: ubuntu-24.04
 
     steps:
