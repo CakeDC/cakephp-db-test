@@ -12,8 +12,6 @@ declare(strict_types=1);
  */
 namespace CakeDC\DbTest\TestSuite\Fixture\Extension;
 
-use Cake\Database\Connection;
-use Cake\Datasource\ConnectionManager;
 use PHPUnit\Event\Test\Finished;
 use PHPUnit\Event\Test\FinishedSubscriber;
 
@@ -25,16 +23,21 @@ use PHPUnit\Event\Test\FinishedSubscriber;
  */
 class PHPUnitTestFinishedSubscriber implements FinishedSubscriber
 {
+    use TestConnectionTrait;
+
+    /**
+     * @param \CakeDC\DbTest\TestSuite\Fixture\Extension\TransactionGuard $guard Transaction guard.
+     */
+    public function __construct(private readonly TransactionGuard $guard = new TransactionGuard())
+    {
+    }
+
     /**
      * @param \PHPUnit\Event\Test\Finished $event Event
      * @return void
      */
     public function notify(Finished $event): void
     {
-        $connection = ConnectionManager::get('test');
-        assert($connection instanceof Connection);
-        if ($connection->inTransaction()) {
-            $connection->rollback(true);
-        }
+        $this->guard->end($this->testConnection());
     }
 }
