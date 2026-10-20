@@ -61,7 +61,9 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
         assert($ds instanceof Connection);
         // rollback transaction. gives us a 'fresh' copy of the database for the next
         // test suite to run
-        $ds->rollback();
+        if ($ds->inTransaction()) {
+            $ds->rollback(true);
+        }
 
         if (!$this->databaseLoaded) {
             $this->loadDatabase($ds, $database);

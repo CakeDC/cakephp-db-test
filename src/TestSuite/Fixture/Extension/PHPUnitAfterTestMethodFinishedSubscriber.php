@@ -30,6 +30,8 @@ class PHPUnitAfterTestMethodFinishedSubscriber implements AfterTestMethodFinishe
     {
         $connection = ConnectionManager::get('test');
         assert($connection instanceof Connection);
-        $connection->rollback();
+        if ($connection->inTransaction()) {
+            $connection->rollback(true);
+        }
     }
 }
