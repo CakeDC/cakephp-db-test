@@ -52,6 +52,9 @@ jobs:
       - name: Run PHPUnit
         run: vendor/bin/phpunit
 
+      - name: Run integration tests
+        run: composer test-integration
+
   cs-stan:
     name: Coding Standard & Static Analysis
     runs-on: ubuntu-24.04

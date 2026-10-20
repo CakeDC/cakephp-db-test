@@ -40,7 +40,8 @@
         "phpstan-baseline": "tools/phpstan --generate-baseline",
         "psalm-baseline": "tools/psalm  --set-baseline=psalm-baseline.xml",
         "stan-setup": "phive install",
-        "test": "phpunit"
+        "test": "phpunit",
+        "test-integration": "phpunit -c phpunit.integration.xml"
     },
     "config": {
         "allow-plugins": {
