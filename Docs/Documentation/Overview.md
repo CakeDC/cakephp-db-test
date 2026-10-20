@@ -12,11 +12,12 @@ Generic cycle of test execution under DbTest
 --------------------------------------------
 
 * When test suite starts with DbTest, It loads test database from template database snapshot.
-* Before test method starts, DbTest initializes the transaction.
-* After test method finishes, DbTest rollbacks transaction.
+* Before `setUp()` runs, DbTest opens the transaction.
+* After the test finishes, DbTest rolls back the transaction.
 
 This way database modifications are quickly restored, but requires that the table uses a transaction engine
-like InnoDb.
+like InnoDb. Because the transaction is already open when `setUp()` runs, tests using DbTest must not declare
+`$fixtures` (CakePHP's fixture transaction strategy cannot run inside an open transaction).
 
 Support
 -------
