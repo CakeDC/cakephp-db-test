@@ -2,6 +2,9 @@ name: CI
 
 on:
   push:
+    branches:
+      - 2.next-cake4
+      - 3.next-cake5
 
   pull_request:
     branches:
@@ -52,8 +55,11 @@ jobs:
       - name: Run PHPUnit
         run: vendor/bin/phpunit
 
-  cs-stan:
-    name: Coding Standard & Static Analysis
+      - name: Run integration tests
+        run: composer test-integration
+
+  cs:
+    name: Coding Standard
     runs-on: ubuntu-24.04
 
     steps:

@@ -12,8 +12,6 @@ declare(strict_types=1);
  */
 namespace CakeDC\DbTest\TestSuite\Fixture\Extension;
 
-use Cake\Database\Connection;
-use Cake\Datasource\ConnectionManager;
 use PHPUnit\Event\Test\PreparationStarted;
 use PHPUnit\Event\Test\PreparationStartedSubscriber;
 
@@ -28,18 +26,21 @@ use PHPUnit\Event\Test\PreparationStartedSubscriber;
  */
 class PHPUnitPreparationStartedSubscriber implements PreparationStartedSubscriber
 {
+    use TestConnectionTrait;
+
+    /**
+     * @param \CakeDC\DbTest\TestSuite\Fixture\Extension\TransactionGuard $guard Transaction guard.
+     */
+    public function __construct(private readonly TransactionGuard $guard = new TransactionGuard())
+    {
+    }
+
     /**
      * @param \PHPUnit\Event\Test\PreparationStarted $event Event
      * @return void
      */
     public function notify(PreparationStarted $event): void
     {
-        $connection = ConnectionManager::get('test');
-        assert($connection instanceof Connection);
-        // a previous test may have left its transaction open (e.g. unmet requirements)
-        if ($connection->inTransaction()) {
-            $connection->rollback(true);
-        }
-        $connection->begin();
+        $this->guard->begin($this->testConnection());
     }
 }

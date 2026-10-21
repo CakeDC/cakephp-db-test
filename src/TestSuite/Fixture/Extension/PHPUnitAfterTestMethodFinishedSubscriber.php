@@ -12,8 +12,6 @@ declare(strict_types=1);
  */
 namespace CakeDC\DbTest\TestSuite\Fixture\Extension;
 
-use Cake\Database\Connection;
-use Cake\Datasource\ConnectionManager;
 use PHPUnit\Event\Test\AfterTestMethodFinished;
 use PHPUnit\Event\Test\AfterTestMethodFinishedSubscriber;
 
@@ -22,14 +20,21 @@ use PHPUnit\Event\Test\AfterTestMethodFinishedSubscriber;
  */
 class PHPUnitAfterTestMethodFinishedSubscriber implements AfterTestMethodFinishedSubscriber
 {
+    use TestConnectionTrait;
+
+    /**
+     * @param \CakeDC\DbTest\TestSuite\Fixture\Extension\TransactionGuard $guard Transaction guard.
+     */
+    public function __construct(private readonly TransactionGuard $guard = new TransactionGuard())
+    {
+    }
+
     /**
      * @param \PHPUnit\Event\Test\AfterTestMethodFinished $event Event
      * @return void
      */
     public function notify(AfterTestMethodFinished $event): void
     {
-        $connection = ConnectionManager::get('test');
-        assert($connection instanceof Connection);
-        $connection->rollback();
+        $this->guard->end($this->testConnection());
     }
 }

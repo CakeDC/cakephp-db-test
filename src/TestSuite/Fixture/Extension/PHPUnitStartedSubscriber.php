@@ -24,6 +24,8 @@ use PHPUnit\Event\TestSuite\StartedSubscriber;
  */
 class PHPUnitStartedSubscriber implements StartedSubscriber
 {
+    use TestConnectionTrait;
+
     /**
      * @var true
      */
@@ -35,9 +37,11 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
 
     /**
      * @param \CakeDC\DbTest\TestSuite\Fixture\FixtureManager $fixtureManager Fixture Manager instance
+     * @param \CakeDC\DbTest\TestSuite\Fixture\Extension\TransactionGuard $guard Transaction guard.
      */
     public function __construct(
-        private readonly FixtureManager $fixtureManager
+        private readonly FixtureManager $fixtureManager,
+        private readonly TransactionGuard $guard = new TransactionGuard()
     ) {
     }
 
@@ -47,8 +51,7 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
      */
     public function notify(Started $event): void
     {
-        $connection = ConnectionManager::get('test');
-        assert($connection instanceof Connection);
+        $connection = $this->testConnection();
         $database = $connection->config();
 
         try {
@@ -58,10 +61,10 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
             $this->fixtureManager->setupDatabase($database, true, false);
             $ds = ConnectionManager::get('test');
         }
-        assert($ds instanceof Connection);
+        $ds = $this->asConnection($ds);
         // rollback transaction. gives us a 'fresh' copy of the database for the next
         // test suite to run
-        $ds->rollback();
+        $this->guard->end($ds);
 
         if (!$this->databaseLoaded) {
             $this->loadDatabase($ds, $database);
