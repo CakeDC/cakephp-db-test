@@ -12,13 +12,14 @@ declare(strict_types=1);
  */
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
+use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\Log\Log;
 use Cake\TestSuite\Fixture\SchemaLoader;
 use CakeDC\DbTest\DbTestPlugin;
 
-require_once 'vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 // Path constants to a few helpful things.
 if (!defined('DS')) {
@@ -29,8 +30,8 @@ define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'c
 define('CORE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp' . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
 define('TESTS', ROOT . DS . 'tests');
-define('APP', ROOT . DS . 'tests' . DS . 'test_app' . DS);
-define('APP_DIR', 'test_app');
+define('APP', ROOT . DS . 'tests' . DS);
+define('APP_DIR', 'tests');
 define('WEBROOT_DIR', 'webroot');
 define('WWW_ROOT', APP . 'webroot' . DS);
 define('TMP', sys_get_temp_dir() . DS);
@@ -45,9 +46,10 @@ require_once CAKE . 'Collection/functions_global.php';
 date_default_timezone_set('UTC');
 mb_internal_encoding('UTF-8');
 
+Configure::config('default', new PhpConfig());
 Configure::write('debug', true);
 Configure::write('App', [
-    'namespace' => 'DebugKit\TestApp',
+    'namespace' => 'CakeDC\DbTest\Test',
     'encoding' => 'UTF-8',
     'base' => false,
     'baseUrl' => false,
@@ -68,9 +70,9 @@ Configure::write('Session', [
 ]);
 
 Cache::setConfig([
-    '_cake_core_' => [
+    '_cake_translations_' => [
         'engine' => 'File',
-        'prefix' => 'cake_core_',
+        'prefix' => 'cake_translations_',
         'serialize' => true,
     ],
     '_cake_model_' => [
@@ -87,7 +89,7 @@ Cache::setConfig([
 
 // Ensure default test connection is defined
 if (!getenv('DB_URL')) {
-    putenv('DB_URL=sqlite://127.0.0.1/' . TMP . 'debug_kit_test.sqlite');
+    putenv('DB_URL=sqlite://127.0.0.1/' . TMP . 'db_test_test.sqlite');
 }
 
 $config = [
@@ -95,9 +97,7 @@ $config = [
     'timezone' => 'UTC',
 ];
 
-// Use the test connection for 'debug_kit' as well.
 ConnectionManager::setConfig('test', $config);
-ConnectionManager::setConfig('test_debug_kit', $config);
 
 Log::setConfig([
     'debug' => [
@@ -117,7 +117,8 @@ Log::setConfig([
 Plugin::getCollection()->add(new DbTestPlugin());
 
 // Create test database schema
-if (env('FIXTURE_SCHEMA_METADATA')) {
+$schemaFile = env('FIXTURE_SCHEMA_METADATA');
+if (is_string($schemaFile) && $schemaFile !== '') {
     $loader = new SchemaLoader();
-    $loader->loadInternalFile(env('FIXTURE_SCHEMA_METADATA'), 'test');
+    $loader->loadInternalFile($schemaFile, 'test');
 }

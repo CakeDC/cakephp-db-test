@@ -10,11 +10,11 @@ The **DbTest** plugin enables developers to speeding up tests running on MySQL o
 Requirements
 ------------
 
-* CakePHP 5.0+
-* PHP 8.1+
+* CakePHP 6.0 (6.x-dev until 6.0.0 is tagged; `minimum-stability: dev` and `prefer-stable: true` in the application `composer.json`)
+* PHP 8.5+
 * MySQL database with InnoDb engine
 * PostgreSQL database
-* Phpunit 10.*
+* PHPUnit 13.*
 
 Documentation
 -------------
@@ -36,6 +36,6 @@ If you'd like to contribute new features, enhancements or bug fixes to the plugi
 License
 -------
 
-Copyright 2013-2023 Cake Development Corporation (CakeDC). All rights reserved.
+Copyright 2013-2026 Cake Development Corporation (CakeDC). All rights reserved.
 
 Licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) License. Redistributions of the source code included in this repository must retain the copyright notice found in each file.

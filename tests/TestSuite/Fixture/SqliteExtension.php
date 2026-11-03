@@ -46,7 +46,7 @@ class SqliteExtension implements Extension
         $facade->registerSubscribers(
             new PHPUnitPreparationStartedSubscriber(),
             new PHPUnitTestFinishedSubscriber(),
-            new PHPUnitTestRunnerFinishedSubscriber()
+            new PHPUnitTestRunnerFinishedSubscriber(),
         );
     }
 }

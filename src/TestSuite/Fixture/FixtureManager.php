@@ -24,7 +24,7 @@ class FixtureManager
      *
      * @var bool
      */
-    protected bool $_verbose = false;
+    protected bool $verbose = false;
 
     /**
      * Drops existing connections to test database, recreates db,
@@ -40,16 +40,16 @@ class FixtureManager
         array $database,
         bool $createSchema,
         bool $importTestSkeleton = false,
-        ?string $sqlFilePath = null
+        ?string $sqlFilePath = null,
     ): bool {
-        $engine = EngineFactory::engine($database, $this->_verbose);
+        $engine = EngineFactory::engine($database, $this->verbose);
 
         $success = $engine->recreateTestDatabase();
         if ($success && $createSchema) {
             $success = $engine->createSchema();
         }
         if ($success && $importTestSkeleton) {
-            $this->__importTestSkeleton($database, $sqlFilePath);
+            $this->importTestSkeleton($database, $sqlFilePath);
         }
 
         return $success;
@@ -67,23 +67,23 @@ class FixtureManager
      */
     public function transferData(array $database): void
     {
+        $engine = EngineFactory::engine($database, $this->verbose);
         $testDbName = $database['database'];
         $skeletonDatabase = ConnectionManager::get('test_template')->config();
         if (!empty($skeletonDatabase)) {
+            $skeletonEngine = EngineFactory::engine($skeletonDatabase, $this->verbose);
             $skeletonName = $skeletonDatabase['database'];
 
             $cacheFolder = CACHE . 'fixtures';
-            $this->_ensureFolder($cacheFolder);
+            $this->ensureFolder($cacheFolder);
             $tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
 
             if (!file_exists($tmpFile)) {
                 Log::info(__d('cake_d_c/db_test', "Backing up data from skeleton database: $skeletonName \n"));
-                $engine = EngineFactory::engine($skeletonDatabase, $this->_verbose);
-                $engine->export($tmpFile);
+                $skeletonEngine->export($tmpFile);
             }
 
             Log::info(__d('cake_d_c/db_test', "Restoring data to: $testDbName \n"));
-            $engine = EngineFactory::engine($database, $this->_verbose);
             $engine->import($tmpFile);
         }
     }
@@ -95,11 +95,12 @@ class FixtureManager
      * @param string|null $sqlFilePath Path to the sql script to import
      * @return void
      */
-    private function __importTestSkeleton(array $database, ?string $sqlFilePath = null): void
+    private function importTestSkeleton(array $database, ?string $sqlFilePath = null): void
     {
+        $engine = EngineFactory::engine($database, $this->verbose);
         $testDbName = $database['database'];
         $cacheFolder = CACHE . 'fixtures';
-        $this->_ensureFolder($cacheFolder);
+        $this->ensureFolder($cacheFolder);
         $tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
         Log::info(__d('cake_d_c/db_test', "Deleting cached file: $tmpFile \n"));
         if (is_file($tmpFile)) {
@@ -112,7 +113,6 @@ class FixtureManager
             $testSkeletonFile = $sqlFilePath;
         }
 
-        $engine = EngineFactory::engine($database, $this->_verbose);
         Log::info(__d('cake_d_c/db_test', "Importing test skeleton from: $testSkeletonFile \n"));
         $engine->import($testSkeletonFile, ['format' => 'plain']);
         Log::info(__d('cake_d_c/db_test', "Backing up data from skeleton database: $testDbName \n\n"));
@@ -127,7 +127,7 @@ class FixtureManager
      */
     public function setVerbose(bool $verbose): void
     {
-        $this->_verbose = $verbose;
+        $this->verbose = $verbose;
     }
 
     /**
@@ -136,13 +136,13 @@ class FixtureManager
      * @param string $path Path to folder
      * @return void
      */
-    protected function _ensureFolder(string $path): void
+    protected function ensureFolder(string $path): void
     {
         if (!is_dir($path)) {
             mkdir(
                 directory: $path,
                 permissions: 0755,
-                recursive: true
+                recursive: true,
             );
         }
     }

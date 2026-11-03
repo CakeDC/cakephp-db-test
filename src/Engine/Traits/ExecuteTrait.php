@@ -28,16 +28,16 @@ trait ExecuteTrait
      * @param int|null $return_var Return status of the executed command
      * @return bool The last line from the result of the command
      */
-    protected function _execute(
+    protected function execute(
         string $command,
         ?array &$output = null,
-        ?int &$return_var = null
+        ?int &$return_var = null,
     ): bool {
-        if ($this->_verbose) {
+        if ($this->verbose) {
             Log::info(__d('cake_d_c/db_test', $command . "\n"));
         }
         $result = exec($command, $output, $return_var);
-        if ($this->_verbose) {
+        if ($this->verbose) {
             Log::info(__d('cake_d_c/db_test', implode("\n", $output) . "\n"));
         }
 

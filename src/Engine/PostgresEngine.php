@@ -22,22 +22,22 @@ class PostgresEngine extends BaseEngine
      */
     public function recreateTestDatabase(): bool
     {
-        $baseArgs = $this->_getBaseArguments();
-        $this->_setPassword();
-        $databaseName = $this->_database['database'];
+        $baseArgs = $this->getBaseArguments();
+        $this->setPassword();
+        $databaseName = $this->database['database'];
         $systemUser = 'postgres';
         $terminateQuery = 'select pg_terminate_backend(pg_stat_activity.pid) from pg_stat_activity ' .
             "where pg_stat_activity.datname = '$databaseName'";
-        $this->_execute("psql $baseArgs -c \"$terminateQuery\" $systemUser", $output, $success);
+        $this->execute("psql $baseArgs -c \"$terminateQuery\" $systemUser", $output, $success);
 
         $output = [];
         $success = 0;
         Log::info(__d('cake_d_c/db_test', "Dropping database: $databaseName \n"));
-        $this->_execute("dropdb $baseArgs $databaseName", $output, $success);
+        $this->execute("dropdb $baseArgs $databaseName", $output, $success);
 
         if ($this->isSuccess($success)) {
             Log::info(__d('cake_d_c/db_test', "Creating database: $databaseName \n"));
-            $this->_execute("createdb $baseArgs $databaseName", $output, $success);
+            $this->execute("createdb $baseArgs $databaseName", $output, $success);
         }
 
         return $this->isSuccess($success);
@@ -48,16 +48,16 @@ class PostgresEngine extends BaseEngine
      */
     public function createSchema(): bool
     {
-        $baseArgs = $this->_getBaseArguments();
-        $this->_setPassword();
+        $baseArgs = $this->getBaseArguments();
+        $this->setPassword();
         $success = 0;
-        $testDbName = $this->_database['database'];
-        if (!empty($this->_database['schema'])) {
-            $schema = $this->_database['schema'];
+        $testDbName = $this->database['database'];
+        if (!empty($this->database['schema'])) {
+            $schema = $this->database['schema'];
         }
 
         if (!empty($schema)) {
-            $this->_execute("psql $baseArgs -c \"create schema $schema;\" $testDbName", $output, $success);
+            $this->execute("psql $baseArgs -c \"create schema $schema;\" $testDbName", $output, $success);
         }
 
         return $this->isSuccess($success);
@@ -68,9 +68,9 @@ class PostgresEngine extends BaseEngine
      */
     public function import(string $file, array $options = []): bool
     {
-        $baseArgs = $this->_getBaseArguments();
-        $testDbName = $this->_database['database'];
-        $this->_setPassword();
+        $baseArgs = $this->getBaseArguments();
+        $testDbName = $this->database['database'];
+        $this->setPassword();
 
         if (isset($options['format']) && $options['format'] == 'plain') {
             $command = "psql $baseArgs $testDbName < $file";
@@ -78,7 +78,7 @@ class PostgresEngine extends BaseEngine
             $command = "pg_restore $baseArgs -j 8 -Fc -d $testDbName $file";
         }
 
-        return $this->_execute($command, $output);
+        return $this->execute($command, $output);
     }
 
     /**
@@ -86,9 +86,9 @@ class PostgresEngine extends BaseEngine
      */
     public function export(string $file, array $options = []): bool
     {
-        $baseArgs = $this->_getBaseArguments();
-        $this->_setPassword();
-        $testDbName = $this->_database['database'];
+        $baseArgs = $this->getBaseArguments();
+        $this->setPassword();
+        $testDbName = $this->database['database'];
         $format = ' -Fc ';
         if (isset($options['format']) && $options['format'] == 'plain') {
             $format = ' -Fp ';
@@ -96,7 +96,7 @@ class PostgresEngine extends BaseEngine
 
         $command = "pg_dump $baseArgs  --compress=0 --file=$file $format $testDbName";
 
-        return $this->_execute($command, $output);
+        return $this->execute($command, $output);
     }
 
     /**
@@ -104,16 +104,20 @@ class PostgresEngine extends BaseEngine
      *
      * @return string
      */
-    protected function _getBaseArguments(): string
+    protected function getBaseArguments(): string
     {
-        $user = $this->_database['username'];
-        $host = $this->_database['host'];
-        $port = '';
-        if (!empty($this->_database['port'])) {
-            $port = ' --port=' . $this->_database['port'];
+        $args = [];
+        if (!empty($this->database['host'])) {
+            $args[] = '--host=' . $this->database['host'];
+        }
+        if (!empty($this->database['port'])) {
+            $args[] = '--port=' . $this->database['port'];
+        }
+        if (!empty($this->database['username'])) {
+            $args[] = '--username=' . $this->database['username'];
         }
 
-        return "--host=$host $port --username=$user";
+        return implode(' ', $args);
     }
 
     /**
@@ -121,9 +125,11 @@ class PostgresEngine extends BaseEngine
      *
      * @return void
      */
-    protected function _setPassword(): void
+    protected function setPassword(): void
     {
-        $password = $this->_database['password'];
-        putenv("PGPASSWORD=$password");
+        if (!isset($this->database['password'])) {
+            return;
+        }
+        putenv('PGPASSWORD=' . $this->database['password']);
     }
 }

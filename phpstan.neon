@@ -1,8 +1,10 @@
 parameters:
-	level: 8
-	treatPhpDocTypesAsCertain: false
-	checkGenericClassInNonGenericObjectType: false
-	bootstrapFiles:
-		- tests/bootstrap.php
-	paths:
-		- src/
+    level: 8
+    treatPhpDocTypesAsCertain: false
+    bootstrapFiles:
+        - tests/bootstrap.php
+    paths:
+        - src/
+        - tests/
+    ignoreErrors:
+        - identifier: missingType.iterableValue

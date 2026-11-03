@@ -27,11 +27,11 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
     use TestConnectionTrait;
 
     /**
-     * @var true
+     * @var bool
      */
     protected bool $databaseLoaded = false;
     /**
-     * @var true
+     * @var bool
      */
     protected bool $initialized = false;
 
@@ -41,7 +41,7 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
      */
     public function __construct(
         private readonly FixtureManager $fixtureManager,
-        private readonly TransactionGuard $guard = new TransactionGuard()
+        private readonly TransactionGuard $guard = new TransactionGuard(),
     ) {
     }
 

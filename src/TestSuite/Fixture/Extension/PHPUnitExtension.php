@@ -32,15 +32,32 @@ class PHPUnitExtension implements Extension
     public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters): void
     {
         $fixtureManager = new FixtureManager();
-        $verbose = (bool)$parameters->get('verbose');
-        $fixtureManager->setVerbose($verbose);
+        $fixtureManager->setVerbose($this->isVerbose($parameters));
 
         $facade->registerSubscribers(
             new PHPUnitStartedSubscriber($fixtureManager),
             new PHPUnitPreparationStartedSubscriber(),
             new PHPUnitAfterTestMethodFinishedSubscriber(),
             new PHPUnitTestFinishedSubscriber(),
-            new PHPUnitTestRunnerFinishedSubscriber()
+            new PHPUnitTestRunnerFinishedSubscriber(),
         );
+    }
+
+    /**
+     * Reads the `verbose` extension parameter.
+     *
+     * The parameter is optional (`ParameterCollection::get()` throws on a missing name) and arrives as a string,
+     * so `"false"`, `"0"`, `"off"` and `"no"` are false; `"true"`, `"1"`, `"on"` and `"yes"` are true.
+     *
+     * @param \PHPUnit\Runner\Extension\ParameterCollection $parameters Parameters
+     * @return bool
+     */
+    public function isVerbose(ParameterCollection $parameters): bool
+    {
+        if (!$parameters->has('verbose')) {
+            return false;
+        }
+
+        return filter_var($parameters->get('verbose'), FILTER_VALIDATE_BOOLEAN);
     }
 }

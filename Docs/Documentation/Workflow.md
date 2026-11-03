@@ -25,5 +25,13 @@ Copy phpunit.xml.dbtest as phpunit.xml.dist in your project (modify if needed) a
 
 Debug Test Suite
 -------------------
-Verbose mode enabled by second parameter of FixtureInjector set to true.
-It is defined in phpunit.xml.dist in arguments section of FixtureInjector listener.
+Verbose mode logs every shell command the engines run and its output (`Log::info()`). Enable it with the `verbose`
+parameter of the extension in `phpunit.xml.dist` (`"true"`, `"1"`, `"on"` or `"yes"`; omitted or `"false"` is off):
+
+```xml
+<extensions>
+    <bootstrap class="CakeDC\DbTest\TestSuite\Fixture\Extension\PHPUnitExtension">
+        <parameter name="verbose" value="true"/>
+    </bootstrap>
+</extensions>
+```

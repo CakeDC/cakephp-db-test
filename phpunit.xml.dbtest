@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/13.4/phpunit.xsd"
          colors="true"
          processIsolation="false"
          stopOnFailure="false"
          bootstrap="tests/bootstrap.php"
-         cacheDirectory=".phpunit.cache"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd">
+         cacheDirectory=".phpunit.cache">
     <php>
-        <ini name="memory_limit" value="-1"/>
-        <ini name="apc.enable_cli" value="1"/>
+        <ini name="memory_limit" value="512M"/>
     </php>
 
     <!-- Add any additional test suites you want to run here -->
@@ -22,8 +21,8 @@
     <!-- Load extension for fixtures -->
     <extensions>
         <bootstrap class="CakeDC\DbTest\TestSuite\Fixture\Extension\PHPUnitExtension">
-            <!-- Optionaly enable verbosity -->
-            <parameter name="verbose" value="false" />
+            <!-- Optionally enable verbosity -->
+            <parameter name="verbose" value="false"/>
         </bootstrap>
     </extensions>
 
@@ -33,8 +32,5 @@
             <directory suffix=".php">src/</directory>
             <directory suffix=".php">plugins/*/src/</directory>
         </include>
-        <exclude>
-            <file>src/Console/Installer.php</file>
-        </exclude>
     </source>
 </phpunit>
