@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace CakeDC\DbTest\Engine;
 
 use CakeDC\DbTest\Engine\Traits\ExecuteTrait;
+use InvalidArgumentException;
+use function Cake\I18n\__d;
 
 abstract class BaseEngine implements EngineInterface
 {
@@ -23,14 +25,14 @@ abstract class BaseEngine implements EngineInterface
      *
      * @var bool
      */
-    protected bool $_verbose = false;
+    protected bool $verbose = false;
 
     /**
      * Database configuration
      *
      * @var array
      */
-    protected array $_database = [];
+    protected array $database = [];
 
     /**
      * Constructor method
@@ -40,24 +42,29 @@ abstract class BaseEngine implements EngineInterface
      */
     public function __construct(array $database, bool $verbose = false)
     {
-        $this->_database = $database;
-        $this->_verbose = $verbose;
+        if (empty($database['database']) || !is_string($database['database'])) {
+            throw new InvalidArgumentException(
+                __d('cake_d_c/db_test', 'The datasource configuration must name a `database`'),
+            );
+        }
+        $this->database = $database;
+        $this->verbose = $verbose;
     }
 
     /**
      * Check if success.
      *
-     * @param int $check Check value
+     * @param int|null $check Exit status of the executed command, null when unknown
      * @return bool
      */
-    public function isSuccess(int $check): bool
+    public function isSuccess(?int $check): bool
     {
         $allowed = [
             0 => true,
             1 => true,
         ];
 
-        return isset($allowed[$check]);
+        return $check !== null && isset($allowed[$check]);
     }
 
     /**

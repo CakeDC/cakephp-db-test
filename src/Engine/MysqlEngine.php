@@ -23,15 +23,15 @@ class MysqlEngine extends BaseEngine
      */
     public function recreateTestDatabase(): bool
     {
-        $databaseName = $this->_database['database'];
-        $baseArgs = $this->_getBaseArguments();
+        $databaseName = $this->database['database'];
+        $baseArgs = $this->getBaseArguments();
         $output = [];
         $success = 0;
         Log::info(__d('cake_d_c/db_test', "Dropping database: $databaseName \n"));
-        $this->_execute("mysqladmin -f $baseArgs drop $databaseName", $output, $success);
+        $this->execute("mysqladmin -f $baseArgs drop $databaseName", $output, $success);
         if ($this->isSuccess($success)) {
             Log::info(__d('cake_d_c/db_test', "Creating database: $databaseName \n"));
-            $this->_execute("mysqladmin -f $baseArgs create $databaseName", $output, $success);
+            $this->execute("mysqladmin -f $baseArgs create $databaseName", $output, $success);
         }
 
         return $success === 0;
@@ -42,11 +42,11 @@ class MysqlEngine extends BaseEngine
      */
     public function import(string $file, array $options = []): bool
     {
-        $databaseName = $this->_database['database'];
-        $baseArgs = $this->_getBaseArguments();
+        $databaseName = $this->database['database'];
+        $baseArgs = $this->getBaseArguments();
         $command = "mysql $baseArgs $databaseName < $file";
 
-        return $this->_execute($command, $output);
+        return $this->execute($command, $output);
     }
 
     /**
@@ -54,8 +54,8 @@ class MysqlEngine extends BaseEngine
      */
     public function export(string $file, array $options = []): bool
     {
-        $databaseName = $this->_database['database'];
-        $baseArgs = $this->_getBaseArguments();
+        $databaseName = $this->database['database'];
+        $baseArgs = $this->getBaseArguments();
         $command = 'mysqldump';
         if (Configure::read('DbTest.dumpExtendedInserts') !== true) {
             $command .= ' --extended-insert=FALSE';
@@ -68,7 +68,7 @@ class MysqlEngine extends BaseEngine
             $command .= " > $file";
         }
 
-        return $this->_execute($command, $output);
+        return $this->execute($command, $output);
     }
 
     /**
@@ -76,17 +76,22 @@ class MysqlEngine extends BaseEngine
      *
      * @return string
      */
-    protected function _getBaseArguments(): string
+    protected function getBaseArguments(): string
     {
-        $user = $this->_database['username'];
-        $password = $this->_database['password'];
-        $host = $this->_database['host'];
-        $port = '';
-        if (!empty($this->_database['port'])) {
-            $port = ' --port=' . $this->_database['port'];
+        $args = [];
+        if (!empty($this->database['host'])) {
+            $args[] = '--host=' . $this->database['host'];
         }
-        $quote = DS === '/' ? "'" : '"';
+        if (!empty($this->database['port'])) {
+            $args[] = '--port=' . $this->database['port'];
+        }
+        if (!empty($this->database['username'])) {
+            $args[] = '--user=' . $this->database['username'];
+        }
+        if (isset($this->database['password'])) {
+            $args[] = '--password=' . escapeshellarg((string)$this->database['password']);
+        }
 
-        return "--host=$host $port --user=$user --password=$quote$password$quote";
+        return implode(' ', $args);
     }
 }

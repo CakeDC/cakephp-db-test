@@ -8,14 +8,17 @@ Composer
 composer require cakedc/cakephp-db-test
 ```
 
+Until CakePHP 6.0.0 is tagged the plugin resolves against `cakephp/cakephp` `6.x-dev`, so the application's
+`composer.json` needs `"minimum-stability": "dev"` and `"prefer-stable": true`.
+
 Load the plugin
 ---------------
 
 ```
 bin/cake plugin load CakeDC/DbTest
 ```
-Note you'll need this plugin loaded in the `cli` section of your `Application::bootstrap`, around the line loading
-Bake Plugin: `$this->addPlugin('DbTestPlugin');`
+Or load it from `Application::bootstrap()` next to the other CLI-only plugins (Bake, Migrations):
+`$this->addPlugin('CakeDC/DbTest');`
 
 Configuration
 -------------
@@ -43,9 +46,15 @@ Add the next configuration setting into app.php
     // ...
 ```
 
+Name `host`, `username`, `password` and `database` explicitly on both the `test` and the `test_template`
+connections: the plugin reads the raw datasource array (`Connection::config()`), the driver defaults are never
+applied to it, and the values go to `mysql`/`mysqladmin`/`mysqldump` or `psql`/`pg_dump`/`pg_restore` on the
+command line. On PostgreSQL also name `schema` when the test database needs a `CREATE SCHEMA` after it is
+recreated; without the key no schema is created.
+
 PHPUnit
 -------
-Copy https://github.com/CakeDC/cakephp-db-test/blob/master/phpunit.xml.dbtest as phpunit.xml.dist in your
+Copy https://github.com/CakeDC/cakephp-db-test/blob/4.next-cake6/phpunit.xml.dbtest as phpunit.xml.dist in your
 project (modify if needed)
 
 Fixture database

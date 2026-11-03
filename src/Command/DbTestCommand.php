@@ -13,8 +13,6 @@ declare(strict_types=1);
 namespace CakeDC\DbTest\Command;
 
 use Cake\Command\Command;
-use Cake\Console\Arguments;
-use Cake\Console\ConsoleIo;
 use Cake\Console\ConsoleOptionParser;
 use Cake\Core\Configure;
 use Cake\Datasource\ConnectionManager;
@@ -46,7 +44,7 @@ class DbTestCommand extends Command
                 'boolean' => true,
                 'short' => 'i',
                 'help' => __d('cake_d_c/db_test', 'Drops test template database and imports ' .
-                    'test_db.sql file from app/Config/sql'),
+                    'test_db.sql file from config/sql'),
             ])
             ->addOption('import-database-file', [
                 'short' => 'f',
@@ -57,26 +55,24 @@ class DbTestCommand extends Command
     /**
      * @inheritDoc
      */
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute(): int
     {
         Configure::load('app', 'default', false);
 
-        $io->out(__d('cake_d_c/db_test', 'Db Test Shell'));
-        $io->hr();
+        $this->io->out(__d('cake_d_c/db_test', 'Db Test Shell'));
+        $this->io->hr();
 
-        if ($args->getOption('import-database-template')) {
+        if ($this->args->getOption('import-database-template')) {
             $path = null;
-            if (
-                !empty($args->getOption('import-database-file')) &&
-                file_exists($args->getOption('import-database-file'))
-            ) {
-                $path = $args->getOption('import-database-file');
+            $file = $this->args->getOption('import-database-file');
+            if (is_string($file) && $file !== '' && file_exists($file)) {
+                $path = $file;
             }
             $skeletonDatabase = ConnectionManager::get('test_template')->config();
             $manager = new FixtureManager();
             $manager->setupDatabase($skeletonDatabase, true, true, $path);
         } else {
-            $io->out($this->getOptionParser()->help());
+            $this->io->out($this->getOptionParser()->help());
         }
 
         return self::CODE_SUCCESS;

@@ -12,7 +12,7 @@ declare(strict_types=1);
  */
 namespace CakeDC\DbTest\Test\TestCase\TestSuite\Fixture\Extension;
 
-use Cake\Database\Connection;
+use CakeDC\DbTest\Test\TestSuite\Fixture\RecordingConnection;
 use CakeDC\DbTest\TestSuite\Fixture\Extension\TransactionGuard;
 use PHPUnit\Framework\TestCase;
 
@@ -22,9 +22,9 @@ use PHPUnit\Framework\TestCase;
 class TransactionGuardTest extends TestCase
 {
     /**
-     * @var \Cake\Database\Connection
+     * @var \CakeDC\DbTest\Test\TestSuite\Fixture\RecordingConnection
      */
-    protected Connection $connection;
+    protected RecordingConnection $connection;
 
     /**
      * @return void
@@ -33,7 +33,7 @@ class TransactionGuardTest extends TestCase
     {
         parent::setUp();
 
-        $this->connection = $this->fakeConnection();
+        $this->connection = new RecordingConnection();
     }
 
     /**
@@ -81,59 +81,5 @@ class TransactionGuardTest extends TestCase
         (new TransactionGuard())->end($this->connection);
 
         $this->assertSame([], $this->connection->calls);
-    }
-
-    /**
-     * @return \Cake\Database\Connection
-     */
-    protected function fakeConnection(): Connection
-    {
-        return new class extends Connection {
-            /**
-             * @var array<string>
-             */
-            public array $calls = [];
-
-            /**
-             * @var bool
-             */
-            public bool $inTransaction = false;
-
-            /**
-             * Skip the parent constructor, the test never touches the driver.
-             */
-            public function __construct()
-            {
-            }
-
-            /**
-             * @return bool
-             */
-            public function inTransaction(): bool
-            {
-                return $this->inTransaction;
-            }
-
-            /**
-             * @return void
-             */
-            public function begin(): void
-            {
-                $this->calls[] = 'begin';
-                $this->inTransaction = true;
-            }
-
-            /**
-             * @param bool|null $toBeginning Whether the transaction should be rolled back to the beginning.
-             * @return bool
-             */
-            public function rollback(?bool $toBeginning = null): bool
-            {
-                $this->calls[] = 'rollback';
-                $this->inTransaction = false;
-
-                return true;
-            }
-        };
     }
 }

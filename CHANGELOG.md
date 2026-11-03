@@ -1,6 +1,23 @@
 Changelog
 =========
 
+Releases for CakePHP 6.0
+------------------------
+* 4.0.0 (unreleased, tracks `cakephp/cakephp` `6.x-dev` until 6.0.0 is tagged; verified against core commit `421c644`, PHPUnit 13.4.6, PHP 8.5.12)
+    * **Breaking (requirements)** — PHP 8.5+, CakePHP 6.0 (`^6.0`, resolves `6.x-dev`: applications need `minimum-stability: dev` and `prefer-stable: true`), PHPUnit 13.
+    * **Breaking (API)** — the protected members of `BaseEngine`, `MysqlEngine`, `PostgresEngine`, `ExecuteTrait` and `FixtureManager` lost their underscore prefix, following CakePHP 6 and the `cakephp/cakephp-codesniffer` 6 standard: `_execute()` -> `execute()`, `_getBaseArguments()` -> `getBaseArguments()`, `_setPassword()` -> `setPassword()`, `__importTestSkeleton()` -> `importTestSkeleton()`, `_ensureFolder()` -> `ensureFolder()`, `$_verbose` -> `$verbose`, `$_database` -> `$database`. Subclasses must rename their overrides.
+    * **Breaking (API)** — `BaseEngine::isSuccess()` accepts `?int` (a `null` exit status is a failure).
+    * Fix: the `verbose` extension parameter is optional and parsed as a boolean string (`"false"` used to enable verbose logging, a missing parameter threw `ParameterDoesNotExistException`); `PHPUnitExtension::isVerbose()` is public
+    * Fix: engines build the CLI arguments from the keys the datasource defines (`host`, `port`, `username`, `password`) instead of raising `Undefined array key`; `PGPASSWORD` is only exported when a password is configured; a datasource without `database` throws `InvalidArgumentException` at engine construction
+    * Fix: `db_test` help text names `config/sql`; docs: verbose mode and plugin loading examples updated
+    * Fix: `fixture_import` reports a missing `test_template` datasource with its error message instead of an uncaught `MissingDatasourceConfigException`
+    * Fix: the MySQL password is shell-escaped (`escapeshellarg()`); a password containing a quote no longer breaks the command
+    * `DbTestCommand` and `FixtureImportCommand` follow the CakePHP 6 command shape: parameterless `execute()` reading `$this->args` and `$this->io`.
+    * Note — name `host`, `username`, `password` and `database` on the `test` and `test_template` connections (and `schema` on PostgreSQL when `createSchema()` should run): the engines read the raw datasource array (`Connection::config()`), the driver defaults (`localhost`, the default port, `public`) are never applied to it.
+    * Chore: `phpunit.xml.dbtest` migrated to the PHPUnit 13 schema (the `apc.enable_cli` ini line is gone: it is `PHP_INI_SYSTEM` and PHPUnit 12.5+ warns on it).
+    * Chore: the plugin's own suites fail on deprecations, notices and warnings; PHPStan 2 level 8 over `src/` and `tests/` without a baseline (only `missingType.iterableValue` is ignored by identifier) replaces the phive-installed PHPStan 1.10 and Psalm 5.10; `composer stan` runs it, `composer check` runs cs-check, stan and the unit suite.
+    * CI: PHP 8.5, coding standard and PHPStan job, `4.next-cake6` branch.
+
 Releases for CakePHP 5.0
 ------------------------
 * 3.1.0

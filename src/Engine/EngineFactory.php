@@ -38,7 +38,7 @@ class EngineFactory
      * Translate a cake engine into a DbTest engine
      *
      * @param string $driver Driver name
-     * @return string
+     * @return class-string<\CakeDC\DbTest\Engine\EngineInterface>
      */
     protected static function getEngineClass(string $driver): string
     {
@@ -50,14 +50,14 @@ class EngineFactory
         $type = str_replace('Cake\\Database\\Driver\\', '', $driver);
         if (!in_array($type, array_keys($engineMap))) {
             throw new NotFoundException(
-                __d('cake_d_c/db_test', 'Database engine {0} is not supported', $type)
+                __d('cake_d_c/db_test', 'Database engine {0} is not supported', $type),
             );
         }
 
         $engineClass = $engineMap[$type];
         if (!class_exists($engineClass)) {
             throw new NotFoundException(
-                __d('cake_d_c/db_test', 'Can\'t load engine ' . $engineClass)
+                __d('cake_d_c/db_test', 'Can\'t load engine ' . $engineClass),
             );
         }
 
