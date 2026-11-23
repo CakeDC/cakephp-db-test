@@ -32,15 +32,27 @@ class PHPUnitExtension implements Extension
     public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters): void
     {
         $fixtureManager = new FixtureManager();
-        $verbose = (bool)$parameters->get('verbose');
+        $verbose = $parameters->has('verbose') && (bool)$parameters->get('verbose');
         $fixtureManager->setVerbose($verbose);
+        $testConnection = 'test';
+        if ($parameters->has('testConnection')) {
+            $testConnection = (string)$parameters->get('testConnection');
+        }
+        $templateConnection = 'test_template';
+        if ($parameters->has('templateConnection')) {
+            $templateConnection = (string)$parameters->get('templateConnection');
+        }
+        $fixtureManager->setTemplateConnection($templateConnection);
+        if ($parameters->has('cacheSuffix')) {
+            $fixtureManager->setCacheSuffix((string)$parameters->get('cacheSuffix'));
+        }
 
         $facade->registerSubscribers(
-            new PHPUnitStartedSubscriber($fixtureManager),
-            new PHPUnitPreparationStartedSubscriber(),
-            new PHPUnitAfterTestMethodFinishedSubscriber(),
-            new PHPUnitTestFinishedSubscriber(),
-            new PHPUnitTestRunnerFinishedSubscriber()
+            new PHPUnitStartedSubscriber($fixtureManager, new TransactionGuard(), $testConnection),
+            new PHPUnitPreparationStartedSubscriber(new TransactionGuard(), $testConnection),
+            new PHPUnitAfterTestMethodFinishedSubscriber(new TransactionGuard(), $testConnection),
+            new PHPUnitTestFinishedSubscriber(new TransactionGuard(), $testConnection),
+            new PHPUnitTestRunnerFinishedSubscriber(new TransactionGuard(), $testConnection)
         );
     }
 }

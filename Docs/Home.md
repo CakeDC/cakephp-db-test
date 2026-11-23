@@ -20,4 +20,5 @@ Documentation
 * [Examples](Documentation/Examples.md)
 * [Workflow](Documentation/Workflow.md)
 * [Configuration](Documentation/Configuration.md)
+* [Parallel (ParaTest)](Documentation/Parallel.md)
 

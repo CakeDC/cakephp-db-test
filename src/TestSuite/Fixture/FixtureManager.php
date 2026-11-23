@@ -15,6 +15,7 @@ namespace CakeDC\DbTest\TestSuite\Fixture;
 use Cake\Datasource\ConnectionManager;
 use Cake\Log\Log;
 use CakeDC\DbTest\Engine\EngineFactory;
+use CakeDC\DbTest\TestSuite\Parallel\WorkerId;
 use function Cake\I18n\__d;
 
 class FixtureManager
@@ -25,6 +26,20 @@ class FixtureManager
      * @var bool
      */
     protected bool $_verbose = false;
+
+    /**
+     * Connection holding the template database used as the restore source.
+     *
+     * @var string
+     */
+    protected string $templateConnection = 'test_template';
+
+    /**
+     * Cache file suffix override. Null resolves from the parallel worker id.
+     *
+     * @var string|null
+     */
+    protected ?string $cacheSuffix = null;
 
     /**
      * Drops existing connections to test database, recreates db,
@@ -68,13 +83,11 @@ class FixtureManager
     public function transferData(array $database): void
     {
         $testDbName = $database['database'];
-        $skeletonDatabase = ConnectionManager::get('test_template')->config();
+        $skeletonDatabase = ConnectionManager::get($this->templateConnection)->config();
         if (!empty($skeletonDatabase)) {
             $skeletonName = $skeletonDatabase['database'];
 
-            $cacheFolder = CACHE . 'fixtures';
-            $this->_ensureFolder($cacheFolder);
-            $tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
+            $tmpFile = $this->dumpFile();
 
             if (!file_exists($tmpFile)) {
                 Log::info(__d('cake_d_c/db_test', "Backing up data from skeleton database: $skeletonName \n"));
@@ -98,9 +111,7 @@ class FixtureManager
     private function __importTestSkeleton(array $database, ?string $sqlFilePath = null): void
     {
         $testDbName = $database['database'];
-        $cacheFolder = CACHE . 'fixtures';
-        $this->_ensureFolder($cacheFolder);
-        $tmpFile = $cacheFolder . DS . 'db_dump_backup.custom';
+        $tmpFile = $this->dumpFile();
         Log::info(__d('cake_d_c/db_test', "Deleting cached file: $tmpFile \n"));
         if (is_file($tmpFile)) {
             unlink($tmpFile);
@@ -128,6 +139,45 @@ class FixtureManager
     public function setVerbose(bool $verbose): void
     {
         $this->_verbose = $verbose;
+    }
+
+    /**
+     * Set the connection holding the template database.
+     *
+     * @param string $templateConnection Connection name.
+     * @return void
+     */
+    public function setTemplateConnection(string $templateConnection): void
+    {
+        $this->templateConnection = $templateConnection;
+    }
+
+    /**
+     * Set the dump cache file suffix override.
+     *
+     * Null resolves from the parallel worker id, so plain `phpunit` keeps the
+     * historical `db_dump_backup.custom` path.
+     *
+     * @param string|null $cacheSuffix Suffix including the leading `_`, or null for auto.
+     * @return void
+     */
+    public function setCacheSuffix(?string $cacheSuffix): void
+    {
+        $this->cacheSuffix = $cacheSuffix;
+    }
+
+    /**
+     * Absolute path of the cached database dump for this worker.
+     *
+     * @return string
+     */
+    public function dumpFile(): string
+    {
+        $suffix = $this->cacheSuffix ?? WorkerId::suffix();
+        $cacheFolder = CACHE . 'fixtures';
+        $this->_ensureFolder($cacheFolder);
+
+        return $cacheFolder . DS . 'db_dump_backup' . $suffix . '.custom';
     }
 
     /**

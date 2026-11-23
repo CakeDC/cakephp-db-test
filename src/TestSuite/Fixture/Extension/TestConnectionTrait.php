@@ -17,17 +17,35 @@ use Cake\Datasource\ConnectionManager;
 use RuntimeException;
 
 /**
- * Resolves and validates the "test" connection used by the extension.
+ * Resolves and validates the test connection used by the extension.
  */
 trait TestConnectionTrait
 {
     /**
+     * Connection holding the test database wrapped in the per-test transaction.
+     *
+     * @var string
+     */
+    protected string $testConnectionName = 'test';
+
+    /**
+     * Set the connection holding the test database.
+     *
+     * @param string $testConnectionName Connection name.
+     * @return void
+     */
+    public function setTestConnectionName(string $testConnectionName): void
+    {
+        $this->testConnectionName = $testConnectionName;
+    }
+
+    /**
      * @return \Cake\Database\Connection
-     * @throws \RuntimeException When the "test" connection is not a database connection.
+     * @throws \RuntimeException When the test connection is not a database connection.
      */
     protected function testConnection(): Connection
     {
-        return $this->asConnection(ConnectionManager::get('test'));
+        return $this->asConnection(ConnectionManager::get($this->testConnectionName));
     }
 
     /**
@@ -38,7 +56,10 @@ trait TestConnectionTrait
     protected function asConnection(mixed $connection): Connection
     {
         if (!$connection instanceof Connection) {
-            throw new RuntimeException('The "test" connection must be a Cake\Database\Connection instance.');
+            throw new RuntimeException(sprintf(
+                'The "%s" connection must be a Cake\Database\Connection instance.',
+                $this->testConnectionName
+            ));
         }
 
         return $connection;

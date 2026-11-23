@@ -38,11 +38,14 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
     /**
      * @param \CakeDC\DbTest\TestSuite\Fixture\FixtureManager $fixtureManager Fixture Manager instance
      * @param \CakeDC\DbTest\TestSuite\Fixture\Extension\TransactionGuard $guard Transaction guard.
+     * @param string $testConnection Connection holding the test database.
      */
     public function __construct(
         private readonly FixtureManager $fixtureManager,
-        private readonly TransactionGuard $guard = new TransactionGuard()
+        private readonly TransactionGuard $guard = new TransactionGuard(),
+        string $testConnection = 'test'
     ) {
+        $this->testConnectionName = $testConnection;
     }
 
     /**
@@ -55,7 +58,7 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
         $database = $connection->config();
 
         try {
-            $ds = ConnectionManager::get('test');
+            $ds = ConnectionManager::get($this->testConnectionName);
         } catch (Exception) {
             // create test database and schema
             $this->fixtureManager->setupDatabase($database, true, false);
@@ -112,10 +115,10 @@ class PHPUnitStartedSubscriber implements StartedSubscriber
     protected function aliasConnections(): void
     {
         $connections = ConnectionManager::configured();
-        ConnectionManager::alias('test', 'default');
+        ConnectionManager::alias($this->testConnectionName, 'default');
         $map = [];
         foreach ($connections as $connection) {
-            if ($connection === 'test' || $connection === 'default') {
+            if ($connection === $this->testConnectionName || $connection === 'default') {
                 continue;
             }
             if (isset($map[$connection])) {

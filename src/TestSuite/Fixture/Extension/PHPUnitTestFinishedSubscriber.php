@@ -27,9 +27,13 @@ class PHPUnitTestFinishedSubscriber implements FinishedSubscriber
 
     /**
      * @param \CakeDC\DbTest\TestSuite\Fixture\Extension\TransactionGuard $guard Transaction guard.
+     * @param string $testConnection Connection holding the test database.
      */
-    public function __construct(private readonly TransactionGuard $guard = new TransactionGuard())
-    {
+    public function __construct(
+        private readonly TransactionGuard $guard = new TransactionGuard(),
+        string $testConnection = 'test'
+    ) {
+        $this->testConnectionName = $testConnection;
     }
 
     /**
